@@ -104,6 +104,10 @@ h1 {
   gap: 12px;
 }
 
+.secondary-grid {
+  margin-top: 12px;
+}
+
 .language-grid a {
   display: flex;
   min-height: 104px;
