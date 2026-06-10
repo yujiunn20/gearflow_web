@@ -24,6 +24,9 @@
         <option value="../ja/index.html">日本語</option>
       </select>
     </nav>
+    <button class="hamburger" aria-label="Menu" onclick="document.body.classList.toggle('nav-open')">
+      <span></span><span></span><span></span>
+    </button>
   </header>
   <main class="home">
     <section class="hero" aria-labelledby="site-title">
@@ -115,5 +118,10 @@
     </div>
     <p>&copy; 2026 GearFlow. All rights reserved.</p>
   </footer>
+  <script>
+    document.querySelectorAll('.nav-links a').forEach(function(a) {
+      a.addEventListener('click', function() { document.body.classList.remove('nav-open'); });
+    });
+  </script>
 </body>
 </html>
