@@ -34,7 +34,7 @@ a {
 .hero {
   display: grid;
   min-height: 100vh;
-  grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
 }
 
 .hero-media {
@@ -61,7 +61,7 @@ a {
   min-height: 100vh;
   flex-direction: column;
   justify-content: center;
-  padding: clamp(32px, 7vw, 96px);
+  padding: clamp(24px, 4vw, 60px);
 }
 
 .app-icon {
@@ -81,7 +81,7 @@ a {
 }
 
 h1 {
-  max-width: 680px;
+  max-width: 850px;
   margin: 0;
   color: var(--ink);
   font-size: clamp(2.3rem, 5vw, 4.9rem);
@@ -290,7 +290,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 5%;
+  padding: 1rem 2%;
   background: var(--surface);
   border-bottom: 1px solid var(--line);
   position: sticky;
@@ -333,7 +333,7 @@ header {
 }
 
 section {
-  padding: 80px 5%;
+  padding: 80px 2%;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -392,10 +392,7 @@ section {
   .nav-links { display: none; }
 }
 
-/* 確保置中效果 */
 #web .lead {
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
   text-align: center;
-  display: block;
 }
