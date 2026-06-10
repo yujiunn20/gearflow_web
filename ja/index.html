@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GearFlow | プロフェッショナルなイベント装備・複雑物流管理</title>
+  <link rel="icon" href="../assets/images/gearflow_icon_friendly.png">
+  <link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+  <header>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <img src="../assets/images/gearflow_icon_friendly.png" alt="Logo" style="height: 30px;">
+      <span style="font-weight: bold; font-size: 1.2rem;">GearFlow</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#about">制作秘話</a>
+      <a href="#usage">使い方</a>
+      <a href="#pricing">プラン</a>
+      <a href="#web">ウェブ版</a>
+      <select class="lang-select" onchange="location = this.value;">
+        <option value="../index.html">繁體中文</option>
+        <option value="../en/index.html">English</option>
+        <option value="index.html" selected>日本語</option>
+      </select>
+    </nav>
+  </header>
+  <main class="home">
+    <section class="hero" aria-labelledby="site-title">
+      <div class="hero-media">
+        <img src="../assets/images/gearflow_feature_graphic.png" alt="GearFlow 装備チェックリストと物流管理">
+      </div>
+      <div class="hero-content">
+        <img class="app-icon" src="../assets/images/gearflow_icon_friendly.png" alt="GearFlow App アイコン">
+        <p class="eyebrow">GearFlow</p>
+        <h1 id="site-title">複雑なイベントの装備を完全にコントロール</h1>
+        <p class="lead">大型イベントや複雑な物流のために設計。映画撮影、キャンプ、大規模な展示会、または専門的な活動に。積み間違いをなくし、チームの連携を最大化します。</p>
+        <div style="margin-top: 20px;">
+          <a href="https://play.google.com/store/apps/details?id=com.yj.gearflow" target="_blank">
+            <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Google Play" style="height: 60px;">
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <h2 class="section-title">制作の背景</h2>
+      <div class="grid-2">
+        <div>
+          <p>GearFlow は、巡回健診に携わる医師の体験から生まれました。現場で目にしたのは、機材の忘れ物、車両への積み間違い、そして一部のメンバーしか計画を知らないことによる混乱でした。これは医療現場に限らず、映画の撮影現場や大人数のキャンプ、大規模イベントでも共通の課題です。</p>
+          <p>私たちは、個人の頭の中にある「積み込み計画」をクラウドで共有し、見える化します。「何が、いつ、どの車両で、どこへ運ばれるか」を全員が把握することで、点検と協力を驚くほど簡単にします。</p>
+        </div>
+        <img src="../assets/images/gearflow_feature_graphic.png" alt="制作の背景" style="width: 100%; border-radius: 20px;">
+      </div>
+    </section>
+
+    <section id="usage" style="background: var(--soft);">
+      <h2 class="section-title">使い方</h2>
+      <div class="grid-2">
+        <img src="../assets/images/gearflow_icon_friendly.png" alt="チュートリアルアイコン" style="width: 200px; margin: 0 auto; display: block;">
+        <div>
+          <ol class="lead" style="text-align: left;">
+            <li><strong>場所ごとの機材設定：</strong> イベント内の特定の場所で必要な機材を個別に設定。</li>
+            <li><strong>車両の指定：</strong> どのアイテムをどの車両で運ぶかを明確に設定し、積載の混乱を回避。</li>
+            <li><strong>クラウドリアルタイム点検：</strong> 全員でリストを共有・点検でき、特定の担当者に頼らない現場運営を実現。</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing">
+      <h2 class="section-title">サブスクリプションプラン</h2>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h3>無料版 (ベータ中)</h3>
+          <p class="lead" style="font-size: 2rem; color: var(--ink); font-weight: 800;">無料</p>
+          <ul style="list-style: none; padding: 0; margin-top: 20px; color: var(--muted);">
+            <li>✓ 1つのクラウドスペース</li>
+            <li>✓ 基本的なチェックリスト管理</li>
+            <li>✓ 個人利用に最適</li>
+            <li>● 基本的な利用制限あり</li>
+          </ul>
+        </div>
+        <div class="price-card premium">
+          <h3>プロ版 (予定)</h3>
+          <p class="lead" style="font-size: 2rem; color: var(--blue); font-weight: 800;">サブスクリプション</p>
+          <ul style="list-style: none; padding: 0; margin-top: 20px; color: var(--muted);">
+            <li>✓ 10つのクラウドスペース</li>
+            <li>✓ 大幅に緩和された利用制限</li>
+            <li>✓ 広告を完全に削除</li>
+            <li>✓ 優先カスタマーサポート</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="web" style="text-align: center;">
+      <h2 class="section-title">ウェブ版</h2>
+      <p class="lead">現在、ウェブ版を鋭意開発中です！将来的には、大画面でより直感的に膨大なギアライブラリを管理できるようになります。</p>
+      <div style="background: var(--soft); min-height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 20px; border: 2px dashed var(--line); padding: 40px;">
+        <svg width="120" height="90" viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 20px; opacity: 0.6;">
+          <rect x="5" y="5" width="110" height="80" rx="6" stroke="var(--blue)" stroke-width="4"/>
+          <path d="M5 25H115" stroke="var(--blue)" stroke-width="4"/>
+          <circle cx="15" cy="15" r="3" fill="var(--blue)"/><circle cx="25" cy="15" r="3" fill="var(--blue)"/><circle cx="35" cy="15" r="3" fill="var(--blue)"/>
+          <rect x="20" y="40" width="30" height="30" rx="2" fill="var(--line)"/><rect x="60" y="40" width="40" height="10" rx="2" fill="var(--line)"/><rect x="60" y="55" width="40" height="10" rx="2" fill="var(--line)"/>
+        </svg>
+        <p style="color: var(--muted); font-weight: 600; margin: 0;">Web Dashboard Coming Soon</p>
+      </div>
+    </section>
+  </main>
+  <footer class="footer-links">
+    <div style="margin-bottom: 20px;">
+      <a href="privacy.html">プライバシーポリシー</a> | 
+      <a href="account-deletion.html">アカウント削除</a>
+    </div>
+    <p>&copy; 2024-2026 GearFlow. All rights reserved.</p>
+  </footer>
+</body>
+</html>

@@ -3,52 +3,117 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GearFlow | Privacy Policy</title>
-  <meta name="description" content="GearFlow official website and privacy policy in Traditional Chinese, English, and Japanese.">
+  <title>GearFlow | 專業活動裝備與複雜物流管理工具</title>
   <link rel="icon" href="assets/images/gearflow_icon_friendly.png">
   <link rel="stylesheet" href="assets/css/site.css">
 </head>
 <body>
+  <header>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <img src="assets/images/gearflow_icon_friendly.png" alt="Logo" style="height: 30px;">
+      <span style="font-weight: bold; font-size: 1.2rem;">GearFlow</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#about">製作故事</a>
+      <a href="#usage">使用方法</a>
+      <a href="#pricing">訂閱方案</a>
+      <a href="#web">網頁版預覽</a>
+      <select class="lang-select" onchange="location = this.value;">
+        <option value="index.html" selected>繁體中文</option>
+        <option value="en/index.html">English</option>
+        <option value="ja/index.html">日本語</option>
+      </select>
+    </nav>
+  </header>
   <main class="home">
     <section class="hero" aria-labelledby="site-title">
       <div class="hero-media">
-        <img src="assets/images/gearflow_feature_graphic.png" alt="GearFlow equipment checklist illustration">
+        <img src="assets/images/gearflow_feature_graphic.png" alt="GearFlow 裝備清單與物流管理">
       </div>
       <div class="hero-content">
-        <img class="app-icon" src="assets/images/gearflow_icon_friendly.png" alt="GearFlow app icon">
+        <img class="app-icon" src="assets/images/gearflow_icon_friendly.png" alt="GearFlow App 圖示">
         <p class="eyebrow">GearFlow</p>
-        <h1 id="site-title">Trip gear, inventory, and logistics checklist app</h1>
-        <p class="lead">Choose a language to view GearFlow privacy and account deletion information.</p>
-        <nav class="language-grid" aria-label="Privacy policy language">
-          <a href="zh-Hant/privacy.html">
-            <span>繁體中文</span>
-            <strong>隱私權政策</strong>
+        <h1 id="site-title">掌控複雜活動中的每一件裝備</h1>
+        <p class="lead">專為大型活動與複雜物流設計的清單工具。不論是影視劇組、多人露營或專業展演，不再怕放錯車、帶錯物。</p>
+        <div style="margin-top: 20px;">
+          <a href="https://play.google.com/store/apps/details?id=com.yj.gearflow" target="_blank">
+            <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Google Play" style="height: 60px;">
           </a>
-          <a href="en/privacy.html">
-            <span>English</span>
-            <strong>Privacy Policy</strong>
-          </a>
-          <a href="ja/privacy.html">
-            <span>日本語</span>
-            <strong>プライバシーポリシー</strong>
-          </a>
-        </nav>
-        <nav class="language-grid secondary-grid" aria-label="Account deletion language">
-          <a href="zh-Hant/account-deletion.html">
-            <span>繁體中文</span>
-            <strong>帳戶與資料刪除</strong>
-          </a>
-          <a href="en/account-deletion.html">
-            <span>English</span>
-            <strong>Account Deletion</strong>
-          </a>
-          <a href="ja/account-deletion.html">
-            <span>日本語</span>
-            <strong>アカウント削除</strong>
-          </a>
-        </nav>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <h2 class="section-title">製作背景故事</h2>
+      <div class="grid-2">
+        <div>
+          <p>GearFlow 的靈感來自一位巡迴健檢醫師。在跟著醫療團隊工作的過程中，他發現一個普遍問題：器材忘了帶、放錯車、或是在搬運時只有少數人知道計畫。這種情況不只發生在醫療，在影視劇組搬運器材、多人露營、或大型活動策劃中也層出不窮。</p>
+          <p>我們希望透過雲端共享，將分散在核心成員大腦中的打包計畫數據化。讓每個人都能即時掌握「什麼東西要在什麼時候，放在哪台車上並送到哪個地點」，確保資訊同步，讓清點與協作變得極其簡單。</p>
+        </div>
+        <img src="assets/images/gearflow_feature_graphic.png" alt="製作故事" style="width: 100%; border-radius: 20px;">
+      </div>
+    </section>
+
+    <section id="usage" style="background: var(--soft);">
+      <h2 class="section-title">使用方法</h2>
+      <div class="grid-2">
+        <img src="assets/images/gearflow_icon_friendly.png" alt="教學圖示" style="width: 200px; margin: 0 auto; display: block;">
+        <div>
+          <ol class="lead" style="text-align: left;">
+            <li><strong>活動與地點配置：</strong> 為活動中的特定地點設定所需的裝備。</li>
+            <li><strong>指定交通工具：</strong> 精確設定哪些物品由哪輛車負責運送，避免裝載混亂。</li>
+            <li><strong>雲端即時清點：</strong> 多人同步查看清單，現場搬運與點貨不再依賴特定少數人。</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing">
+      <h2 class="section-title">訂閱方案</h2>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h3>基礎版 (封測中)</h3>
+          <p class="lead" style="font-size: 2rem; color: var(--ink); font-weight: 800;">免費</p>
+          <ul style="list-style: none; padding: 0; margin-top: 20px; color: var(--muted);">
+            <li>✓ 1 個雲端空間</li>
+            <li>✓ 基礎清單管理功能</li>
+            <li>✓ 適合個人或小型活動</li>
+            <li>● 基礎使用量限制</li>
+          </ul>
+        </div>
+        <div class="price-card premium">
+          <h3>專業版 (預計)</h3>
+          <p class="lead" style="font-size: 2rem; color: var(--blue); font-weight: 800;">訂閱制</p>
+          <ul style="list-style: none; padding: 0; margin-top: 20px; color: var(--muted);">
+            <li>✓ 10 個雲端空間</li>
+            <li>✓ 高上限儲存量與功能</li>
+            <li>✓ 完全移除廣告</li>
+            <li>✓ 優先技術支援</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="web" style="text-align: center;">
+      <h2 class="section-title">網頁版連結</h2>
+      <p class="lead">我們正在積極開發網頁版中！未來你將能在大螢幕上更直覺地管理你的龐大裝備庫。</p>
+      <div style="background: var(--soft); min-height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 20px; border: 2px dashed var(--line); padding: 40px;">
+        <svg width="120" height="90" viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 20px; opacity: 0.6;">
+          <rect x="5" y="5" width="110" height="80" rx="6" stroke="var(--blue)" stroke-width="4"/>
+          <path d="M5 25H115" stroke="var(--blue)" stroke-width="4"/>
+          <circle cx="15" cy="15" r="3" fill="var(--blue)"/><circle cx="25" cy="15" r="3" fill="var(--blue)"/><circle cx="35" cy="15" r="3" fill="var(--blue)"/>
+          <rect x="20" y="40" width="30" height="30" rx="2" fill="var(--line)"/><rect x="60" y="40" width="40" height="10" rx="2" fill="var(--line)"/><rect x="60" y="55" width="40" height="10" rx="2" fill="var(--line)"/>
+        </svg>
+        <p style="color: var(--muted); font-weight: 600; margin: 0;">Web Dashboard Coming Soon</p>
       </div>
     </section>
   </main>
+  <footer class="footer-links">
+    <div style="margin-bottom: 20px;">
+      <a href="zh-Hant/privacy.html">隱私權政策</a> | 
+      <a href="zh-Hant/account-deletion.html">帳戶資料刪除</a>
+    </div>
+    <p>&copy; 2024-2026 GearFlow. All rights reserved.</p>
+  </footer>
 </body>
 </html>
