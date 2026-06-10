@@ -392,7 +392,10 @@ section {
   .nav-links { display: none; }
 }
 
+/* 確保置中效果 */
 #web .lead {
-  margin-inline: auto;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
+  display: block;
 }
