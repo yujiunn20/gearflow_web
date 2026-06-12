@@ -6,7 +6,7 @@
   <title>GearFlow Web</title>
   <meta name="description" content="GearFlow Web 版，登入後才能使用，所有資料只走雲端，並為行動版提供接近 App 的排版。">
   <link rel="icon" href="../assets/images/gearflow_icon_friendly.png">
-  <link rel="stylesheet" href="../assets/css/web-app.css?v=20260612c">
+  <link rel="stylesheet" href="../assets/css/web-app.css?v=20260612e">
 </head>
 <body>
   <div class="web-app">
@@ -119,6 +119,14 @@
         </aside>
 
         <div class="app-main">
+          <section class="access-banner" id="access-banner" hidden>
+            <div>
+              <strong id="access-banner-title" data-i18n="viewerBannerTitle">Web 免費方案：唯讀</strong>
+              <p id="access-banner-body" data-i18n="viewerBannerBody">你可以查看雲端資料，但新增、編輯、刪除與移動功能需要 Web Pro。</p>
+            </div>
+            <span class="tag orange" id="access-banner-plan">Viewer</span>
+          </section>
+
           <section class="app-page" data-page="home">
             <div class="page-title">
               <div>
@@ -126,7 +134,10 @@
                 <h1 data-i18n="workspaceTitle">雲端工作區</h1>
                 <p data-i18n="workspaceBody">管理活動、倉庫與雲端裝備。</p>
               </div>
-              <span class="pill" data-i18n="workspacePill">Signed in</span>
+              <div class="page-title-actions">
+                <span class="pill" id="web-access-pill">Viewer</span>
+                <button class="secondary-button compact-button" type="button" id="refresh-cloud-btn" data-i18n="refreshCloudButton">重新整理</button>
+              </div>
             </div>
             <div class="metrics-grid">
               <button class="metric metric-button" type="button" data-page-target="events">
@@ -160,13 +171,21 @@
                 <h1 data-i18n="eventsTitle">活動</h1>
                 <p data-i18n="eventsBody">點選活動進入地點、運輸與裝備管理。</p>
               </div>
-              <button class="primary-button" type="button" id="add-event-btn" data-i18n="addEventButton">新增活動</button>
+              <button class="primary-button write-control" type="button" id="add-event-btn" data-i18n="addEventButton">新增活動</button>
             </div>
             <div class="event-list" id="event-list"></div>
           </section>
 
           <section class="app-page" data-page="event-detail">
             <div class="detail-pane" id="event-detail"></div>
+          </section>
+
+          <section class="app-page" data-page="transport-detail">
+            <div class="detail-pane" id="transport-detail"></div>
+          </section>
+
+          <section class="app-page" data-page="site-detail">
+            <div class="detail-pane" id="site-detail"></div>
           </section>
 
           <section class="app-page" data-page="warehouses" id="warehouses">
@@ -176,7 +195,7 @@
                 <h1 data-i18n="warehousesTitle">倉庫與裝備庫</h1>
                 <p data-i18n="warehousesBody">點選倉庫進入裝備與位置管理。</p>
               </div>
-              <button class="primary-button" type="button" id="add-warehouse-btn" data-i18n="addWarehouseButton">新增倉庫</button>
+              <button class="primary-button write-control" type="button" id="add-warehouse-btn" data-i18n="addWarehouseButton">新增倉庫</button>
             </div>
             <div class="warehouse-tabs">
               <button type="button" class="active" data-library-tab="warehouses" data-i18n="warehouseTab">倉庫</button>
@@ -200,13 +219,14 @@
             </div>
             <section class="panel section-card">
               <div class="subscription-card">
-                <div class="price" id="plan-name" data-i18n="planName">Free</div>
-                <div class="price-note" id="plan-note" data-i18n="planNote">目前不啟用限制。</div>
+                <div class="price" id="plan-name">Viewer</div>
+                <div class="price-note" id="plan-note" data-i18n="viewerPlanNote">Web 免費方案目前只能查看資料。</div>
                 <div class="tag-row">
                   <span class="tag green" data-i18n="planTagOne">Cloud enabled</span>
-                  <span class="tag" data-i18n="planTagTwo">Ads reserved</span>
-                  <span class="tag orange" data-i18n="planTagThree">Subscription later</span>
+                  <span class="tag" id="entitlement-status">active</span>
+                  <span class="tag orange" id="entitlement-source">default</span>
                 </div>
+                <p class="entitlement-help" data-i18n="entitlementHelp">Web 訂閱付款尚未開放；測試 Pro 目前由管理員手動啟用。</p>
               </div>
             </section>
           </section>
@@ -308,6 +328,8 @@
     const FIREBASE_PROJECT_ID = 'gearflow-71351';
     const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents`;
     const SESSION_KEY = 'gearflow_web_auth_session';
+    const WORKSPACE_CACHE_TTL_MS = 5 * 60 * 1000;
+    const COLLECTION_PAGE_SIZE = 100;
 
     const locales = {
       'zh-Hant': {
@@ -339,6 +361,14 @@
         workspaceTitle: '雲端工作區',
         workspaceBody: '這裡先放產品骨架。等你要接 Firebase 後，再把資料模型串進來。',
         workspacePill: 'Signed in',
+        refreshCloudButton: '重新整理',
+        refreshCloudLoading: '重新整理中...',
+        viewerBannerTitle: 'Web 免費方案：唯讀',
+        viewerBannerBody: '你可以查看雲端資料，但新增、編輯、刪除與移動功能需要 Web Pro。',
+        viewerPlanNote: 'Web 免費方案目前只能查看資料。',
+        proPlanNote: 'Web Pro 測試權限已啟用，可使用完整編輯功能。',
+        writeAccessRequired: 'Web 免費方案為唯讀，這項操作需要 Web Pro。',
+        entitlementHelp: 'Web 訂閱付款尚未開放；測試 Pro 目前由管理員手動啟用。',
         metricEvents: '活動',
         metricWarehouses: '倉庫 / 空間',
         metricTransports: '運輸工具',
@@ -347,7 +377,19 @@
         warehouseTab: '倉庫',
         gearTab: '裝備庫',
         backToEvents: '返回活動',
+        backToEventDetail: '返回活動詳情',
         backToWarehouses: '返回倉庫',
+        transportDetailEmpty: '找不到這個運輸工具。',
+        siteDetailEmpty: '找不到這個活動地點。',
+        operationsTitle: '物品作業',
+        responsibleItemsTitle: '負責物品',
+        plannedItemsTitle: '此地點預定物品',
+        extraItemsTitle: '額外物品',
+        noItemsHere: '目前沒有物品。',
+        readyCountLabel: '已到位',
+        moveAllOutButton: '全部移出',
+        viewDetailsLabel: '查看詳情',
+        contactLabel: '聯絡資訊',
         moveItemEyebrow: '物品位置',
         moveItemTitle: '移動物品',
         moveTargetLabel: '移動到',
@@ -523,6 +565,14 @@
         workspaceTitle: 'Cloud workspace',
         workspaceBody: 'This is the product skeleton. Once you wire in Firebase, the data model can drop in here.',
         workspacePill: 'Signed in',
+        refreshCloudButton: 'Refresh',
+        refreshCloudLoading: 'Refreshing...',
+        viewerBannerTitle: 'Web Free: view only',
+        viewerBannerBody: 'You can view cloud data. Creating, editing, deleting, and moving items requires Web Pro.',
+        viewerPlanNote: 'The Web Free plan currently provides view-only access.',
+        proPlanNote: 'Web Pro test access is active. Full editing is enabled.',
+        writeAccessRequired: 'Web Free is view only. This action requires Web Pro.',
+        entitlementHelp: 'Web subscription payments are not available yet. Test Pro access is currently enabled by an administrator.',
         metricEvents: 'Events',
         metricWarehouses: 'Warehouses / spaces',
         metricTransports: 'Transport units',
@@ -531,7 +581,19 @@
         warehouseTab: 'Warehouses',
         gearTab: 'Gear library',
         backToEvents: 'Back to events',
+        backToEventDetail: 'Back to event details',
         backToWarehouses: 'Back to warehouses',
+        transportDetailEmpty: 'This transport could not be found.',
+        siteDetailEmpty: 'This event site could not be found.',
+        operationsTitle: 'Item operations',
+        responsibleItemsTitle: 'Responsible items',
+        plannedItemsTitle: 'Items planned for this site',
+        extraItemsTitle: 'Extra items',
+        noItemsHere: 'No items here.',
+        readyCountLabel: 'Ready',
+        moveAllOutButton: 'Move all out',
+        viewDetailsLabel: 'View details',
+        contactLabel: 'Contact',
         moveItemEyebrow: 'Item location',
         moveItemTitle: 'Move item',
         moveTargetLabel: 'Move to',
@@ -707,6 +769,14 @@
         workspaceTitle: 'クラウドワークスペース',
         workspaceBody: 'ここにはまず製品の骨組みを置きます。Firebase を接続すると、データモデルをそのまま流し込めます。',
         workspacePill: 'Signed in',
+        refreshCloudButton: '再読み込み',
+        refreshCloudLoading: '再読み込み中...',
+        viewerBannerTitle: 'Web Free：閲覧のみ',
+        viewerBannerBody: 'クラウドデータを閲覧できます。追加・編集・削除・移動には Web Pro が必要です。',
+        viewerPlanNote: 'Web Free プランは現在、閲覧のみ利用できます。',
+        proPlanNote: 'Web Pro のテスト権限が有効です。すべての編集機能を利用できます。',
+        writeAccessRequired: 'Web Free は閲覧のみです。この操作には Web Pro が必要です。',
+        entitlementHelp: 'Web の支払いはまだ利用できません。テスト用 Pro は現在、管理者が手動で有効にします。',
         metricEvents: 'イベント',
         metricWarehouses: '倉庫 / スペース',
         metricTransports: '輸送手段',
@@ -715,7 +785,19 @@
         warehouseTab: '倉庫',
         gearTab: '装備庫',
         backToEvents: 'イベントに戻る',
+        backToEventDetail: 'イベント詳細に戻る',
         backToWarehouses: '倉庫に戻る',
+        transportDetailEmpty: 'この輸送手段が見つかりません。',
+        siteDetailEmpty: 'このイベント地点が見つかりません。',
+        operationsTitle: 'アイテム作業',
+        responsibleItemsTitle: '担当アイテム',
+        plannedItemsTitle: 'この地点の予定アイテム',
+        extraItemsTitle: '追加アイテム',
+        noItemsHere: 'アイテムはありません。',
+        readyCountLabel: '到着済み',
+        moveAllOutButton: 'すべて搬出',
+        viewDetailsLabel: '詳細を見る',
+        contactLabel: '連絡先',
         moveItemEyebrow: 'アイテム位置',
         moveItemTitle: 'アイテム移動',
         moveTargetLabel: '移動先',
@@ -878,8 +960,17 @@
         selectedWorkspaceId: '',
         selectedWorkspace: null,
         selectedEventId: '',
+        selectedTransportId: '',
+        selectedSiteId: '',
         selectedWarehouseId: '',
         subscription: null,
+        entitlement: {
+          webPlan: 'viewer',
+          status: 'active',
+          expiresAt: '',
+          source: 'default',
+        },
+        workspaceCache: new Map(),
       },
     };
 
@@ -899,11 +990,19 @@
     const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
     const planNameNode = document.getElementById('plan-name');
     const planNoteNode = document.getElementById('plan-note');
+    const entitlementStatusNode = document.getElementById('entitlement-status');
+    const entitlementSourceNode = document.getElementById('entitlement-source');
+    const webAccessPill = document.getElementById('web-access-pill');
+    const accessBanner = document.getElementById('access-banner');
+    const accessBannerPlan = document.getElementById('access-banner-plan');
+    const refreshCloudBtn = document.getElementById('refresh-cloud-btn');
     const eventListNode = document.getElementById('event-list');
     const warehouseListNode = document.getElementById('warehouse-list');
     const gearLibraryListNode = document.getElementById('gear-library-list');
     const activityListNode = document.getElementById('activity-list');
     const eventDetailNode = document.getElementById('event-detail');
+    const transportDetailNode = document.getElementById('transport-detail');
+    const siteDetailNode = document.getElementById('site-detail');
     const warehouseDetailNode = document.getElementById('warehouse-detail');
     const addEventBtn = document.getElementById('add-event-btn');
     const addWarehouseBtn = document.getElementById('add-warehouse-btn');
@@ -950,7 +1049,16 @@
     }
 
     function setActivePage(page, { updateHash = true } = {}) {
-      const allowedPages = ['home', 'events', 'event-detail', 'warehouses', 'warehouse-detail', 'account'];
+      const allowedPages = [
+        'home',
+        'events',
+        'event-detail',
+        'transport-detail',
+        'site-detail',
+        'warehouses',
+        'warehouse-detail',
+        'account',
+      ];
       state.activePage = allowedPages.includes(page) ? page : 'home';
 
       pageNodes.forEach((node) => {
@@ -958,7 +1066,7 @@
       });
       pageButtons.forEach((button) => {
         const target = button.dataset.pageTarget;
-        const activeTarget = state.activePage === 'event-detail'
+        const activeTarget = ['event-detail', 'transport-detail', 'site-detail'].includes(state.activePage)
           ? 'events'
           : state.activePage === 'warehouse-detail'
             ? 'warehouses'
@@ -1180,8 +1288,9 @@
       return data;
     }
 
-    async function firestoreList(path, token) {
-      const data = await firestoreRequest(path, token);
+    async function firestoreList(path, token, pageSize = COLLECTION_PAGE_SIZE) {
+      const separator = path.includes('?') ? '&' : '?';
+      const data = await firestoreRequest(`${path}${separator}pageSize=${pageSize}`, token);
       return data?.documents || [];
     }
 
@@ -1190,6 +1299,7 @@
     }
 
     async function firestoreCreate(collectionPath, token, fields, documentId = '') {
+      requireWebWriteAccess();
       const suffix = documentId ? `?documentId=${encodeURIComponent(documentId)}` : '';
       return firestoreRequest(collectionPath + suffix, token, {
         method: 'POST',
@@ -1198,6 +1308,7 @@
     }
 
     async function firestoreUpdate(documentPath, token, fields) {
+      requireWebWriteAccess();
       const updateMask = Object.keys(fields || {})
         .map((fieldPath) => `updateMask.fieldPaths=${encodeURIComponent(fieldPath)}`)
         .join('&');
@@ -1208,6 +1319,7 @@
     }
 
     async function firestoreDelete(documentPath, token) {
+      requireWebWriteAccess();
       return firestoreRequest(documentPath, token, { method: 'DELETE' });
     }
 
@@ -1271,6 +1383,82 @@
       };
     }
 
+    function formatEntitlement(userDoc) {
+      const fields = decodeFirestoreFields(userDoc?.fields || {});
+      const subscription = fields.subscription || {};
+      const paidPlan = ['pro', 'premium'].includes(String(subscription.plan || '').toLowerCase());
+      return {
+        webPlan: subscription.webPlan === 'pro' || paidPlan ? 'pro' : 'viewer',
+        status: subscription.status || 'active',
+        expiresAt: subscription.expiresAt || '',
+        source: subscription.source || subscription.provider || 'default',
+      };
+    }
+
+    function hasActiveWebPro() {
+      const entitlement = state.cloud.entitlement;
+      if (entitlement.webPlan !== 'pro' || entitlement.status !== 'active') {
+        return false;
+      }
+      if (!entitlement.expiresAt) {
+        return true;
+      }
+      const expiresAt = new Date(entitlement.expiresAt).getTime();
+      return Number.isNaN(expiresAt) || expiresAt > Date.now();
+    }
+
+    function requireWebWriteAccess({ notify = true } = {}) {
+      if (hasActiveWebPro()) {
+        return true;
+      }
+      if (notify) {
+        const message = currentCopy().writeAccessRequired;
+        setWorkspaceMessage(message, 'error');
+        window.alert(message);
+      }
+      throw new Error('WEB_VIEW_ONLY');
+    }
+
+    function allowWebWriteAction() {
+      try {
+        return requireWebWriteAccess();
+      } catch {
+        return false;
+      }
+    }
+
+    function renderWebAccess() {
+      const copy = currentCopy();
+      const isPro = hasActiveWebPro();
+      const entitlement = state.cloud.entitlement;
+      document.body.classList.toggle('web-pro', isPro);
+      document.body.classList.toggle('web-viewer', Boolean(state.session) && !isPro);
+      document.querySelectorAll('.write-control').forEach((control) => {
+        control.hidden = !isPro;
+      });
+      if (accessBanner) {
+        accessBanner.hidden = !state.session || isPro;
+      }
+      if (webAccessPill) {
+        webAccessPill.textContent = isPro ? 'Web Pro' : 'Viewer';
+      }
+      if (accessBannerPlan) {
+        accessBannerPlan.textContent = isPro ? 'Pro' : 'Viewer';
+      }
+      if (planNameNode) {
+        planNameNode.textContent = isPro ? 'Web Pro' : 'Viewer';
+      }
+      if (planNoteNode) {
+        planNoteNode.textContent = isPro ? copy.proPlanNote : copy.viewerPlanNote;
+      }
+      if (entitlementStatusNode) {
+        entitlementStatusNode.textContent = entitlement.status || 'active';
+      }
+      if (entitlementSourceNode) {
+        entitlementSourceNode.textContent = entitlement.source || 'default';
+      }
+    }
+
     function renderWorkspaceSelector() {
       if (!workspaceSelector) {
         return;
@@ -1299,6 +1487,7 @@
     function renderWorkspaceContent() {
       const copy = currentCopy();
       const workspace = state.cloud.selectedWorkspace;
+      renderWebAccess();
       const emptyEvents = `<article class="list-item"><div class="item-title">${copy.emptyEventsTitle}</div><div class="item-meta">${copy.emptyEventsBody}</div></article>`;
       const emptyWarehouses = `<article class="list-item"><div class="item-title">${copy.emptyWarehousesTitle}</div><div class="item-meta">${copy.emptyWarehousesBody}</div></article>`;
       const emptyActivity = `<article class="list-item"><div class="item-title">${copy.emptyActivityTitle}</div><div class="item-meta">${copy.emptyActivityBody}</div></article>`;
@@ -1310,17 +1499,13 @@
         renderEventList([]);
         renderWarehouseList([]);
         renderActivity('activity-list', []);
-        if (planNameNode) {
-          planNameNode.textContent = copy.planName;
-        }
-        if (planNoteNode) {
-          planNoteNode.textContent = copy.planNote;
-        }
         eventListNode.innerHTML = emptyEvents;
         warehouseListNode.innerHTML = emptyWarehouses;
         gearLibraryListNode.innerHTML = emptyWarehouses;
         activityListNode.innerHTML = emptyActivity;
         eventDetailNode.innerHTML = `<article class="detail-card"><div class="item-title">${copy.eventDetailEmpty}</div></article>`;
+        transportDetailNode.innerHTML = `<article class="detail-card"><div class="item-title">${copy.transportDetailEmpty}</div></article>`;
+        siteDetailNode.innerHTML = `<article class="detail-card"><div class="item-title">${copy.siteDetailEmpty}</div></article>`;
         warehouseDetailNode.innerHTML = `<article class="detail-card"><div class="item-title">${copy.warehouseDetailEmpty}</div></article>`;
         metricEventsValue.textContent = '0';
         metricWarehousesValue.textContent = '0';
@@ -1338,6 +1523,19 @@
       if (!state.cloud.selectedWarehouseId || !warehouses.some((warehouse) => warehouse.id === state.cloud.selectedWarehouseId)) {
         state.cloud.selectedWarehouseId = warehouses[0]?.id || '';
       }
+      const selectedEvent = events.find((event) => event.id === state.cloud.selectedEventId);
+      const selectedEventTransports = selectedEvent?.fields?.transports || [];
+      const selectedEventSites = selectedEvent?.fields?.sites || [];
+      if (!selectedEventTransports.some((transport, index) => transportKey(transport, index) === state.cloud.selectedTransportId)) {
+        state.cloud.selectedTransportId = selectedEventTransports.length
+          ? transportKey(selectedEventTransports[0], 0)
+          : '';
+      }
+      if (!selectedEventSites.some((site, index) => siteKey(site, index) === state.cloud.selectedSiteId)) {
+        state.cloud.selectedSiteId = selectedEventSites.length
+          ? siteKey(selectedEventSites[0], 0)
+          : '';
+      }
 
       workspaceSummary.textContent = workspace.name
         ? `${workspace.name} · ${workspace.ownerEmail || workspace.role}`
@@ -1348,25 +1546,19 @@
       renderGearLibrary(workspace.gearItems || []);
       renderActivity('activity-list', activity);
       renderSelectedEventDetail();
+      renderSelectedTransportDetail();
+      renderSelectedSiteDetail();
       renderSelectedWarehouseDetail();
       metricEventsValue.textContent = String(events.length);
       metricWarehousesValue.textContent = String(warehouses.length);
       metricGearValue.textContent = String((workspace.gearItems || []).length);
 
-      if (planNameNode) {
-        planNameNode.textContent = workspace.subscription?.plan || copy.planName;
-      }
-      if (planNoteNode) {
-        const subscription = workspace.subscription;
-        if (subscription?.providerStatus) {
-          planNoteNode.textContent = `${subscription.providerStatus}${subscription.expiresAt ? ` · ${subscription.expiresAt}` : ''}`;
-        } else {
-          planNoteNode.textContent = copy.planNote;
-        }
-      }
     }
 
     function renderActionButtons(kind, entity) {
+      if (!hasActiveWebPro()) {
+        return '';
+      }
       const copy = currentCopy();
       return `
         <div class="card-actions">
@@ -1381,6 +1573,7 @@
         return;
       }
       if (!items.length) {
+        eventListNode.innerHTML = `<article class="list-item"><div class="item-title">${escapeHtml(currentCopy().emptyEventsTitle)}</div><div class="item-meta">${escapeHtml(currentCopy().emptyEventsBody)}</div></article>`;
         return;
       }
       eventListNode.innerHTML = items.map((item) => `
@@ -1402,6 +1595,8 @@
             return;
           }
           state.cloud.selectedEventId = article.getAttribute('data-event-id') || '';
+          state.cloud.selectedTransportId = '';
+          state.cloud.selectedSiteId = '';
           renderSelectedEventDetail();
           setActivePage('event-detail');
         });
@@ -1413,6 +1608,7 @@
         return;
       }
       if (!items.length) {
+        warehouseListNode.innerHTML = `<article class="list-item"><div class="item-title">${escapeHtml(currentCopy().emptyWarehousesTitle)}</div><div class="item-meta">${escapeHtml(currentCopy().emptyWarehousesBody)}</div></article>`;
         return;
       }
       warehouseListNode.innerHTML = items.map((item) => `
@@ -1451,6 +1647,7 @@
       }
 
       const warehouses = state.cloud.selectedWorkspace?.warehouses || [];
+      const canWrite = hasActiveWebPro();
       gearLibraryListNode.innerHTML = items.map((item) => {
         const plannedWarehouse = warehouses.find((warehouse) => warehouse.id === item.fields?.warehouseId);
         return `
@@ -1460,11 +1657,11 @@
                 <div class="item-title">${escapeHtml(item.title)}</div>
                 <div class="item-meta">${escapeHtml(item.fields?.category || '')} · ${escapeHtml(plannedWarehouse?.title || item.fields?.warehouseId || '')}</div>
               </div>
-              <div class="card-actions">
+              ${canWrite ? `<div class="card-actions">
                 <button class="icon-button" type="button" data-library-action="move" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.moveButton)}</button>
                 <button class="icon-button" type="button" data-library-action="edit" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.editLabel)}</button>
                 <button class="icon-button danger" type="button" data-library-action="delete" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.deleteLabel)}</button>
-              </div>
+              </div>` : ''}
             </div>
             <div class="tag-row">
               <span class="tag">${escapeHtml(item.fields?.currentLocationType || 'unassigned')}</span>
@@ -1511,6 +1708,7 @@
       const transports = event.fields?.transports || [];
       const sites = event.fields?.sites || [];
       const items = event.fields?.items || [];
+      const canWrite = hasActiveWebPro();
 
       eventDetailNode.innerHTML = `
         <article class="detail-card selected">
@@ -1520,13 +1718,13 @@
               <h3>${escapeHtml(event.title)}</h3>
               <p class="detail-subtitle">${escapeHtml(event.meta)}</p>
             </div>
-            <div class="detail-actions">
+            ${canWrite ? `<div class="detail-actions">
               <button class="secondary-button" type="button" id="event-add-transport">${escapeHtml(copy.addTransportButton)}</button>
               <button class="secondary-button" type="button" id="event-add-site">${escapeHtml(copy.addSiteButton)}</button>
               <button class="secondary-button" type="button" id="event-add-item">${escapeHtml(copy.addPlanItemButton)}</button>
               <button class="secondary-button" type="button" id="event-edit">${escapeHtml(copy.editLabel)}</button>
               <button class="secondary-button" type="button" id="event-delete">${escapeHtml(copy.deleteLabel)}</button>
-            </div>
+            </div>` : ''}
           </div>
           <div class="tag-row">${event.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>
           <div style="height: 14px;"></div>
@@ -1538,20 +1736,21 @@
               </div>
             </div>
             ${transports.length ? transports.map((transport, index) => `
-              <article class="list-item" style="margin-bottom: 10px;">
+              <article class="list-item interactive-card" style="margin-bottom: 10px;" data-transport-open="${index}" tabindex="0" role="button">
                 <div class="list-item-top">
                   <div>
                     <div class="item-title">${escapeHtml(transport.name || `Transport ${index + 1}`)}</div>
                     <div class="item-meta">${escapeHtml([transport.representative, transport.plateNumber, transport.contactPhone].filter(Boolean).join(' · '))}</div>
                   </div>
-                  <div class="card-actions">
+                  ${canWrite ? `<div class="card-actions">
                     <button class="icon-button" type="button" data-transport-action="edit" data-transport-index="${index}">${escapeHtml(copy.editLabel)}</button>
                     <button class="icon-button danger" type="button" data-transport-action="delete" data-transport-index="${index}">${escapeHtml(copy.deleteLabel)}</button>
-                  </div>
+                  </div>` : ''}
                 </div>
                 <div class="tag-row">
                   <span class="tag">${escapeHtml(transport.type || 'transport')}</span>
                   <span class="tag">${escapeHtml(transport.isActive === false ? 'disabled' : 'active')}</span>
+                  <span class="tag green">${escapeHtml(copy.viewDetailsLabel)}</span>
                 </div>
               </article>
             `).join('') : `<div class="item-meta">No transports yet</div>`}
@@ -1565,16 +1764,19 @@
               </div>
             </div>
             ${sites.length ? sites.map((site, index) => `
-              <article class="list-item" style="margin-bottom: 10px;">
+              <article class="list-item interactive-card" style="margin-bottom: 10px;" data-site-open="${index}" tabindex="0" role="button">
                 <div class="list-item-top">
                   <div>
                     <div class="item-title">${escapeHtml(site.name || `Site ${index + 1}`)}</div>
                     <div class="item-meta">${escapeHtml([site.timeLabel, site.address, site.note].filter(Boolean).join(' · '))}</div>
                   </div>
-                  <div class="card-actions">
+                  ${canWrite ? `<div class="card-actions">
                     <button class="icon-button" type="button" data-site-action="edit" data-site-index="${index}">${escapeHtml(copy.editLabel)}</button>
                     <button class="icon-button danger" type="button" data-site-action="delete" data-site-index="${index}">${escapeHtml(copy.deleteLabel)}</button>
-                  </div>
+                  </div>` : ''}
+                </div>
+                <div class="tag-row">
+                  <span class="tag green">${escapeHtml(copy.viewDetailsLabel)}</span>
                 </div>
               </article>
             `).join('') : `<div class="item-meta">No sites yet</div>`}
@@ -1594,11 +1796,11 @@
                     <div class="item-title">${escapeHtml(item.name || `Item ${index + 1}`)}</div>
                     <div class="item-meta">${escapeHtml([item.category, item.updatedAtLabel].filter(Boolean).join(' · '))}</div>
                   </div>
-                  <div class="card-actions">
+                  ${canWrite ? `<div class="card-actions">
                     <button class="icon-button" type="button" data-item-action="move" data-item-index="${index}">${escapeHtml(copy.moveButton)}</button>
                     <button class="icon-button" type="button" data-item-action="edit" data-item-index="${index}">${escapeHtml(copy.editLabel)}</button>
                     <button class="icon-button danger" type="button" data-item-action="delete" data-item-index="${index}">${escapeHtml(copy.deleteLabel)}</button>
-                  </div>
+                  </div>` : ''}
                 </div>
                 <div class="tag-row">
                   <span class="tag">${escapeHtml(item.status || 'planned')}</span>
@@ -1616,6 +1818,38 @@
       eventDetailNode.querySelector('#event-add-item')?.addEventListener('click', () => promptUpsertEventItem(event));
       eventDetailNode.querySelector('#event-edit')?.addEventListener('click', () => openEntityDialog('event', event));
       eventDetailNode.querySelector('#event-delete')?.addEventListener('click', () => deleteEventRecord(event));
+
+      const openNestedDetail = (article, page, selectionKey) => {
+        const open = () => {
+          const index = Number(article.getAttribute(selectionKey));
+          if (page === 'transport-detail') {
+            state.cloud.selectedTransportId = transportKey(transports[index], index);
+            renderSelectedTransportDetail();
+          } else {
+            state.cloud.selectedSiteId = siteKey(sites[index], index);
+            renderSelectedSiteDetail();
+          }
+          setActivePage(page);
+        };
+        article.addEventListener('click', (clickEvent) => {
+          if (!clickEvent.target.closest('button')) {
+            open();
+          }
+        });
+        article.addEventListener('keydown', (keyEvent) => {
+          if (keyEvent.key === 'Enter' || keyEvent.key === ' ') {
+            keyEvent.preventDefault();
+            open();
+          }
+        });
+      };
+
+      eventDetailNode.querySelectorAll('[data-transport-open]').forEach((article) => {
+        openNestedDetail(article, 'transport-detail', 'data-transport-open');
+      });
+      eventDetailNode.querySelectorAll('[data-site-open]').forEach((article) => {
+        openNestedDetail(article, 'site-detail', 'data-site-open');
+      });
 
       eventDetailNode.querySelectorAll('[data-transport-action]').forEach((button) => {
         button.addEventListener('click', () => {
@@ -1653,6 +1887,264 @@
       });
     }
 
+    function transportKey(transport, index) {
+      return String(transport?.id || `transport-index-${index}`);
+    }
+
+    function siteKey(site, index) {
+      return String(site?.id || `site-index-${index}`);
+    }
+
+    function eventItemLocationName(item, event) {
+      const copy = currentCopy();
+      if (item.currentLocationType === 'unassigned') {
+        return copy.unassignedLabel;
+      }
+      if (item.currentLocationType === 'warehouse') {
+        return copy.warehouseLocationLabel;
+      }
+      if (item.currentLocationType === 'transport') {
+        const transport = (event.fields?.transports || []).find((value, index) => {
+          const aliases = [transportKey(value, index), value.id, value.name].filter(Boolean);
+          return aliases.includes(item.currentLocationId);
+        });
+        return transport?.name || item.currentLocationId || copy.unassignedLabel;
+      }
+      if (item.currentLocationType === 'site') {
+        const site = (event.fields?.sites || []).find((value, index) => {
+          const aliases = [siteKey(value, index), value.id, value.name].filter(Boolean);
+          return aliases.includes(item.currentLocationId);
+        });
+        return site?.name || item.currentLocationId || copy.unassignedLabel;
+      }
+      return item.currentLocationId || copy.unassignedLabel;
+    }
+
+    function renderOperationItems(records, event, targetType, targetId, targetAliases = [targetId]) {
+      const copy = currentCopy();
+      const canWrite = hasActiveWebPro();
+      if (!records.length) {
+        return `<div class="item-meta">${escapeHtml(copy.noItemsHere)}</div>`;
+      }
+      return records.map(({ item, index }) => {
+        const isHere = item.currentLocationType === targetType && targetAliases.includes(item.currentLocationId);
+        return `
+          <article class="list-item operation-item">
+            <div class="list-item-top">
+              <div>
+                <div class="item-title">${escapeHtml(item.name || `Item ${index + 1}`)}</div>
+                <div class="item-meta">${escapeHtml(item.status || 'planned')} · ${escapeHtml(eventItemLocationName(item, event))}</div>
+              </div>
+              ${canWrite ? `
+                <button class="secondary-button compact-button" type="button" data-operation-index="${index}" data-operation-action="${isHere ? 'out' : 'in'}">
+                  ${escapeHtml(isHere ? copy.moveOutLabel : copy.moveInLabel)}
+                </button>
+              ` : ''}
+            </div>
+            <div class="tag-row">
+              <span class="tag ${isHere ? 'green' : 'orange'}">${escapeHtml(isHere ? copy.readyCountLabel : item.currentLocationType || 'unassigned')}</span>
+              ${item.quantity ? `<span class="tag">× ${escapeHtml(item.quantity)}</span>` : ''}
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function moveEventItemAtIndex(event, itemIndex, locationType, locationId) {
+      if (!allowWebWriteAction()) {
+        return;
+      }
+      const items = [...(event.fields?.items || [])];
+      if (!items[itemIndex]) {
+        return;
+      }
+      items[itemIndex] = {
+        ...items[itemIndex],
+        currentLocationType: locationType,
+        currentLocationId: locationId,
+        status: locationType === 'transport'
+          ? 'loaded'
+          : locationType === 'site'
+            ? 'onsite'
+            : 'planned',
+        updatedBy: state.session?.email || 'me',
+        updatedAtLabel: formatNowLabel(),
+      };
+      await saveEventDocument(event.id, {
+        ...event.fields,
+        items,
+        updatedAtLabel: formatNowLabel(),
+      });
+    }
+
+    async function moveAllOutOfEventLocation(event, locationType, locationIds) {
+      if (!allowWebWriteAction()) {
+        return;
+      }
+      const items = (event.fields?.items || []).map((item) => {
+        if (item.currentLocationType !== locationType || !locationIds.includes(item.currentLocationId)) {
+          return item;
+        }
+        return {
+          ...item,
+          currentLocationType: 'unassigned',
+          currentLocationId: 'unassigned',
+          status: 'planned',
+          updatedBy: state.session?.email || 'me',
+          updatedAtLabel: formatNowLabel(),
+        };
+      });
+      await saveEventDocument(event.id, {
+        ...event.fields,
+        items,
+        updatedAtLabel: formatNowLabel(),
+      });
+    }
+
+    function bindOperationButtons(container, event, targetType, targetId) {
+      container.querySelectorAll('[data-operation-index]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const index = Number(button.dataset.operationIndex);
+          const moveIn = button.dataset.operationAction === 'in';
+          moveEventItemAtIndex(
+            event,
+            index,
+            moveIn ? targetType : 'unassigned',
+            moveIn ? targetId : 'unassigned',
+          );
+        });
+      });
+    }
+
+    function renderSelectedTransportDetail() {
+      const copy = currentCopy();
+      const event = getWorkspaceEvent();
+      const transports = event?.fields?.transports || [];
+      const selectedIndex = transports.findIndex(
+        (transport, index) => transportKey(transport, index) === state.cloud.selectedTransportId,
+      );
+      const transport = transports[selectedIndex];
+      if (!event || !transport) {
+        transportDetailNode.innerHTML = `<article class="detail-card"><div class="item-title">${escapeHtml(copy.transportDetailEmpty)}</div></article>`;
+        return;
+      }
+
+      const targetId = transport.id || transport.name || transportKey(transport, selectedIndex);
+      const aliases = [targetId, transport.id, transport.name, transportKey(transport, selectedIndex)].filter(Boolean);
+      const indexedItems = (event.fields?.items || []).map((item, index) => ({ item, index }));
+      const responsible = indexedItems.filter(({ item }) => aliases.includes(item.assignedTransportId));
+      const extras = indexedItems.filter(({ item }) =>
+        !aliases.includes(item.assignedTransportId)
+        && item.currentLocationType === 'transport'
+        && aliases.includes(item.currentLocationId)
+      );
+      const readyCount = responsible.filter(({ item }) =>
+        item.currentLocationType === 'transport' && aliases.includes(item.currentLocationId)
+      ).length;
+      const canWrite = hasActiveWebPro();
+
+      transportDetailNode.innerHTML = `
+        <article class="detail-card selected">
+          <button class="back-button" type="button" id="transport-detail-back">← ${escapeHtml(copy.backToEventDetail)}</button>
+          <div class="detail-head">
+            <div>
+              <p class="eyebrow">${escapeHtml(transport.type || 'transport')}</p>
+              <h3>${escapeHtml(transport.name || `Transport ${selectedIndex + 1}`)}</h3>
+              <p class="detail-subtitle">${escapeHtml(`${copy.readyCountLabel} ${readyCount} / ${responsible.length}`)}</p>
+            </div>
+            ${canWrite && readyCount > 0 ? `<button class="secondary-button" type="button" id="transport-move-all-out">${escapeHtml(copy.moveAllOutButton)}</button>` : ''}
+          </div>
+          <section class="detail-summary-grid">
+            <div><span>${escapeHtml(copy.contactLabel)}</span><strong>${escapeHtml(transport.representative || '-')}</strong></div>
+            <div><span>Plate / ID</span><strong>${escapeHtml(transport.plateNumber || '-')}</strong></div>
+            <div><span>Phone</span><strong>${escapeHtml(transport.contactPhone || '-')}</strong></div>
+            <div><span>Note</span><strong>${escapeHtml(transport.note || '-')}</strong></div>
+          </section>
+          <section class="operation-section">
+            <div class="detail-head"><div><h4>${escapeHtml(copy.responsibleItemsTitle)}</h4><p class="detail-subtitle">${escapeHtml(copy.operationsTitle)}</p></div></div>
+            ${renderOperationItems(responsible, event, 'transport', targetId, aliases)}
+          </section>
+          ${extras.length ? `
+            <section class="operation-section">
+              <div class="detail-head"><div><h4>${escapeHtml(copy.extraItemsTitle)}</h4></div></div>
+              ${renderOperationItems(extras, event, 'transport', targetId, aliases)}
+            </section>
+          ` : ''}
+        </article>
+      `;
+
+      transportDetailNode.querySelector('#transport-detail-back')?.addEventListener('click', () => setActivePage('event-detail'));
+      transportDetailNode.querySelector('#transport-move-all-out')?.addEventListener('click', () => {
+        moveAllOutOfEventLocation(event, 'transport', aliases);
+      });
+      bindOperationButtons(transportDetailNode, event, 'transport', targetId);
+    }
+
+    function renderSelectedSiteDetail() {
+      const copy = currentCopy();
+      const event = getWorkspaceEvent();
+      const sites = event?.fields?.sites || [];
+      const selectedIndex = sites.findIndex(
+        (site, index) => siteKey(site, index) === state.cloud.selectedSiteId,
+      );
+      const site = sites[selectedIndex];
+      if (!event || !site) {
+        siteDetailNode.innerHTML = `<article class="detail-card"><div class="item-title">${escapeHtml(copy.siteDetailEmpty)}</div></article>`;
+        return;
+      }
+
+      const targetId = site.id || site.name || siteKey(site, selectedIndex);
+      const aliases = [targetId, site.id, site.name, siteKey(site, selectedIndex)].filter(Boolean);
+      const indexedItems = (event.fields?.items || []).map((item, index) => ({ item, index }));
+      const planned = indexedItems.filter(({ item }) =>
+        (item.requiredSiteIds || []).some((requiredId) => aliases.includes(requiredId))
+      );
+      const extras = indexedItems.filter(({ item }) =>
+        !(item.requiredSiteIds || []).some((requiredId) => aliases.includes(requiredId))
+        && item.currentLocationType === 'site'
+        && aliases.includes(item.currentLocationId)
+      );
+      const readyCount = planned.filter(({ item }) =>
+        item.currentLocationType === 'site' && aliases.includes(item.currentLocationId)
+      ).length;
+      const canWrite = hasActiveWebPro();
+
+      siteDetailNode.innerHTML = `
+        <article class="detail-card selected">
+          <button class="back-button" type="button" id="site-detail-back">← ${escapeHtml(copy.backToEventDetail)}</button>
+          <div class="detail-head">
+            <div>
+              <p class="eyebrow">${escapeHtml(site.timeLabel || 'Site')}</p>
+              <h3>${escapeHtml(site.name || `Site ${selectedIndex + 1}`)}</h3>
+              <p class="detail-subtitle">${escapeHtml(`${copy.readyCountLabel} ${readyCount} / ${planned.length}`)}</p>
+            </div>
+            ${canWrite && readyCount > 0 ? `<button class="secondary-button" type="button" id="site-move-all-out">${escapeHtml(copy.moveAllOutButton)}</button>` : ''}
+          </div>
+          <section class="detail-summary-grid">
+            <div><span>Time</span><strong>${escapeHtml(site.timeLabel || '-')}</strong></div>
+            <div><span>Address</span><strong>${escapeHtml(site.address || '-')}</strong></div>
+            <div><span>Note</span><strong>${escapeHtml(site.note || '-')}</strong></div>
+          </section>
+          <section class="operation-section">
+            <div class="detail-head"><div><h4>${escapeHtml(copy.plannedItemsTitle)}</h4><p class="detail-subtitle">${escapeHtml(copy.operationsTitle)}</p></div></div>
+            ${renderOperationItems(planned, event, 'site', targetId, aliases)}
+          </section>
+          ${extras.length ? `
+            <section class="operation-section">
+              <div class="detail-head"><div><h4>${escapeHtml(copy.extraItemsTitle)}</h4></div></div>
+              ${renderOperationItems(extras, event, 'site', targetId, aliases)}
+            </section>
+          ` : ''}
+        </article>
+      `;
+
+      siteDetailNode.querySelector('#site-detail-back')?.addEventListener('click', () => setActivePage('event-detail'));
+      siteDetailNode.querySelector('#site-move-all-out')?.addEventListener('click', () => {
+        moveAllOutOfEventLocation(event, 'site', aliases);
+      });
+      bindOperationButtons(siteDetailNode, event, 'site', targetId);
+    }
+
     function renderSelectedWarehouseDetail() {
       if (!warehouseDetailNode) {
         return;
@@ -1667,6 +2159,7 @@
       }
 
       const gearItems = workspace?.gearItems || [];
+      const canWrite = hasActiveWebPro();
       const plannedGearItems = gearItems.filter((item) => item.fields?.warehouseId === warehouse.id);
       const extraGearItems = gearItems.filter((item) =>
         item.fields?.currentLocationType === 'warehouse' &&
@@ -1682,11 +2175,11 @@
               <h3>${escapeHtml(warehouse.title)}</h3>
               <p class="detail-subtitle">${escapeHtml(warehouse.meta)}</p>
             </div>
-            <div class="detail-actions">
+            ${canWrite ? `<div class="detail-actions">
               <button class="secondary-button" type="button" id="warehouse-add-gear">${escapeHtml(copy.addGearButton)}</button>
               <button class="secondary-button" type="button" id="warehouse-edit">${escapeHtml(copy.editLabel)}</button>
               <button class="secondary-button" type="button" id="warehouse-delete">${escapeHtml(copy.deleteLabel)}</button>
-            </div>
+            </div>` : ''}
           </div>
           <div class="tag-row">
             ${warehouse.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
@@ -1705,12 +2198,12 @@
                   <div class="item-title">${escapeHtml(item.title)}</div>
                   <div class="item-meta">${escapeHtml(item.meta)}</div>
                 </div>
-                <div class="card-actions">
+                ${canWrite ? `<div class="card-actions">
                   <button class="icon-button" type="button" data-gear-action="move-in" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.moveInLabel)}</button>
                   <button class="icon-button" type="button" data-gear-action="move-out" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.moveOutLabel)}</button>
                   <button class="icon-button" type="button" data-gear-action="edit" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.editLabel)}</button>
                   <button class="icon-button danger" type="button" data-gear-action="delete" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.deleteLabel)}</button>
-                </div>
+                </div>` : ''}
               </div>
               <div class="tag-row">
                 ${item.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
@@ -1731,11 +2224,11 @@
                   <div class="item-title">${escapeHtml(item.title)}</div>
                   <div class="item-meta">${escapeHtml(item.meta)}</div>
                 </div>
-                <div class="card-actions">
+                ${canWrite ? `<div class="card-actions">
                   <button class="icon-button" type="button" data-gear-action="move-out" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.moveOutLabel)}</button>
                   <button class="icon-button" type="button" data-gear-action="edit" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.editLabel)}</button>
                   <button class="icon-button danger" type="button" data-gear-action="delete" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.deleteLabel)}</button>
-                </div>
+                </div>` : ''}
               </div>
               <div class="tag-row">
                 ${item.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
@@ -1787,6 +2280,9 @@
     }
 
     async function saveEventDocument(eventId, nextFields) {
+      if (!allowWebWriteAction()) {
+        return;
+      }
       const workspaceId = currentWorkspaceId();
       if (!workspaceId || !state.session) {
         return;
@@ -1796,6 +2292,9 @@
     }
 
     async function deleteEventRecord(event) {
+      if (!allowWebWriteAction()) {
+        return;
+      }
       if (!window.confirm(currentCopy().deleteConfirmEvent || 'Delete this event?')) {
         return;
       }
@@ -1809,6 +2308,9 @@
     }
 
     async function deleteWarehouseRecord(warehouse) {
+      if (!allowWebWriteAction()) {
+        return;
+      }
       if (!window.confirm(currentCopy().deleteConfirmWarehouse || 'Delete this warehouse?')) {
         return;
       }
@@ -1822,6 +2324,9 @@
     }
 
     async function deleteNestedRecord(event, key, index) {
+      if (!allowWebWriteAction()) {
+        return;
+      }
       const next = [...(event.fields?.[key] || [])];
       next.splice(index, 1);
       await saveEventDocument(event.id, {
@@ -1861,6 +2366,9 @@
     }
 
     async function promptUpsertTransport(event, index = null) {
+      if (!allowWebWriteAction()) {
+        return;
+      }
       const current = index == null ? null : (event.fields?.transports || [])[index];
       try {
         const next = {
@@ -1890,6 +2398,9 @@
     }
 
     async function promptUpsertSite(event, index = null) {
+      if (!allowWebWriteAction()) {
+        return;
+      }
       const current = index == null ? null : (event.fields?.sites || [])[index];
       try {
         const next = {
@@ -1917,6 +2428,9 @@
     }
 
     async function promptUpsertEventItem(event, index = null) {
+      if (!allowWebWriteAction()) {
+        return;
+      }
       const workspace = state.cloud.selectedWorkspace;
       if (!workspace) {
         return;
@@ -1977,6 +2491,9 @@
     }
 
     async function promptUpsertGearItem(warehouse, initialItem = null) {
+      if (!allowWebWriteAction()) {
+        return;
+      }
       const workspace = state.cloud.selectedWorkspace;
       if (!workspace || !state.session) {
         return;
@@ -2017,6 +2534,9 @@
     }
 
     async function updateGearLocation(item, locationType, locationId) {
+      if (!allowWebWriteAction()) {
+        return;
+      }
       const workspace = state.cloud.selectedWorkspace;
       if (!workspace || !state.session) {
         return;
@@ -2049,6 +2569,9 @@
     }
 
     function openMoveDialog(kind, item, event = null, preferredWarehouseId = '') {
+      if (!allowWebWriteAction()) {
+        return;
+      }
       const copy = currentCopy();
       const workspace = state.cloud.selectedWorkspace;
       if (!workspace) {
@@ -2114,6 +2637,10 @@
 
     async function handleMoveSubmit(event) {
       event.preventDefault();
+      if (!allowWebWriteAction()) {
+        closeMoveDialog();
+        return;
+      }
       const context = state.moveContext;
       if (!context) {
         return;
@@ -2160,6 +2687,9 @@
     }
 
     async function deleteGearRecord(item) {
+      if (!allowWebWriteAction()) {
+        return;
+      }
       const workspace = state.cloud.selectedWorkspace;
       if (!workspace || !state.session) {
         return;
@@ -2184,6 +2714,9 @@
     }
 
     function openEntityDialog(kind, entity = null) {
+      if (!allowWebWriteAction()) {
+        return;
+      }
       const copy = currentCopy();
       const isEvent = kind === 'event';
       entityKindInput.value = kind;
@@ -2214,7 +2747,8 @@
 
     async function reloadCurrentWorkspace() {
       if (state.session && currentWorkspaceId()) {
-        await selectWorkspace(currentWorkspaceId(), state.session.idToken);
+        state.cloud.workspaceCache.delete(currentWorkspaceId());
+        await selectWorkspace(currentWorkspaceId(), state.session.idToken, { force: true });
       } else {
         renderWorkspaceContent();
       }
@@ -2222,6 +2756,10 @@
 
     async function handleEntitySubmit(event) {
       event.preventDefault();
+      if (!allowWebWriteAction()) {
+        closeEntityDialog();
+        return;
+      }
       if (!state.session) {
         return;
       }
@@ -2301,6 +2839,9 @@
       if (!button) {
         return;
       }
+      if (!allowWebWriteAction()) {
+        return;
+      }
 
       const kind = button.getAttribute('data-kind');
       const id = button.getAttribute('data-id');
@@ -2341,9 +2882,12 @@
       }
     }
 
-    async function loadCloudData(session) {
+    async function loadCloudData(session, { force = false } = {}) {
       state.cloud.loading = true;
       state.cloud.error = '';
+      if (force) {
+        state.cloud.workspaceCache.clear();
+      }
       renderWorkspaceSelector();
       renderWorkspaceContent();
 
@@ -2379,10 +2923,11 @@
 
         state.cloud.workspaces = [...workspacesById.values()].sort((a, b) => a.name.localeCompare(b.name));
         state.cloud.subscription = formatSubscription(userDoc);
+        state.cloud.entitlement = formatEntitlement(userDoc);
         if (!state.cloud.workspaces.some((workspace) => workspace.id === state.cloud.selectedWorkspaceId)) {
           state.cloud.selectedWorkspaceId = state.cloud.workspaces[0]?.id || '';
         }
-        await selectWorkspace(state.cloud.selectedWorkspaceId, session.idToken);
+        await selectWorkspace(state.cloud.selectedWorkspaceId, session.idToken, { force });
       } catch (error) {
         state.cloud.error = error.message;
         state.cloud.workspaces = [];
@@ -2398,7 +2943,11 @@
       }
     }
 
-    async function selectWorkspace(workspaceId, token = state.session?.idToken) {
+    async function selectWorkspace(
+      workspaceId,
+      token = state.session?.idToken,
+      { force = false } = {},
+    ) {
       if (!workspaceId) {
         state.cloud.selectedWorkspace = null;
         renderWorkspaceContent();
@@ -2408,6 +2957,27 @@
       const workspaceMeta = state.cloud.workspaces.find((item) => item.id === workspaceId);
       if (!workspaceMeta) {
         state.cloud.selectedWorkspace = null;
+        renderWorkspaceContent();
+        return;
+      }
+
+      const cached = state.cloud.workspaceCache.get(workspaceId);
+      if (!force && cached && Date.now() - cached.loadedAt < WORKSPACE_CACHE_TTL_MS) {
+        const cachedWorkspace = cached.workspace;
+        state.cloud.selectedWorkspace = {
+          ...cachedWorkspace,
+          activity: buildActivityList(
+            cachedWorkspace,
+            cachedWorkspace.events || [],
+            cachedWorkspace.warehouses || [],
+            cachedWorkspace.gearItems || [],
+          ),
+          subscription: state.cloud.subscription || null,
+        };
+        state.cloud.selectedWorkspaceId = workspaceId;
+        state.cloud.error = '';
+        setWorkspaceMessage(currentCopy().workspaceMessageIdle, 'idle');
+        renderWorkspaceSelector();
         renderWorkspaceContent();
         return;
       }
@@ -2436,7 +3006,7 @@
         });
 
         const copy = currentCopy();
-        state.cloud.selectedWorkspace = {
+        const loadedWorkspace = {
           ...workspaceMeta,
           events,
           warehouses,
@@ -2444,6 +3014,12 @@
           activity: buildActivityList(workspaceMeta, events, warehouses, gearItems),
           subscription: state.cloud.subscription || null,
         };
+        state.cloud.selectedWorkspace = loadedWorkspace;
+        state.cloud.selectedWorkspaceId = workspaceId;
+        state.cloud.workspaceCache.set(workspaceId, {
+          workspace: loadedWorkspace,
+          loadedAt: Date.now(),
+        });
         state.cloud.error = '';
         setWorkspaceMessage(currentCopy().workspaceMessageIdle, 'idle');
       } catch (error) {
@@ -2468,7 +3044,7 @@
 
     function buildActivityList(workspace, events, warehouses, gearItems) {
       const copy = currentCopy();
-      const subscription = state.cloud.subscription;
+      const entitlement = state.cloud.entitlement;
       return [
         {
           title: `${workspace.name} · ${copy.eventsTitle}`,
@@ -2480,9 +3056,7 @@
         },
         {
           title: copy.accountTitle,
-          meta: subscription?.plan
-            ? `${subscription.plan}${subscription.providerStatus ? ` · ${subscription.providerStatus}` : ''}`
-            : copy.planNote,
+          meta: `${entitlement.webPlan} · ${entitlement.status}`,
         },
         {
           title: copy.metricTransports,
@@ -2505,6 +3079,21 @@
       authToggle.textContent = mode === 'signIn'
         ? copy.createAccountButton
         : copy.authModeSignIn;
+    }
+
+    async function refreshCloudData() {
+      if (!state.session || state.cloud.loading) {
+        return;
+      }
+      const copy = currentCopy();
+      refreshCloudBtn.disabled = true;
+      refreshCloudBtn.textContent = copy.refreshCloudLoading;
+      try {
+        await loadCloudData(state.session, { force: true });
+      } finally {
+        refreshCloudBtn.disabled = false;
+        refreshCloudBtn.textContent = copy.refreshCloudButton;
+      }
     }
 
     async function setSignedIn(session) {
@@ -2534,7 +3123,19 @@
       authUserPill.setAttribute('data-i18n', 'signedOutPill');
       authUserPill.textContent = currentCopy().signedOutPill;
       signOutTop.hidden = true;
+      state.cloud.entitlement = {
+        webPlan: 'viewer',
+        status: 'active',
+        expiresAt: '',
+        source: 'default',
+      };
+      state.cloud.workspaceCache.clear();
+      state.cloud.workspaces = [];
+      state.cloud.selectedWorkspace = null;
+      state.cloud.selectedWorkspaceId = '';
       state.cloud.selectedEventId = '';
+      state.cloud.selectedTransportId = '';
+      state.cloud.selectedSiteId = '';
       state.cloud.selectedWarehouseId = '';
       state.activePage = 'home';
       setAuthMessage(currentCopy().authHint);
@@ -2686,6 +3287,7 @@
       setAuthMode(state.authMode === 'signIn' ? 'create' : 'signIn');
     });
     signOutTop.addEventListener('click', handleSignOut);
+    refreshCloudBtn.addEventListener('click', refreshCloudData);
     mobileMenuToggle.addEventListener('click', () => {
       const isOpen = document.body.classList.toggle('mobile-menu-open');
       mobileMenuToggle.setAttribute('aria-expanded', String(isOpen));

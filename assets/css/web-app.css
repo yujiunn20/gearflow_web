@@ -533,6 +533,30 @@ body.signed-in .content {
   min-width: 0;
 }
 
+.access-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(242, 182, 61, 0.34);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255, 250, 235, 0.96), rgba(255, 255, 255, 0.92));
+  box-shadow: var(--shadow-soft);
+}
+
+.access-banner strong {
+  display: block;
+  color: #744d00;
+}
+
+.access-banner p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
 .app-page {
   display: none;
   gap: 18px;
@@ -562,6 +586,26 @@ body.signed-in .content {
 .page-title p:last-child {
   margin: 8px 0 0;
   color: var(--muted);
+}
+
+.page-title-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.compact-button {
+  min-height: 40px;
+  padding: 0 15px;
+}
+
+.entitlement-help {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.6;
 }
 
 .metric-button {
@@ -617,6 +661,64 @@ body.signed-in .content {
 
 .list-item.selected {
   border-color: rgba(24, 157, 230, 0.36);
+}
+
+.interactive-card {
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.interactive-card:hover,
+.interactive-card:focus-visible {
+  border-color: rgba(24, 157, 230, 0.42);
+  box-shadow: 0 12px 26px rgba(24, 157, 230, 0.09);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.detail-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.detail-summary-grid > div {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.detail-summary-grid span {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.detail-summary-grid strong {
+  overflow-wrap: anywhere;
+}
+
+.operation-section {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.operation-section .detail-head {
+  margin-bottom: 0;
+}
+
+.operation-item {
+  margin-bottom: 0;
 }
 
 .section-card {
@@ -1119,6 +1221,17 @@ body.signed-in .footer-note {
     gap: 12px;
   }
 
+  .access-banner {
+    align-items: flex-start;
+    margin-bottom: 12px;
+    padding: 13px 14px;
+    border-radius: 17px;
+  }
+
+  .access-banner p {
+    font-size: 0.88rem;
+  }
+
   .app-main,
   .app-page,
   .event-list,
@@ -1151,6 +1264,14 @@ body.signed-in .footer-note {
     border-radius: 16px;
   }
 
+  .detail-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .operation-item .secondary-button {
+    width: auto;
+  }
+
   .item-title,
   .item-meta {
     overflow-wrap: anywhere;
@@ -1180,6 +1301,15 @@ body.signed-in .footer-note {
   body.signed-in .page-title p:last-child {
     margin-top: 5px;
     line-height: 1.5;
+  }
+
+  .page-title-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .page-title-actions .compact-button {
+    width: auto;
   }
 
   .app-footer-ad {
