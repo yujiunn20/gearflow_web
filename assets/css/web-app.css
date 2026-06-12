@@ -959,45 +959,6 @@ dialog.entity-dialog::backdrop {
   font-size: 0.9rem;
 }
 
-.ad-slot {
-  display: grid;
-  gap: 10px;
-  padding: 18px;
-  border-radius: 22px;
-  border: 1px dashed rgba(24, 157, 230, 0.36);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(236, 247, 253, 0.9));
-}
-
-.ad-slot.compact p {
-  display: none;
-}
-
-.ad-slot small {
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 800;
-}
-
-.ad-slot strong {
-  font-size: 1.02rem;
-}
-
-.ad-slot p {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.7;
-}
-
-.app-footer-ad {
-  display: none;
-  margin-top: 18px;
-}
-
-body.signed-in .app-footer-ad {
-  display: grid;
-}
-
 body.signed-in .footer-note {
   display: none;
 }
@@ -1312,11 +1273,6 @@ body.signed-in .footer-note {
     width: auto;
   }
 
-  .app-footer-ad {
-    margin-top: 12px;
-    padding: 14px;
-    border-radius: 18px;
-  }
 }
 
 @media (max-width: 560px) {

@@ -6,7 +6,7 @@
   <title>GearFlow Web</title>
   <meta name="description" content="GearFlow Web 版，登入後才能使用，所有資料只走雲端，並為行動版提供接近 App 的排版。">
   <link rel="icon" href="../assets/images/gearflow_icon_friendly.png">
-  <link rel="stylesheet" href="../assets/css/web-app.css?v=20260612e">
+  <link rel="stylesheet" href="../assets/css/web-app.css?v=20260612f">
 </head>
 <body>
   <div class="web-app">
@@ -73,8 +73,8 @@
               <span data-i18n="statTwoLabel">登入後才可使用</span>
             </div>
             <div class="status-card">
-              <strong data-i18n="statThreeValue">Ads</strong>
-              <span data-i18n="statThreeLabel">功能頁預留廣告位</span>
+              <strong data-i18n="statThreeValue">Viewer</strong>
+              <span data-i18n="statThreeLabel">Web 免費方案唯讀</span>
             </div>
             <div class="status-card">
               <strong data-i18n="statFourValue">Soon</strong>
@@ -87,7 +87,7 @@
           <div>
             <p class="eyebrow" data-i18n="sideEyebrow">Access</p>
             <h2 data-i18n="loginTitle">先做登入介面，再接 Firebase Auth</h2>
-            <p data-i18n="loginBody">這一版先把入口、排版、廣告位與訂閱入口定下來，之後再接真實登入和雲端資料來源。</p>
+            <p data-i18n="loginBody">登入後可查看雲端工作區；Web 免費方案維持唯讀，完整編輯功能由 Web Pro 啟用。</p>
           </div>
 
           <div class="cloud-card">
@@ -234,11 +234,6 @@
       </section>
 
       <p class="footer-note" data-i18n="footerNote">這是一個 Web 版產品原型。下一步可以把 Firebase Auth、Firestore 與權限流程接上。</p>
-      <section class="ad-slot app-footer-ad">
-        <small data-i18n="adLabel">Advertisement</small>
-        <strong data-i18n="adTitle">功能頁廣告插槽</strong>
-        <p data-i18n="adBody">這裡先預留廣告版位。</p>
-      </section>
     </main>
   </div>
 
@@ -346,13 +341,13 @@
         statOneLabel: '唯一資料來源',
         statTwoValue: 'Login',
         statTwoLabel: '登入後才可使用',
-        statThreeValue: 'Ads',
-        statThreeLabel: '功能頁預留廣告位',
+        statThreeValue: 'Viewer',
+        statThreeLabel: 'Web 免費方案唯讀',
         statFourValue: 'Soon',
         statFourLabel: '訂閱接口先保留',
         sideEyebrow: 'Access',
         loginTitle: '先做登入介面，再接 Firebase Auth',
-        loginBody: '這一版先把入口、排版、廣告位與訂閱入口定下來，之後再接真實登入和雲端資料來源。',
+        loginBody: '登入後可查看雲端工作區；Web 免費方案維持唯讀，完整編輯功能由 Web Pro 啟用。',
         cloudCardTitle: 'Web 版原則',
         cloudRuleOne: '不做本機資料持久儲存',
         cloudRuleTwo: '登入後才顯示主功能',
@@ -409,7 +404,7 @@
         planName: 'Free',
         planNote: '目前不啟用限制，之後可直接接訂閱判斷。',
         planTagOne: 'Cloud enabled',
-        planTagTwo: 'Ads reserved',
+        planTagTwo: 'Viewer access',
         planTagThree: 'Subscription later',
         addEventButton: '新增活動',
         addWarehouseButton: '新增倉庫',
@@ -427,9 +422,6 @@
         moveOutLabel: '出庫',
         activityTitle: '最近動態',
         activityBody: '未來這裡可以接雲端同步紀錄、權限變更與更新通知。',
-        adLabel: 'Advertisement',
-        adTitle: '功能頁廣告插槽',
-        adBody: '這裡先預留廣告版位，未來可接 AdMob 或其他 Web 廣告服務。',
         footerNote: '這是一個 Web 版產品原型。下一步可以把 Firebase Auth、Firestore 與權限流程接上。',
         workspaceMessageIdle: '變更會即時寫入 Firestore。',
         workspaceMessageSaving: '正在寫入雲端資料...',
@@ -501,7 +493,7 @@
           {
             title: '品牌展演',
             meta: '2026/07/02 · 21 件裝備 · 4 個地點',
-            tags: ['規劃中', '廣告保留'],
+            tags: ['規劃中', '權限接口'],
           },
         ],
         warehouses: [
@@ -550,13 +542,13 @@
         statOneLabel: 'Single source of truth',
         statTwoValue: 'Login',
         statTwoLabel: 'Required before use',
-        statThreeValue: 'Ads',
-        statThreeLabel: 'Reserved inside feature pages',
+        statThreeValue: 'Viewer',
+        statThreeLabel: 'Web Free is view only',
         statFourValue: 'Soon',
         statFourLabel: 'Subscription interface only',
         sideEyebrow: 'Access',
         loginTitle: 'Build the sign-in gate first, then connect Firebase Auth',
-        loginBody: 'This version locks down the entry point, layout, ad placements, and subscription hooks first. Real login and cloud data sources can be connected next.',
+        loginBody: 'After signing in, users can view the cloud workspace. Web Free remains view only, while full editing is enabled by Web Pro.',
         cloudCardTitle: 'Web principles',
         cloudRuleOne: 'No persistent local storage',
         cloudRuleTwo: 'Show main features only after sign-in',
@@ -613,7 +605,7 @@
         planName: 'Free',
         planNote: 'No limits are enforced yet, but the subscription gate can be connected later.',
         planTagOne: 'Cloud enabled',
-        planTagTwo: 'Ads reserved',
+        planTagTwo: 'Viewer access',
         planTagThree: 'Subscription later',
         addEventButton: 'Add event',
         addWarehouseButton: 'Add warehouse',
@@ -631,9 +623,6 @@
         moveOutLabel: 'Move out',
         activityTitle: 'Recent activity',
         activityBody: 'Cloud sync logs, permission changes, and updates can live here later.',
-        adLabel: 'Advertisement',
-        adTitle: 'Feature-page ad slot',
-        adBody: 'This area is reserved for ads and can later connect to AdMob or another web ad service.',
         footerNote: 'This is a web product prototype. Next step: connect Firebase Auth, Firestore, and permission flows.',
         workspaceMessageIdle: 'Changes are written to Firestore immediately.',
         workspaceMessageSaving: 'Saving cloud data...',
@@ -754,13 +743,13 @@
         statOneLabel: '唯一の保存先',
         statTwoValue: 'Login',
         statTwoLabel: '使用前に必要',
-        statThreeValue: 'Ads',
-        statThreeLabel: '機能ページに予約',
+        statThreeValue: 'Viewer',
+        statThreeLabel: 'Web Free は閲覧のみ',
         statFourValue: 'Soon',
         statFourLabel: 'サブスク接口のみ',
         sideEyebrow: 'Access',
         loginTitle: 'まずサインイン画面を作り、次に Firebase Auth を接続',
-        loginBody: 'この版では入口、レイアウト、広告枠、サブスクの接続点を先に固めます。実際のログインとクラウドデータは後で接続します。',
+        loginBody: 'ログイン後にクラウドワークスペースを閲覧できます。Web Free は閲覧のみで、完全な編集機能は Web Pro で有効になります。',
         cloudCardTitle: 'Web 版の方針',
         cloudRuleOne: 'ローカルの永続保存をしない',
         cloudRuleTwo: 'サインイン後のみ主機能を表示',
@@ -817,7 +806,7 @@
         planName: 'Free',
         planNote: '今は制限をかけません。後でサブスクリプション判定をつなげられます。',
         planTagOne: 'Cloud enabled',
-        planTagTwo: 'Ads reserved',
+        planTagTwo: 'Viewer access',
         planTagThree: 'Subscription later',
         addEventButton: 'イベント追加',
         addWarehouseButton: '倉庫追加',
@@ -835,9 +824,6 @@
         moveOutLabel: '出庫',
         activityTitle: '最近の動き',
         activityBody: 'クラウド同期ログ、権限変更、更新通知をここに接続できます。',
-        adLabel: 'Advertisement',
-        adTitle: '機能ページの広告枠',
-        adBody: 'この領域は広告用に確保しておき、後で AdMob などの Web 広告サービスに接続できます。',
         footerNote: 'これは Web 版の製品プロトタイプです。次の段階で Firebase Auth、Firestore、権限フローを接続できます。',
         workspaceMessageIdle: '変更はすぐに Firestore に書き込まれます。',
         workspaceMessageSaving: 'クラウドデータを保存中...',
