@@ -469,3 +469,46 @@ body.nav-open .hamburger span:nth-child(3) {
   margin-inline: auto;
   text-align: center;
 }
+
+.web-preview-container {
+  background: var(--soft);
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  border: 2px dashed var(--line);
+  padding: 40px;
+}
+
+.web-entry-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 14px 28px rgba(24, 48, 71, 0.18);
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.web-entry-link:hover,
+.web-entry-link:focus-visible {
+  transform: translateY(-2px);
+  background: var(--blue);
+  box-shadow: 0 18px 34px rgba(24, 157, 230, 0.22);
+  outline: none;
+}
+
+.web-entry-note {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}

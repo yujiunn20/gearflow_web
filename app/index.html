@@ -1,0 +1,1738 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GearFlow Web</title>
+  <meta name="description" content="GearFlow Web 版，登入後才能使用，所有資料只走雲端，並為行動版提供接近 App 的排版。">
+  <link rel="icon" href="../assets/images/gearflow_icon_friendly.png">
+  <link rel="stylesheet" href="../assets/css/web-app.css">
+</head>
+<body>
+  <div class="web-app">
+    <header class="topbar">
+      <a class="brand" href="../index.html">
+        <img src="../assets/images/gearflow_icon_friendly.png" alt="GearFlow">
+        <span class="brand-mark">
+          <strong>GearFlow</strong>
+          <span data-i18n="brandLine">Cloud-only web workspace</span>
+        </span>
+      </a>
+      <div class="topbar-actions">
+        <span class="pill" data-i18n="cloudPill">Cloud only</span>
+        <span class="pill warn" data-i18n="betaPill">Subscription interface reserved</span>
+        <select id="lang-select" class="lang-select" aria-label="Language">
+          <option value="zh-Hant">繁體中文</option>
+          <option value="en">English</option>
+          <option value="ja">日本語</option>
+        </select>
+        <span class="pill" id="auth-user-pill" data-i18n="signedOutPill">尚未登入</span>
+        <button class="secondary-button" id="sign-out-top" type="button" hidden data-i18n="signOutButton">登出</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <section class="panel hero-copy login-only">
+          <p class="eyebrow" data-i18n="eyebrow">Web App</p>
+          <h1 data-i18n="heroTitle">登入後才能使用的雲端版 GearFlow</h1>
+          <p class="lead" data-i18n="heroLead">這裡是你的 Web 版工作空間。所有資料都預計只走雲端，不保留本機儲存；手機打開時會自動切成更像 App 的排版。</p>
+          <form id="auth-form" class="auth-form">
+            <label for="auth-email" data-i18n="emailLabel">Email</label>
+            <input id="auth-email" name="email" type="email" autocomplete="email" inputmode="email" required>
+
+            <label for="auth-password" data-i18n="passwordLabel">Password</label>
+            <input id="auth-password" name="password" type="password" autocomplete="current-password" minlength="6" required>
+
+            <div class="hero-actions">
+              <button class="primary-button" id="auth-submit" type="submit" data-i18n="signInButton">登入雲端工作區</button>
+              <button class="secondary-button" id="auth-toggle" type="button" data-i18n="createAccountButton">建立帳號</button>
+              <a class="secondary-button" href="../index.html" data-i18n="backToSite">回官網首頁</a>
+            </div>
+            <p class="auth-status" id="auth-status" data-i18n="authHint">使用同一個 Firebase 專案的 Email / Password 登入。</p>
+          </form>
+
+          <div class="status-grid">
+            <div class="status-card">
+              <strong data-i18n="statOneValue">Cloud</strong>
+              <span data-i18n="statOneLabel">唯一資料來源</span>
+            </div>
+            <div class="status-card">
+              <strong data-i18n="statTwoValue">Login</strong>
+              <span data-i18n="statTwoLabel">登入後才可使用</span>
+            </div>
+            <div class="status-card">
+              <strong data-i18n="statThreeValue">Ads</strong>
+              <span data-i18n="statThreeLabel">功能頁預留廣告位</span>
+            </div>
+            <div class="status-card">
+              <strong data-i18n="statFourValue">Soon</strong>
+              <span data-i18n="statFourLabel">訂閱接口先保留</span>
+            </div>
+          </div>
+        </section>
+
+        <aside class="panel login-card login-only">
+          <div>
+            <p class="eyebrow" data-i18n="sideEyebrow">Access</p>
+            <h2 data-i18n="loginTitle">先做登入介面，再接 Firebase Auth</h2>
+            <p data-i18n="loginBody">這一版先把入口、排版、廣告位與訂閱入口定下來，之後再接真實登入和雲端資料來源。</p>
+          </div>
+
+          <div class="cloud-card">
+            <strong data-i18n="cloudCardTitle">Web 版原則</strong>
+            <ul>
+              <li data-i18n="cloudRuleOne">不做本機資料持久儲存</li>
+              <li data-i18n="cloudRuleTwo">登入後才顯示主功能</li>
+              <li data-i18n="cloudRuleThree">訂閱先保留接口，不擋功能</li>
+              <li data-i18n="cloudRuleFour">手機版優先接近 App 風格</li>
+            </ul>
+          </div>
+        </aside>
+      </section>
+
+      <section class="content dashboard-shell" id="dashboard">
+        <div class="panel section-card">
+          <div class="section-head">
+            <div>
+              <h2 data-i18n="workspaceTitle">雲端工作區</h2>
+              <p data-i18n="workspaceBody">這裡先放產品骨架。等你要接 Firebase 後，再把資料模型串進來。</p>
+            </div>
+            <span class="pill" data-i18n="workspacePill">Signed in</span>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric">
+              <strong>12</strong>
+              <span data-i18n="metricEvents">活動</span>
+            </div>
+            <div class="metric">
+              <strong>4</strong>
+              <span data-i18n="metricWarehouses">倉庫 / 空間</span>
+            </div>
+            <div class="metric">
+              <strong>3</strong>
+              <span data-i18n="metricTransports">運輸工具</span>
+            </div>
+          </div>
+
+          <div style="height: 16px;"></div>
+
+          <section id="events" class="panel section-card" style="box-shadow: none; background: rgba(255,255,255,0.72);">
+            <div class="section-head">
+              <div>
+                <h2 data-i18n="eventsTitle">活動</h2>
+                <p data-i18n="eventsBody">活動、地點、裝備與搬運狀態都放在雲端，讓團隊同步查看。</p>
+              </div>
+              <div class="section-head-actions">
+                <span class="pill" data-i18n="eventsBadge">Cloud sync</span>
+                <button class="secondary-button" type="button" id="add-event-btn" data-i18n="addEventButton">新增活動</button>
+              </div>
+            </div>
+            <div class="workspace-strip">
+              <div class="tag-row" id="workspace-selector"></div>
+              <p class="workspace-summary" id="workspace-summary" data-i18n="workspaceSummaryEmpty">登入後會顯示你的雲端工作區。</p>
+              <p class="workspace-message" id="workspace-message" data-i18n="workspaceMessageIdle">變更會即時寫入 Firestore。</p>
+            </div>
+            <div class="event-list" id="event-list"></div>
+          </section>
+
+          <div style="height: 16px;"></div>
+
+          <section id="warehouses" class="panel section-card" style="box-shadow: none; background: rgba(255,255,255,0.72);">
+            <div class="section-head">
+              <div>
+                <h2 data-i18n="warehousesTitle">倉庫與裝備庫</h2>
+                <p data-i18n="warehousesBody">這裡對應 App 內的倉庫、裝備與目前存放位置。</p>
+              </div>
+              <div class="section-head-actions">
+                <span class="pill" data-i18n="warehouseBadge">Library</span>
+                <button class="secondary-button" type="button" id="add-warehouse-btn" data-i18n="addWarehouseButton">新增倉庫</button>
+              </div>
+            </div>
+            <div class="warehouse-list" id="warehouse-list"></div>
+          </section>
+        </div>
+
+        <aside class="content" style="display: grid; gap: 18px;">
+          <section id="account" class="panel section-card">
+            <div class="section-head">
+              <div>
+                <h2 data-i18n="accountTitle">帳戶與訂閱</h2>
+                <p data-i18n="accountBody">先把接口放好，等訂閱流程完成後再啟用限制。</p>
+              </div>
+              <span class="pill warn" data-i18n="accountBadge">Interface only</span>
+            </div>
+
+            <div class="subscription-card">
+              <div class="price" id="plan-name" data-i18n="planName">Free</div>
+              <div class="price-note" id="plan-note" data-i18n="planNote">目前不啟用限制，之後可直接接訂閱判斷。</div>
+              <div class="tag-row">
+                <span class="tag green" data-i18n="planTagOne">Cloud enabled</span>
+                <span class="tag" data-i18n="planTagTwo">Ads reserved</span>
+                <span class="tag orange" data-i18n="planTagThree">Subscription later</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel section-card">
+            <div class="section-head">
+              <div>
+                <h2 data-i18n="activityTitle">最近動態</h2>
+                <p data-i18n="activityBody">未來這裡可以接雲端同步紀錄、權限變更與更新通知。</p>
+              </div>
+            </div>
+            <div class="activity-list" id="activity-list"></div>
+          </section>
+
+          <section class="ad-slot">
+            <small data-i18n="adLabel">Advertisement</small>
+            <strong data-i18n="adTitle">功能頁廣告插槽</strong>
+            <p data-i18n="adBody">這裡先預留廣告版位，未來可接 AdMob 或其他 Web 廣告服務。</p>
+          </section>
+        </aside>
+      </section>
+
+      <p class="footer-note" data-i18n="footerNote">這是一個 Web 版產品原型。下一步可以把 Firebase Auth、Firestore 與權限流程接上。</p>
+    </main>
+  </div>
+
+  <dialog id="entity-dialog" class="entity-dialog">
+    <form id="entity-form" class="entity-form">
+      <div class="entity-dialog-head">
+        <div>
+          <p class="eyebrow" id="entity-dialog-eyebrow" data-i18n="entityDialogEyebrow">資料編輯</p>
+          <h3 id="entity-dialog-title" data-i18n="entityDialogCreateEventTitle">新增活動</h3>
+        </div>
+        <button class="icon-button" id="entity-dialog-close" type="button" aria-label="Close dialog">×</button>
+      </div>
+
+      <input type="hidden" id="entity-kind">
+      <input type="hidden" id="entity-id">
+
+      <label for="entity-name" data-i18n="entityNameLabel">名稱</label>
+      <input id="entity-name" type="text" maxlength="80" required>
+
+      <div class="entity-fields" data-kind="event">
+        <label for="entity-date-label" data-i18n="entityDateLabel">活動日期</label>
+        <input id="entity-date-label" type="date">
+
+        <label for="entity-status" data-i18n="entityStatusLabel">狀態</label>
+        <input id="entity-status" type="text" maxlength="40" placeholder="draft">
+      </div>
+
+      <div class="entity-fields" data-kind="warehouse">
+        <label for="entity-type" data-i18n="entityTypeLabel">類型</label>
+        <input id="entity-type" type="text" maxlength="40" placeholder="warehouse">
+
+        <label for="entity-location-label" data-i18n="entityLocationLabel">位置標記</label>
+        <input id="entity-location-label" type="text" maxlength="120" placeholder="台北總倉">
+
+        <label for="entity-active" class="checkbox-row">
+          <input id="entity-active" type="checkbox">
+          <span data-i18n="entityActiveLabel">啟用中</span>
+        </label>
+      </div>
+
+      <label for="entity-description" data-i18n="entityDescriptionLabel">說明</label>
+      <textarea id="entity-description" rows="4" maxlength="400" placeholder="說明內容"></textarea>
+
+      <label for="entity-note" data-i18n="entityNoteLabel">備註</label>
+      <textarea id="entity-note" rows="3" maxlength="240" placeholder="備註內容"></textarea>
+
+      <div class="entity-dialog-actions">
+        <button class="primary-button" id="entity-save-btn" type="submit" data-i18n="entitySaveButton">儲存</button>
+        <button class="secondary-button" id="entity-cancel-btn" type="button" data-i18n="entityCancelButton">取消</button>
+      </div>
+    </form>
+  </dialog>
+
+  <nav class="mobile-nav" aria-label="Quick navigation">
+    <a href="#events"><strong data-i18n="mobileNavEvents">活動</strong><span data-i18n="mobileNavEventsSub">Events</span></a>
+    <a href="#warehouses"><strong data-i18n="mobileNavWarehouses">倉庫</strong><span data-i18n="mobileNavWarehousesSub">Library</span></a>
+    <a href="#account"><strong data-i18n="mobileNavAccount">帳戶</strong><span data-i18n="mobileNavAccountSub">Account</span></a>
+  </nav>
+
+  <script>
+    const FIREBASE_API_KEY = 'AIzaSyAzDJ2kG8FgbkeFbnHYyrhi1iloMRzOoEM';
+    const FIREBASE_PROJECT_ID = 'gearflow-71351';
+    const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents`;
+    const SESSION_KEY = 'gearflow_web_auth_session';
+
+    const locales = {
+      'zh-Hant': {
+        brandLine: 'Cloud-only web workspace',
+        cloudPill: 'Only cloud data',
+        betaPill: 'Subscription interface reserved',
+        eyebrow: 'Web App',
+        heroTitle: '登入後才能使用的雲端版 GearFlow',
+        heroLead: '這裡是你的 Web 版工作空間。所有資料都預計只走雲端，不保留本機儲存；手機打開時會自動切成更像 App 的排版。',
+        signInButton: '登入雲端工作區',
+        createAccountButton: '建立帳號',
+        backToSite: '回官網首頁',
+        statOneValue: 'Cloud',
+        statOneLabel: '唯一資料來源',
+        statTwoValue: 'Login',
+        statTwoLabel: '登入後才可使用',
+        statThreeValue: 'Ads',
+        statThreeLabel: '功能頁預留廣告位',
+        statFourValue: 'Soon',
+        statFourLabel: '訂閱接口先保留',
+        sideEyebrow: 'Access',
+        loginTitle: '先做登入介面，再接 Firebase Auth',
+        loginBody: '這一版先把入口、排版、廣告位與訂閱入口定下來，之後再接真實登入和雲端資料來源。',
+        cloudCardTitle: 'Web 版原則',
+        cloudRuleOne: '不做本機資料持久儲存',
+        cloudRuleTwo: '登入後才顯示主功能',
+        cloudRuleThree: '訂閱先保留接口，不擋功能',
+        cloudRuleFour: '手機版優先接近 App 風格',
+        workspaceTitle: '雲端工作區',
+        workspaceBody: '這裡先放產品骨架。等你要接 Firebase 後，再把資料模型串進來。',
+        workspacePill: 'Signed in',
+        metricEvents: '活動',
+        metricWarehouses: '倉庫 / 空間',
+        metricTransports: '運輸工具',
+        eventsTitle: '活動',
+        eventsBody: '活動、地點、裝備與搬運狀態都放在雲端，讓團隊同步查看。',
+        eventsBadge: 'Cloud sync',
+        warehousesTitle: '倉庫與裝備庫',
+        warehousesBody: '這裡對應 App 內的倉庫、裝備與目前存放位置。',
+        warehouseBadge: 'Library',
+        accountTitle: '帳戶與訂閱',
+        accountBody: '先把接口放好，等訂閱流程完成後再啟用限制。',
+        accountBadge: 'Interface only',
+        planName: 'Free',
+        planNote: '目前不啟用限制，之後可直接接訂閱判斷。',
+        planTagOne: 'Cloud enabled',
+        planTagTwo: 'Ads reserved',
+        planTagThree: 'Subscription later',
+        addEventButton: '新增活動',
+        addWarehouseButton: '新增倉庫',
+        activityTitle: '最近動態',
+        activityBody: '未來這裡可以接雲端同步紀錄、權限變更與更新通知。',
+        adLabel: 'Advertisement',
+        adTitle: '功能頁廣告插槽',
+        adBody: '這裡先預留廣告版位，未來可接 AdMob 或其他 Web 廣告服務。',
+        footerNote: '這是一個 Web 版產品原型。下一步可以把 Firebase Auth、Firestore 與權限流程接上。',
+        workspaceMessageIdle: '變更會即時寫入 Firestore。',
+        workspaceMessageSaving: '正在寫入雲端資料...',
+        workspaceMessageSaved: '已更新雲端資料。',
+        workspaceMessageError: '雲端寫入失敗。',
+        entityDialogEyebrow: '資料編輯',
+        entityDialogCreateEventTitle: '新增活動',
+        entityDialogEditEventTitle: '編輯活動',
+        entityDialogCreateWarehouseTitle: '新增倉庫',
+        entityDialogEditWarehouseTitle: '編輯倉庫',
+        entityNameLabel: '名稱',
+        entityDateLabel: '活動日期',
+        entityStatusLabel: '狀態',
+        entityTypeLabel: '類型',
+        entityLocationLabel: '位置標記',
+        entityActiveLabel: '啟用中',
+        entityDescriptionLabel: '說明',
+        entityNoteLabel: '備註',
+        entitySaveButton: '儲存',
+        entityCancelButton: '取消',
+        editButton: '編輯',
+        deleteButton: '刪除',
+        deleteConfirmEvent: '確定要刪除這個活動嗎？',
+        deleteConfirmWarehouse: '確定要刪除這個倉庫嗎？',
+        entitySavedEvent: '活動已更新。',
+        entitySavedWarehouse: '倉庫已更新。',
+        entityDeletedEvent: '活動已刪除。',
+        entityDeletedWarehouse: '倉庫已刪除。',
+        mobileNavEvents: '活動',
+        mobileNavEventsSub: 'Events',
+        mobileNavWarehouses: '倉庫',
+        mobileNavWarehousesSub: 'Library',
+        mobileNavAccount: '帳戶',
+        mobileNavAccountSub: 'Account',
+        signedOutPill: '尚未登入',
+        signedInPill: '已登入',
+        emailLabel: 'Email',
+        emailPlaceholder: 'name@example.com',
+        passwordLabel: 'Password',
+        passwordPlaceholder: '至少 6 碼',
+        authHint: '使用同一個 Firebase 專案的 Email / Password 登入。',
+        authErrorGeneric: '登入失敗',
+        authCreateSuccess: '帳號建立完成，已登入。',
+        authSignInSuccess: '登入成功。',
+        authSignOutSuccess: '已登出。',
+        authModeSignIn: '使用既有帳號',
+        authModeCreate: '建立帳號',
+        authLoading: '處理中...',
+        authSignOut: '登出',
+        workspaceSummaryEmpty: '登入後會顯示你的雲端工作區。',
+        workspaceSummaryLoading: '正在載入雲端工作區...',
+        emptyEventsTitle: '尚無活動',
+        emptyEventsBody: '建立或同步第一個雲端活動後，這裡就會顯示內容。',
+        emptyWarehousesTitle: '尚無倉庫',
+        emptyWarehousesBody: '倉庫與裝備庫會從 Firestore 載入。',
+        emptyActivityTitle: '尚無動態',
+        emptyActivityBody: '雲端同步後會出現最近更新與權限變更。',
+        events: [
+          {
+            title: '台積電健檢',
+            meta: '2026/06/04 · 12 件裝備 · 3 台運輸工具',
+            tags: ['進行中', '同步中'],
+          },
+          {
+            title: '週末露營',
+            meta: '2026/06/18 · 8 件裝備 · 2 個地點',
+            tags: ['待出發', '雲端可見'],
+          },
+          {
+            title: '品牌展演',
+            meta: '2026/07/02 · 21 件裝備 · 4 個地點',
+            tags: ['規劃中', '廣告保留'],
+          },
+        ],
+        warehouses: [
+          {
+            title: '總倉',
+            meta: '大型設備、共用耗材與備品',
+            tags: ['主倉', '雲端同步'],
+          },
+          {
+            title: '行政辦公室',
+            meta: '文件、標示物、印表設備',
+            tags: ['文件', '可編輯'],
+          },
+          {
+            title: '採血備品櫃',
+            meta: '常用耗材與檢測工具',
+            tags: ['醫療', '追蹤中'],
+          },
+        ],
+        activity: [
+          {
+            title: '王先生更新了活動狀態',
+            meta: '09:25 · 雲端工作區即時同步',
+          },
+          {
+            title: '林小姐移動了 2 件裝備',
+            meta: '09:31 · 目前位置：X 光車',
+          },
+          {
+            title: '訂閱接口已預留',
+            meta: '之後可接 Google Play 方案判斷',
+          },
+        ],
+      },
+      en: {
+        brandLine: 'Cloud-only web workspace',
+        cloudPill: 'Only cloud data',
+        betaPill: 'Subscription interface reserved',
+        eyebrow: 'Web App',
+        heroTitle: 'GearFlow on the Web, available after sign-in',
+        heroLead: 'This is your web workspace. Everything is designed to live in the cloud only, with no local persistence; on mobile, the layout shifts to something closer to the app.',
+        signInButton: 'Sign in to cloud workspace',
+        createAccountButton: 'Create account',
+        backToSite: 'Back to site',
+        statOneValue: 'Cloud',
+        statOneLabel: 'Single source of truth',
+        statTwoValue: 'Login',
+        statTwoLabel: 'Required before use',
+        statThreeValue: 'Ads',
+        statThreeLabel: 'Reserved inside feature pages',
+        statFourValue: 'Soon',
+        statFourLabel: 'Subscription interface only',
+        sideEyebrow: 'Access',
+        loginTitle: 'Build the sign-in gate first, then connect Firebase Auth',
+        loginBody: 'This version locks down the entry point, layout, ad placements, and subscription hooks first. Real login and cloud data sources can be connected next.',
+        cloudCardTitle: 'Web principles',
+        cloudRuleOne: 'No persistent local storage',
+        cloudRuleTwo: 'Show main features only after sign-in',
+        cloudRuleThree: 'Keep subscription hooks, do not block features yet',
+        cloudRuleFour: 'Mobile layout should feel close to the app',
+        workspaceTitle: 'Cloud workspace',
+        workspaceBody: 'This is the product skeleton. Once you wire in Firebase, the data model can drop in here.',
+        workspacePill: 'Signed in',
+        metricEvents: 'Events',
+        metricWarehouses: 'Warehouses / spaces',
+        metricTransports: 'Transport units',
+        eventsTitle: 'Events',
+        eventsBody: 'Events, locations, gear, and loading status stay in the cloud so the team can stay in sync.',
+        eventsBadge: 'Cloud sync',
+        warehousesTitle: 'Warehouses and gear library',
+        warehousesBody: 'This maps to the app’s warehouses, gear, and current storage location.',
+        warehouseBadge: 'Library',
+        accountTitle: 'Account and subscription',
+        accountBody: 'Keep the interface in place first. Usage limits can be enabled later.',
+        accountBadge: 'Interface only',
+        planName: 'Free',
+        planNote: 'No limits are enforced yet, but the subscription gate can be connected later.',
+        planTagOne: 'Cloud enabled',
+        planTagTwo: 'Ads reserved',
+        planTagThree: 'Subscription later',
+        addEventButton: 'Add event',
+        addWarehouseButton: 'Add warehouse',
+        activityTitle: 'Recent activity',
+        activityBody: 'Cloud sync logs, permission changes, and updates can live here later.',
+        adLabel: 'Advertisement',
+        adTitle: 'Feature-page ad slot',
+        adBody: 'This area is reserved for ads and can later connect to AdMob or another web ad service.',
+        footerNote: 'This is a web product prototype. Next step: connect Firebase Auth, Firestore, and permission flows.',
+        workspaceMessageIdle: 'Changes are written to Firestore immediately.',
+        workspaceMessageSaving: 'Saving cloud data...',
+        workspaceMessageSaved: 'Cloud data updated.',
+        workspaceMessageError: 'Cloud write failed.',
+        entityDialogEyebrow: 'Record editor',
+        entityDialogCreateEventTitle: 'Create event',
+        entityDialogEditEventTitle: 'Edit event',
+        entityDialogCreateWarehouseTitle: 'Create warehouse',
+        entityDialogEditWarehouseTitle: 'Edit warehouse',
+        entityNameLabel: 'Name',
+        entityDateLabel: 'Event date',
+        entityStatusLabel: 'Status',
+        entityTypeLabel: 'Type',
+        entityLocationLabel: 'Location label',
+        entityActiveLabel: 'Active',
+        entityDescriptionLabel: 'Description',
+        entityNoteLabel: 'Note',
+        entitySaveButton: 'Save',
+        entityCancelButton: 'Cancel',
+        editButton: 'Edit',
+        deleteButton: 'Delete',
+        deleteConfirmEvent: 'Delete this event?',
+        deleteConfirmWarehouse: 'Delete this warehouse?',
+        entitySavedEvent: 'Event updated.',
+        entitySavedWarehouse: 'Warehouse updated.',
+        entityDeletedEvent: 'Event deleted.',
+        entityDeletedWarehouse: 'Warehouse deleted.',
+        mobileNavEvents: 'Events',
+        mobileNavEventsSub: 'Events',
+        mobileNavWarehouses: 'Warehouses',
+        mobileNavWarehousesSub: 'Library',
+        mobileNavAccount: 'Account',
+        mobileNavAccountSub: 'Account',
+        signedOutPill: 'Signed out',
+        signedInPill: 'Signed in',
+        emailLabel: 'Email',
+        emailPlaceholder: 'name@example.com',
+        passwordLabel: 'Password',
+        passwordPlaceholder: 'At least 6 characters',
+        authHint: 'Use Email / Password from the same Firebase project.',
+        authErrorGeneric: 'Authentication failed',
+        authCreateSuccess: 'Account created and signed in.',
+        authSignInSuccess: 'Signed in successfully.',
+        authSignOutSuccess: 'Signed out.',
+        authModeSignIn: 'Use existing account',
+        authModeCreate: 'Create account',
+        authLoading: 'Working...',
+        authSignOut: 'Sign out',
+        workspaceSummaryEmpty: 'Your cloud workspace will appear after sign-in.',
+        workspaceSummaryLoading: 'Loading cloud workspace...',
+        emptyEventsTitle: 'No events yet',
+        emptyEventsBody: 'Create or sync your first cloud event to see it here.',
+        emptyWarehousesTitle: 'No warehouses yet',
+        emptyWarehousesBody: 'Warehouses and gear lists load from Firestore.',
+        emptyActivityTitle: 'No activity yet',
+        emptyActivityBody: 'Recent syncs and permission changes will appear here.',
+        events: [
+          {
+            title: 'Mobile clinic run',
+            meta: '2026/06/04 · 12 gear items · 3 vehicles',
+            tags: ['In progress', 'Synced'],
+          },
+          {
+            title: 'Weekend camp',
+            meta: '2026/06/18 · 8 gear items · 2 locations',
+            tags: ['Pending', 'Cloud visible'],
+          },
+          {
+            title: 'Brand exhibition',
+            meta: '2026/07/02 · 21 gear items · 4 locations',
+            tags: ['Planning', 'Ad slot ready'],
+          },
+        ],
+        warehouses: [
+          {
+            title: 'Main storage',
+            meta: 'Large equipment, shared consumables, and spares',
+            tags: ['Main', 'Cloud sync'],
+          },
+          {
+            title: 'Admin office',
+            meta: 'Documents, signage, and printer equipment',
+            tags: ['Docs', 'Editable'],
+          },
+          {
+            title: 'Blood supply cabinet',
+            meta: 'Common consumables and testing tools',
+            tags: ['Medical', 'Tracked'],
+          },
+        ],
+        activity: [
+          {
+            title: 'Wang updated event status',
+            meta: '09:25 · Synced to cloud workspace',
+          },
+          {
+            title: 'Lin moved 2 gear items',
+            meta: '09:31 · Current location: x-ray vehicle',
+          },
+          {
+            title: 'Subscription hooks reserved',
+            meta: 'Ready for Google Play plan checks later',
+          },
+        ],
+      },
+      ja: {
+        brandLine: 'Cloud-only web workspace',
+        cloudPill: 'Only cloud data',
+        betaPill: 'Subscription interface reserved',
+        eyebrow: 'Web App',
+        heroTitle: 'サインイン後に使える GearFlow Web',
+        heroLead: 'ここは Web 版のワークスペースです。データはすべてクラウドのみを想定し、ローカル保存はしません。モバイルではアプリに近いレイアウトへ切り替わります。',
+        signInButton: 'クラウドワークスペースにサインイン',
+        createAccountButton: 'アカウント作成',
+        backToSite: 'サイトに戻る',
+        statOneValue: 'Cloud',
+        statOneLabel: '唯一の保存先',
+        statTwoValue: 'Login',
+        statTwoLabel: '使用前に必要',
+        statThreeValue: 'Ads',
+        statThreeLabel: '機能ページに予約',
+        statFourValue: 'Soon',
+        statFourLabel: 'サブスク接口のみ',
+        sideEyebrow: 'Access',
+        loginTitle: 'まずサインイン画面を作り、次に Firebase Auth を接続',
+        loginBody: 'この版では入口、レイアウト、広告枠、サブスクの接続点を先に固めます。実際のログインとクラウドデータは後で接続します。',
+        cloudCardTitle: 'Web 版の方針',
+        cloudRuleOne: 'ローカルの永続保存をしない',
+        cloudRuleTwo: 'サインイン後のみ主機能を表示',
+        cloudRuleThree: 'サブスクの接口は残し、機能は止めない',
+        cloudRuleFour: 'モバイルはアプリに近い見た目を優先',
+        workspaceTitle: 'クラウドワークスペース',
+        workspaceBody: 'ここにはまず製品の骨組みを置きます。Firebase を接続すると、データモデルをそのまま流し込めます。',
+        workspacePill: 'Signed in',
+        metricEvents: 'イベント',
+        metricWarehouses: '倉庫 / スペース',
+        metricTransports: '輸送手段',
+        eventsTitle: 'イベント',
+        eventsBody: 'イベント、場所、ギア、搬入状況はすべてクラウドに置き、チーム全員で共有します。',
+        eventsBadge: 'Cloud sync',
+        warehousesTitle: '倉庫とギアライブラリ',
+        warehousesBody: 'アプリの倉庫、ギア、現在の保管位置に対応します。',
+        warehouseBadge: 'Library',
+        accountTitle: 'アカウントとサブスクリプション',
+        accountBody: 'まずは画面と接口を用意し、制限は後で有効にします。',
+        accountBadge: 'Interface only',
+        planName: 'Free',
+        planNote: '今は制限をかけません。後でサブスクリプション判定をつなげられます。',
+        planTagOne: 'Cloud enabled',
+        planTagTwo: 'Ads reserved',
+        planTagThree: 'Subscription later',
+        addEventButton: 'イベント追加',
+        addWarehouseButton: '倉庫追加',
+        activityTitle: '最近の動き',
+        activityBody: 'クラウド同期ログ、権限変更、更新通知をここに接続できます。',
+        adLabel: 'Advertisement',
+        adTitle: '機能ページの広告枠',
+        adBody: 'この領域は広告用に確保しておき、後で AdMob などの Web 広告サービスに接続できます。',
+        footerNote: 'これは Web 版の製品プロトタイプです。次の段階で Firebase Auth、Firestore、権限フローを接続できます。',
+        workspaceMessageIdle: '変更はすぐに Firestore に書き込まれます。',
+        workspaceMessageSaving: 'クラウドデータを保存中...',
+        workspaceMessageSaved: 'クラウドデータを更新しました。',
+        workspaceMessageError: 'クラウド書き込みに失敗しました。',
+        entityDialogEyebrow: 'レコード編集',
+        entityDialogCreateEventTitle: 'イベント追加',
+        entityDialogEditEventTitle: 'イベント編集',
+        entityDialogCreateWarehouseTitle: '倉庫追加',
+        entityDialogEditWarehouseTitle: '倉庫編集',
+        entityNameLabel: '名称',
+        entityDateLabel: 'イベント日付',
+        entityStatusLabel: '状態',
+        entityTypeLabel: '種類',
+        entityLocationLabel: '位置ラベル',
+        entityActiveLabel: '有効',
+        entityDescriptionLabel: '説明',
+        entityNoteLabel: 'メモ',
+        entitySaveButton: '保存',
+        entityCancelButton: 'キャンセル',
+        editButton: '編集',
+        deleteButton: '削除',
+        deleteConfirmEvent: 'このイベントを削除しますか？',
+        deleteConfirmWarehouse: 'この倉庫を削除しますか？',
+        entitySavedEvent: 'イベントを更新しました。',
+        entitySavedWarehouse: '倉庫を更新しました。',
+        entityDeletedEvent: 'イベントを削除しました。',
+        entityDeletedWarehouse: '倉庫を削除しました。',
+        mobileNavEvents: 'イベント',
+        mobileNavEventsSub: 'Events',
+        mobileNavWarehouses: '倉庫',
+        mobileNavWarehousesSub: 'Library',
+        mobileNavAccount: 'アカウント',
+        mobileNavAccountSub: 'Account',
+        signedOutPill: '未ログイン',
+        signedInPill: 'ログイン済み',
+        emailLabel: 'Email',
+        emailPlaceholder: 'name@example.com',
+        passwordLabel: 'Password',
+        passwordPlaceholder: '6 文字以上',
+        authHint: '同じ Firebase プロジェクトの Email / Password を使います。',
+        authErrorGeneric: '認証に失敗しました',
+        authCreateSuccess: 'アカウントを作成してログインしました。',
+        authSignInSuccess: 'ログインしました。',
+        authSignOutSuccess: 'ログアウトしました。',
+        authModeSignIn: '既存アカウントを使う',
+        authModeCreate: 'アカウント作成',
+        authLoading: '処理中...',
+        authSignOut: 'ログアウト',
+        workspaceSummaryEmpty: 'サインイン後にクラウドワークスペースが表示されます。',
+        workspaceSummaryLoading: 'クラウドワークスペースを読み込み中...',
+        emptyEventsTitle: 'イベントなし',
+        emptyEventsBody: '最初のクラウドイベントを作成または同期すると表示されます。',
+        emptyWarehousesTitle: '倉庫なし',
+        emptyWarehousesBody: '倉庫とギアライブラリは Firestore から読み込みます。',
+        emptyActivityTitle: '動きなし',
+        emptyActivityBody: '最近の同期や権限変更はここに出ます。',
+        events: [
+          {
+            title: '巡回健診',
+            meta: '2026/06/04 · 装備 12 件 · 車両 3 台',
+            tags: ['進行中', '同期済み'],
+          },
+          {
+            title: '週末キャンプ',
+            meta: '2026/06/18 · 装備 8 件 · 場所 2 つ',
+            tags: ['準備中', 'クラウド表示'],
+          },
+          {
+            title: 'ブランド展示',
+            meta: '2026/07/02 · 装備 21 件 · 場所 4 つ',
+            tags: ['計画中', '広告枠あり'],
+          },
+        ],
+        warehouses: [
+          {
+            title: 'メイン倉庫',
+            meta: '大型機材、共通消耗品、予備品',
+            tags: ['主倉', 'Cloud sync'],
+          },
+          {
+            title: '事務室',
+            meta: '書類、サイン物、プリンター機材',
+            tags: ['書類', '編集可'],
+          },
+          {
+            title: '採血備品庫',
+            meta: 'よく使う消耗品と検査ツール',
+            tags: ['医療', '追跡中'],
+          },
+        ],
+        activity: [
+          {
+            title: '王さんがイベント状態を更新',
+            meta: '09:25 · クラウドワークスペースに同期',
+          },
+          {
+            title: '林さんが装備 2 件を移動',
+            meta: '09:31 · 現在位置: X 線車',
+          },
+          {
+            title: 'サブスク接口を予約済み',
+            meta: '後で Google Play の判定に接続可能',
+          },
+        ],
+      },
+    };
+
+    const state = {
+      locale: 'zh-Hant',
+      authMode: 'signIn',
+      session: null,
+      cloud: {
+        loading: false,
+        error: '',
+        workspaces: [],
+        selectedWorkspaceId: '',
+        selectedWorkspace: null,
+        subscription: null,
+      },
+    };
+
+    const select = document.getElementById('lang-select');
+    const dashboard = document.getElementById('dashboard');
+    const workspaceSelector = document.getElementById('workspace-selector');
+    const workspaceSummary = document.getElementById('workspace-summary');
+    const workspaceMessage = document.getElementById('workspace-message');
+    const authForm = document.getElementById('auth-form');
+    const authEmail = document.getElementById('auth-email');
+    const authPassword = document.getElementById('auth-password');
+    const authSubmit = document.getElementById('auth-submit');
+    const authToggle = document.getElementById('auth-toggle');
+    const authStatus = document.getElementById('auth-status');
+    const authUserPill = document.getElementById('auth-user-pill');
+    const signOutTop = document.getElementById('sign-out-top');
+    const planNameNode = document.getElementById('plan-name');
+    const planNoteNode = document.getElementById('plan-note');
+    const eventListNode = document.getElementById('event-list');
+    const warehouseListNode = document.getElementById('warehouse-list');
+    const activityListNode = document.getElementById('activity-list');
+    const addEventBtn = document.getElementById('add-event-btn');
+    const addWarehouseBtn = document.getElementById('add-warehouse-btn');
+    const entityDialog = document.getElementById('entity-dialog');
+    const entityForm = document.getElementById('entity-form');
+    const entityDialogTitle = document.getElementById('entity-dialog-title');
+    const entityDialogEyebrow = document.getElementById('entity-dialog-eyebrow');
+    const entityDialogClose = document.getElementById('entity-dialog-close');
+    const entityCancelBtn = document.getElementById('entity-cancel-btn');
+    const entitySaveBtn = document.getElementById('entity-save-btn');
+    const entityKindInput = document.getElementById('entity-kind');
+    const entityIdInput = document.getElementById('entity-id');
+    const entityNameInput = document.getElementById('entity-name');
+    const entityDateLabelInput = document.getElementById('entity-date-label');
+    const entityStatusInput = document.getElementById('entity-status');
+    const entityTypeInput = document.getElementById('entity-type');
+    const entityLocationLabelInput = document.getElementById('entity-location-label');
+    const entityActiveInput = document.getElementById('entity-active');
+    const entityDescriptionInput = document.getElementById('entity-description');
+    const entityNoteInput = document.getElementById('entity-note');
+    const entityFieldGroups = Array.from(document.querySelectorAll('.entity-fields'));
+
+    function currentCopy() {
+      return locales[state.locale] || locales['zh-Hant'];
+    }
+
+    function renderLocale(locale) {
+      const copy = locales[locale] || locales['zh-Hant'];
+      state.locale = locale;
+      document.documentElement.lang = locale;
+
+      document.querySelectorAll('[data-i18n]').forEach((node) => {
+        const key = node.getAttribute('data-i18n');
+        if (copy[key] != null && typeof copy[key] !== 'object') {
+          node.textContent = copy[key];
+        }
+      });
+
+      authEmail.placeholder = copy.emailPlaceholder;
+      authPassword.placeholder = copy.passwordPlaceholder;
+      authToggle.textContent = state.authMode === 'signIn'
+        ? copy.createAccountButton
+        : copy.authModeSignIn;
+      authSubmit.textContent = state.authMode === 'signIn'
+        ? copy.signInButton
+        : copy.createAccountButton;
+      if (!state.session) {
+        authUserPill.textContent = copy.signedOutPill;
+      }
+
+      if (workspaceMessage) {
+        workspaceMessage.textContent = copy.workspaceMessageIdle;
+      }
+      if (entityDialogEyebrow) {
+        entityDialogEyebrow.textContent = copy.entityDialogEyebrow;
+      }
+
+      renderWorkspaceSelector();
+      renderWorkspaceContent();
+    }
+
+    function renderList(containerId, items) {
+      const container = document.getElementById(containerId);
+      if (!container) {
+        return;
+      }
+      container.innerHTML = items.map((item) => {
+        const tags = (item.tags || []).map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('');
+        return `
+          <article class="list-item">
+            <div class="list-item-top">
+              <div class="item-title">${escapeHtml(item.title)}</div>
+            </div>
+            <div class="item-meta">${escapeHtml(item.meta)}</div>
+            <div class="tag-row">${tags}</div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function renderActivity(containerId, items) {
+      const container = document.getElementById(containerId);
+      if (!container) {
+        return;
+      }
+      container.innerHTML = items.map((item) => `
+        <article class="list-item">
+          <div class="item-title">${escapeHtml(item.title)}</div>
+          <div class="item-meta">${escapeHtml(item.meta)}</div>
+        </article>
+      `).join('');
+    }
+
+    function formatDateLabel(value) {
+      if (!value) {
+        return '';
+      }
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) {
+        return String(value);
+      }
+      return date.toLocaleDateString(
+        state.locale === 'en' ? 'en-US' : state.locale === 'ja' ? 'ja-JP' : 'zh-TW',
+        {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        },
+      );
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function decodeFirestoreValue(value) {
+      if (value == null || typeof value !== 'object') {
+        return value ?? null;
+      }
+      if ('stringValue' in value) {
+        return value.stringValue;
+      }
+      if ('integerValue' in value) {
+        return Number(value.integerValue);
+      }
+      if ('doubleValue' in value) {
+        return Number(value.doubleValue);
+      }
+      if ('booleanValue' in value) {
+        return value.booleanValue === true;
+      }
+      if ('timestampValue' in value) {
+        return value.timestampValue;
+      }
+      if ('nullValue' in value) {
+        return null;
+      }
+      if ('mapValue' in value) {
+        return decodeFirestoreFields(value.mapValue?.fields || {});
+      }
+      if ('arrayValue' in value) {
+        return (value.arrayValue?.values || []).map(decodeFirestoreValue);
+      }
+      return value;
+    }
+
+    function decodeFirestoreFields(fields) {
+      const result = {};
+      for (const [key, value] of Object.entries(fields || {})) {
+        result[key] = decodeFirestoreValue(value);
+      }
+      return result;
+    }
+
+    function encodeFirestoreValue(value) {
+      if (value == null) {
+        return { nullValue: null };
+      }
+      if (Array.isArray(value)) {
+        return { arrayValue: { values: value.map(encodeFirestoreValue) } };
+      }
+      if (value instanceof Date) {
+        return { timestampValue: value.toISOString() };
+      }
+      switch (typeof value) {
+        case 'string':
+          return { stringValue: value };
+        case 'number':
+          return Number.isInteger(value)
+            ? { integerValue: String(value) }
+            : { doubleValue: value };
+        case 'boolean':
+          return { booleanValue: value };
+        case 'object': {
+          const fields = {};
+          for (const [key, entry] of Object.entries(value)) {
+            fields[key] = encodeFirestoreValue(entry);
+          }
+          return { mapValue: { fields } };
+        }
+        default:
+          return { stringValue: String(value) };
+      }
+    }
+
+    function encodeFirestoreFields(fields) {
+      const result = {};
+      for (const [key, value] of Object.entries(fields || {})) {
+        result[key] = encodeFirestoreValue(value);
+      }
+      return result;
+    }
+
+    function firestoreDocId(name) {
+      return name?.split('/').pop() || '';
+    }
+
+    async function firestoreRequest(path, token, options = {}) {
+      const response = await fetch(`${FIRESTORE_BASE}/${path}`, {
+        ...options,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          ...(options.headers || {}),
+        },
+      });
+
+      if (response.status === 404) {
+        return null;
+      }
+
+      const text = await response.text();
+      const data = text ? JSON.parse(text) : null;
+      if (!response.ok) {
+        throw new Error(data?.error?.message || `FIRESTORE_${response.status}`);
+      }
+      return data;
+    }
+
+    async function firestoreList(path, token) {
+      const data = await firestoreRequest(path, token);
+      return data?.documents || [];
+    }
+
+    async function firestoreGet(path, token) {
+      return firestoreRequest(path, token);
+    }
+
+    async function firestoreCreate(collectionPath, token, fields, documentId = '') {
+      const suffix = documentId ? `?documentId=${encodeURIComponent(documentId)}` : '';
+      return firestoreRequest(collectionPath + suffix, token, {
+        method: 'POST',
+        body: JSON.stringify({ fields: encodeFirestoreFields(fields) }),
+      });
+    }
+
+    async function firestoreUpdate(documentPath, token, fields) {
+      const updateMask = Object.keys(fields || {})
+        .map((fieldPath) => `updateMask.fieldPaths=${encodeURIComponent(fieldPath)}`)
+        .join('&');
+      return firestoreRequest(`${documentPath}${updateMask ? `?${updateMask}` : ''}`, token, {
+        method: 'PATCH',
+        body: JSON.stringify({ fields: encodeFirestoreFields(fields) }),
+      });
+    }
+
+    async function firestoreDelete(documentPath, token) {
+      return firestoreRequest(documentPath, token, { method: 'DELETE' });
+    }
+
+    function formatCloudWorkspace(doc) {
+      const fields = decodeFirestoreFields(doc.fields || {});
+      return {
+        id: firestoreDocId(doc.name),
+        name: fields.name || '雲端工作區',
+        ownerEmail: fields.ownerEmail || '',
+        ownerUserId: fields.ownerUserId || '',
+        role: fields.role || 'viewer',
+        inviteCode: fields.inviteCode || '',
+        updatedAt: fields.updatedAt || '',
+      };
+    }
+
+    function formatWarehouse(doc) {
+      const fields = decodeFirestoreFields(doc.fields || {});
+      return {
+        id: firestoreDocId(doc.name),
+        fields,
+        title: fields.name || 'Warehouse',
+        meta: [fields.locationLabel, fields.description, fields.note].filter(Boolean).join(' · '),
+        tags: [
+          fields.type || 'warehouse',
+          fields.isActive === false ? 'Disabled' : 'Cloud',
+        ],
+      };
+    }
+
+    function formatEvent(doc) {
+      const fields = decodeFirestoreFields(doc.fields || {});
+      const transportCount = Array.isArray(fields.transports) ? fields.transports.length : 0;
+      const itemCount = Array.isArray(fields.items) ? fields.items.length : 0;
+      const siteCount = Array.isArray(fields.sites) ? fields.sites.length : 0;
+      const dateLabel = fields.dateLabel || formatDateLabel(fields.dateValue);
+      return {
+        id: firestoreDocId(doc.name),
+        fields,
+        title: fields.name || 'Event',
+        meta: [dateLabel, `${itemCount} items`, `${transportCount} vehicles`, `${siteCount} sites`]
+          .filter(Boolean)
+          .join(' · '),
+        tags: [
+          fields.status || 'draft',
+          fields.updatedAtLabel || 'Cloud',
+        ],
+      };
+    }
+
+    function formatSubscription(userDoc) {
+      const fields = decodeFirestoreFields(userDoc?.fields || {});
+      const subscription = fields.subscription || {};
+      const plan = subscription.plan || 'free';
+      return {
+        plan,
+        provider: subscription.provider || '',
+        providerStatus: subscription.status || '',
+        expiresAt: subscription.expiresAt || '',
+        autoRenewing: subscription.autoRenewing === true,
+      };
+    }
+
+    function renderWorkspaceSelector() {
+      if (!workspaceSelector) {
+        return;
+      }
+
+      const copy = currentCopy();
+      if (!state.cloud.workspaces.length) {
+        workspaceSelector.innerHTML = `<span class="tag">${copy.workspaceSummaryEmpty}</span>`;
+        workspaceSummary.textContent = copy.workspaceSummaryEmpty;
+        return;
+      }
+
+      workspaceSelector.innerHTML = state.cloud.workspaces.map((workspace) => {
+        const active = workspace.id === state.cloud.selectedWorkspaceId;
+        return `<button class="tag${active ? ' green' : ''}" type="button" data-workspace-id="${escapeHtml(workspace.id)}">${escapeHtml(workspace.name)}</button>`;
+      }).join('');
+
+      workspaceSelector.querySelectorAll('button[data-workspace-id]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const workspaceId = button.getAttribute('data-workspace-id');
+          selectWorkspace(workspaceId);
+        });
+      });
+    }
+
+    function renderWorkspaceContent() {
+      const copy = currentCopy();
+      const workspace = state.cloud.selectedWorkspace;
+      const emptyEvents = `<article class="list-item"><div class="item-title">${copy.emptyEventsTitle}</div><div class="item-meta">${copy.emptyEventsBody}</div></article>`;
+      const emptyWarehouses = `<article class="list-item"><div class="item-title">${copy.emptyWarehousesTitle}</div><div class="item-meta">${copy.emptyWarehousesBody}</div></article>`;
+      const emptyActivity = `<article class="list-item"><div class="item-title">${copy.emptyActivityTitle}</div><div class="item-meta">${copy.emptyActivityBody}</div></article>`;
+
+      if (!workspace) {
+        workspaceSummary.textContent = state.cloud.loading
+          ? copy.workspaceSummaryLoading
+          : state.cloud.error || copy.workspaceSummaryEmpty;
+        renderEventList([]);
+        renderWarehouseList([]);
+        renderActivity('activity-list', []);
+        if (planNameNode) {
+          planNameNode.textContent = copy.planName;
+        }
+        if (planNoteNode) {
+          planNoteNode.textContent = copy.planNote;
+        }
+        eventListNode.innerHTML = emptyEvents;
+        warehouseListNode.innerHTML = emptyWarehouses;
+        activityListNode.innerHTML = emptyActivity;
+        return;
+      }
+
+      const events = workspace.events || [];
+      const warehouses = workspace.warehouses || [];
+      const activity = workspace.activity || [];
+
+      workspaceSummary.textContent = workspace.name
+        ? `${workspace.name} · ${workspace.ownerEmail || workspace.role}`
+        : copy.workspaceSummaryEmpty;
+
+      renderEventList(events);
+      renderWarehouseList(warehouses);
+      renderActivity('activity-list', activity);
+
+      if (planNameNode) {
+        planNameNode.textContent = workspace.subscription?.plan || copy.planName;
+      }
+      if (planNoteNode) {
+        const subscription = workspace.subscription;
+        if (subscription?.providerStatus) {
+          planNoteNode.textContent = `${subscription.providerStatus}${subscription.expiresAt ? ` · ${subscription.expiresAt}` : ''}`;
+        } else {
+          planNoteNode.textContent = copy.planNote;
+        }
+      }
+    }
+
+    function renderActionButtons(kind, entity) {
+      const copy = currentCopy();
+      return `
+        <div class="card-actions">
+          <button class="icon-button" type="button" data-action="edit" data-kind="${kind}" data-id="${escapeHtml(entity.id)}">${escapeHtml(copy.editButton)}</button>
+          <button class="icon-button danger" type="button" data-action="delete" data-kind="${kind}" data-id="${escapeHtml(entity.id)}">${escapeHtml(copy.deleteButton)}</button>
+        </div>
+      `;
+    }
+
+    function renderEventList(items) {
+      if (!eventListNode) {
+        return;
+      }
+      if (!items.length) {
+        return;
+      }
+      eventListNode.innerHTML = items.map((item) => `
+        <article class="list-item">
+          <div class="list-item-top">
+            <div>
+              <div class="item-title">${escapeHtml(item.title)}</div>
+              <div class="item-meta">${escapeHtml(item.meta)}</div>
+            </div>
+            ${state.session ? renderActionButtons('event', item) : ''}
+          </div>
+          <div class="tag-row">${item.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>
+        </article>
+      `).join('');
+    }
+
+    function renderWarehouseList(items) {
+      if (!warehouseListNode) {
+        return;
+      }
+      if (!items.length) {
+        return;
+      }
+      warehouseListNode.innerHTML = items.map((item) => `
+        <article class="list-item">
+          <div class="list-item-top">
+            <div>
+              <div class="item-title">${escapeHtml(item.title)}</div>
+              <div class="item-meta">${escapeHtml(item.meta)}</div>
+            </div>
+            ${state.session ? renderActionButtons('warehouse', item) : ''}
+          </div>
+          <div class="tag-row">${item.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>
+        </article>
+      `).join('');
+    }
+
+    function setWorkspaceMessage(message, kind = 'idle') {
+      if (!workspaceMessage) {
+        return;
+      }
+      workspaceMessage.textContent = message;
+      workspaceMessage.dataset.kind = kind;
+    }
+
+    function currentWorkspaceId() {
+      return state.cloud.selectedWorkspaceId || state.cloud.selectedWorkspace?.id || '';
+    }
+
+    function openEntityDialog(kind, entity = null) {
+      const copy = currentCopy();
+      const isEvent = kind === 'event';
+      entityKindInput.value = kind;
+      entityIdInput.value = entity?.id || '';
+      entityDialogTitle.textContent = entity
+        ? (isEvent ? copy.entityDialogEditEventTitle : copy.entityDialogEditWarehouseTitle)
+        : (isEvent ? copy.entityDialogCreateEventTitle : copy.entityDialogCreateWarehouseTitle);
+      entityNameInput.value = entity?.title || entity?.fields?.name || '';
+      entityDateLabelInput.value = entity?.fields?.dateValue || '';
+      entityStatusInput.value = entity?.fields?.status || 'draft';
+      entityTypeInput.value = entity?.fields?.type || 'warehouse';
+      entityLocationLabelInput.value = entity?.fields?.locationLabel || '';
+      entityActiveInput.checked = entity?.fields?.isActive !== false;
+      entityDescriptionInput.value = entity?.fields?.description || '';
+      entityNoteInput.value = entity?.fields?.note || '';
+      entityFieldGroups.forEach((group) => {
+        group.hidden = group.dataset.kind !== kind;
+      });
+      entityDialog.showModal();
+      entityNameInput.focus();
+    }
+
+    function closeEntityDialog() {
+      if (entityDialog.open) {
+        entityDialog.close();
+      }
+    }
+
+    async function reloadCurrentWorkspace() {
+      if (state.session && currentWorkspaceId()) {
+        await selectWorkspace(currentWorkspaceId(), state.session.idToken);
+      } else {
+        renderWorkspaceContent();
+      }
+    }
+
+    async function handleEntitySubmit(event) {
+      event.preventDefault();
+      if (!state.session) {
+        return;
+      }
+
+      const kind = entityKindInput.value;
+      const workspaceId = currentWorkspaceId();
+      if (!workspaceId) {
+        return;
+      }
+
+      const copy = currentCopy();
+      const baseFields = kind === 'event'
+        ? {
+            name: entityNameInput.value.trim(),
+            dateValue: entityDateLabelInput.value,
+            dateLabel: formatDateLabel(entityDateLabelInput.value),
+            status: entityStatusInput.value.trim(),
+            description: entityDescriptionInput.value.trim(),
+            updatedAtLabel: new Date().toLocaleString(state.locale === 'en' ? 'en-US' : state.locale === 'ja' ? 'ja-JP' : 'zh-TW', {
+              dateStyle: 'short',
+              timeStyle: 'short',
+            }),
+            transports: entityIdInput.value ? (state.cloud.selectedWorkspace?.events || []).find((item) => item.id === entityIdInput.value)?.fields?.transports || [] : [],
+            items: entityIdInput.value ? (state.cloud.selectedWorkspace?.events || []).find((item) => item.id === entityIdInput.value)?.fields?.items || [] : [],
+            sites: entityIdInput.value ? (state.cloud.selectedWorkspace?.events || []).find((item) => item.id === entityIdInput.value)?.fields?.sites || [] : [],
+          }
+        : {
+            name: entityNameInput.value.trim(),
+            type: entityTypeInput.value.trim(),
+            locationLabel: entityLocationLabelInput.value.trim(),
+            description: entityDescriptionInput.value.trim(),
+            note: entityNoteInput.value.trim(),
+            isActive: entityActiveInput.checked,
+          };
+
+      if (!baseFields.name) {
+        return;
+      }
+
+      try {
+        setWorkspaceMessage(copy.workspaceMessageSaving, 'saving');
+        entitySaveBtn.disabled = true;
+        entityCancelBtn.disabled = true;
+
+        if (entityIdInput.value) {
+          await firestoreUpdate(
+            `workspaces/${workspaceId}/${kind === 'event' ? 'events' : 'warehouses'}/${entityIdInput.value}`,
+            state.session.idToken,
+            baseFields,
+          );
+        } else {
+          await firestoreCreate(
+            `workspaces/${workspaceId}/${kind === 'event' ? 'events' : 'warehouses'}`,
+            state.session.idToken,
+            baseFields,
+          );
+        }
+
+        closeEntityDialog();
+        await reloadCurrentWorkspace();
+        setWorkspaceMessage(
+          kind === 'event' ? copy.entitySavedEvent : copy.entitySavedWarehouse,
+          'saved',
+        );
+      } catch (error) {
+        setWorkspaceMessage(`${copy.workspaceMessageError}: ${error.message}`, 'error');
+      } finally {
+        entitySaveBtn.disabled = false;
+        entityCancelBtn.disabled = false;
+      }
+    }
+
+    async function handleEntityAction(event) {
+      const button = event.target.closest('button[data-action]');
+      if (!button) {
+        return;
+      }
+
+      const kind = button.getAttribute('data-kind');
+      const id = button.getAttribute('data-id');
+      const entity = kind === 'event'
+        ? (state.cloud.selectedWorkspace?.events || []).find((item) => item.id === id)
+        : (state.cloud.selectedWorkspace?.warehouses || []).find((item) => item.id === id);
+
+      if (!entity) {
+        return;
+      }
+
+      if (button.dataset.action === 'edit') {
+        openEntityDialog(kind, entity);
+        return;
+      }
+
+      if (button.dataset.action === 'delete') {
+        const copy = currentCopy();
+        const confirmed = window.confirm(kind === 'event' ? copy.deleteConfirmEvent : copy.deleteConfirmWarehouse);
+        if (!confirmed) {
+          return;
+        }
+
+        try {
+          setWorkspaceMessage(copy.workspaceMessageSaving, 'saving');
+          await firestoreDelete(
+            `workspaces/${currentWorkspaceId()}/${kind === 'event' ? 'events' : 'warehouses'}/${id}`,
+            state.session.idToken,
+          );
+          await reloadCurrentWorkspace();
+          setWorkspaceMessage(
+            kind === 'event' ? copy.entityDeletedEvent : copy.entityDeletedWarehouse,
+            'saved',
+          );
+        } catch (error) {
+          setWorkspaceMessage(`${copy.workspaceMessageError}: ${error.message}`, 'error');
+        }
+      }
+    }
+
+    async function loadCloudData(session) {
+      state.cloud.loading = true;
+      state.cloud.error = '';
+      renderWorkspaceSelector();
+      renderWorkspaceContent();
+
+      try {
+        const [membershipDocs, userDoc] = await Promise.all([
+          firestoreList(`users/${session.localId}/workspaceMemberships`, session.idToken),
+          firestoreGet(`users/${session.localId}`, session.idToken),
+        ]);
+
+        const workspacesById = new Map();
+        for (const membershipDoc of membershipDocs) {
+          const membership = decodeFirestoreFields(membershipDoc.fields || {});
+          const workspaceId = firestoreDocId(membershipDoc.name) || membership.workspaceId || '';
+          if (!workspaceId) {
+            continue;
+          }
+          const workspaceDoc = await firestoreGet(`workspaces/${workspaceId}`, session.idToken);
+          if (!workspaceDoc) {
+            continue;
+          }
+          const workspace = formatCloudWorkspace(workspaceDoc);
+          workspace.role = membership.role || workspace.role;
+          workspacesById.set(workspace.id, workspace);
+        }
+
+        if (!workspacesById.size) {
+          const owned = await firestoreList('workspaces', session.idToken);
+          owned
+            .map((doc) => formatCloudWorkspace(doc))
+            .filter((workspace) => workspace.ownerUserId === session.localId || workspace.ownerEmail === session.email)
+            .forEach((workspace) => workspacesById.set(workspace.id, workspace));
+        }
+
+        state.cloud.workspaces = [...workspacesById.values()].sort((a, b) => a.name.localeCompare(b.name));
+        state.cloud.subscription = formatSubscription(userDoc);
+        if (!state.cloud.workspaces.some((workspace) => workspace.id === state.cloud.selectedWorkspaceId)) {
+          state.cloud.selectedWorkspaceId = state.cloud.workspaces[0]?.id || '';
+        }
+        await selectWorkspace(state.cloud.selectedWorkspaceId, session.idToken);
+      } catch (error) {
+        state.cloud.error = error.message;
+        state.cloud.workspaces = [];
+        state.cloud.selectedWorkspace = null;
+        state.cloud.selectedWorkspaceId = '';
+        setWorkspaceMessage(`${currentCopy().workspaceMessageError}: ${error.message}`, 'error');
+      } finally {
+        state.cloud.loading = false;
+        renderWorkspaceSelector();
+        renderWorkspaceContent();
+      }
+    }
+
+    async function selectWorkspace(workspaceId, token = state.session?.idToken) {
+      if (!workspaceId) {
+        state.cloud.selectedWorkspace = null;
+        renderWorkspaceContent();
+        return;
+      }
+
+      const workspaceMeta = state.cloud.workspaces.find((item) => item.id === workspaceId);
+      if (!workspaceMeta) {
+        state.cloud.selectedWorkspace = null;
+        renderWorkspaceContent();
+        return;
+      }
+
+      try {
+        const [eventsDocs, warehousesDocs, gearDocs] = await Promise.all([
+          firestoreList(`workspaces/${workspaceId}/events`, token),
+          firestoreList(`workspaces/${workspaceId}/warehouses`, token),
+          firestoreList(`workspaces/${workspaceId}/gearItems`, token),
+        ]);
+
+        const events = eventsDocs.map(formatEvent);
+        const warehouses = warehousesDocs.map(formatWarehouse);
+        const gearItems = gearDocs.map((doc) => {
+          const fields = decodeFirestoreFields(doc.fields || {});
+          return {
+            id: firestoreDocId(doc.name),
+            title: fields.name || 'Gear',
+            meta: [fields.warehouseId, fields.category, fields.note].filter(Boolean).join(' · '),
+            tags: [
+              fields.currentLocationType || 'warehouse',
+              fields.currentLocationId || 'unassigned',
+            ],
+          };
+        });
+
+        const copy = currentCopy();
+        state.cloud.selectedWorkspace = {
+          ...workspaceMeta,
+          events,
+          warehouses,
+          gearItems,
+          activity: buildActivityList(workspaceMeta, events, warehouses, gearItems),
+          subscription: state.cloud.subscription || null,
+        };
+        state.cloud.error = '';
+        setWorkspaceMessage(currentCopy().workspaceMessageIdle, 'idle');
+      } catch (error) {
+        state.cloud.selectedWorkspace = {
+          ...workspaceMeta,
+          events: [],
+          warehouses: [],
+          gearItems: [],
+          activity: [{
+            title: currentCopy().authErrorGeneric,
+            meta: error.message,
+          }],
+          subscription: state.cloud.subscription || null,
+        };
+        state.cloud.error = error.message;
+        setWorkspaceMessage(`${currentCopy().workspaceMessageError}: ${error.message}`, 'error');
+      }
+
+      renderWorkspaceSelector();
+      renderWorkspaceContent();
+    }
+
+    function buildActivityList(workspace, events, warehouses, gearItems) {
+      const copy = currentCopy();
+      const subscription = state.cloud.subscription;
+      return [
+        {
+          title: `${workspace.name} · ${copy.eventsTitle}`,
+          meta: `${events.length} ${copy.metricEvents}`,
+        },
+        {
+          title: copy.activityTitle,
+          meta: `${warehouses.length} ${copy.metricWarehouses}`,
+        },
+        {
+          title: copy.accountTitle,
+          meta: subscription?.plan
+            ? `${subscription.plan}${subscription.providerStatus ? ` · ${subscription.providerStatus}` : ''}`
+            : copy.planNote,
+        },
+        {
+          title: copy.metricTransports,
+          meta: `${gearItems.length} ${copy.metricTransports}`,
+        },
+      ];
+    }
+
+    function setAuthMessage(message, isError = false) {
+      authStatus.textContent = message;
+      authStatus.style.color = isError ? 'var(--accent-ink)' : 'var(--muted)';
+    }
+
+    function setAuthMode(mode) {
+      state.authMode = mode;
+      const copy = currentCopy();
+      authSubmit.textContent = mode === 'signIn'
+        ? copy.signInButton
+        : copy.createAccountButton;
+      authToggle.textContent = mode === 'signIn'
+        ? copy.createAccountButton
+        : copy.authModeSignIn;
+    }
+
+    async function setSignedIn(session) {
+      state.session = session;
+      document.body.classList.add('signed-in');
+      authUserPill.textContent = session.email;
+      authUserPill.removeAttribute('data-i18n');
+      signOutTop.hidden = false;
+      setAuthMessage(
+        state.locale === 'en'
+          ? 'Signed in.'
+          : state.locale === 'ja'
+            ? 'ログインしました。'
+          : '已登入。',
+      );
+      dashboard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      await loadCloudData(session);
+    }
+
+    function setSignedOut() {
+      state.session = null;
+      document.body.classList.remove('signed-in');
+      authUserPill.setAttribute('data-i18n', 'signedOutPill');
+      authUserPill.textContent = currentCopy().signedOutPill;
+      signOutTop.hidden = true;
+      setAuthMessage(currentCopy().authHint);
+      setWorkspaceMessage(currentCopy().workspaceMessageIdle, 'idle');
+      renderWorkspaceSelector();
+      renderWorkspaceContent();
+    }
+
+    function persistSession(session) {
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    }
+
+    function clearSession() {
+      sessionStorage.removeItem(SESSION_KEY);
+    }
+
+    function loadSession() {
+      try {
+        const raw = sessionStorage.getItem(SESSION_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch {
+        return null;
+      }
+    }
+
+    async function authRequest(endpoint, payload) {
+      const response = await fetch(
+        `https://identitytoolkit.googleapis.com/v1/accounts:${endpoint}?key=${FIREBASE_API_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        },
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data?.error?.message || 'AUTH_ERROR');
+      }
+      return data;
+    }
+
+    async function refreshSession(refreshToken) {
+      const response = await fetch(
+        `https://securetoken.googleapis.com/v1/token?key=${FIREBASE_API_KEY}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`,
+        },
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data?.error?.message || 'TOKEN_REFRESH_FAILED');
+      }
+      return data;
+    }
+
+    async function restoreSession() {
+      const saved = loadSession();
+      if (!saved?.refreshToken) {
+        setSignedOut();
+        return;
+      }
+
+      try {
+        const refreshed = await refreshSession(saved.refreshToken);
+        const session = {
+          email: saved.email,
+          refreshToken: refreshed.refresh_token,
+          idToken: refreshed.id_token,
+          localId: refreshed.user_id,
+          expiresAt: Date.now() + Number(refreshed.expires_in) * 1000,
+        };
+        persistSession(session);
+        await setSignedIn(session);
+      } catch {
+        clearSession();
+        setSignedOut();
+      }
+    }
+
+    async function handleAuthSubmit(event) {
+      event.preventDefault();
+
+      const email = authEmail.value.trim();
+      const password = authPassword.value;
+      if (!email || !password) {
+        setAuthMessage(currentCopy().authHint, true);
+        return;
+      }
+
+      const copy = currentCopy();
+      authSubmit.disabled = true;
+      authToggle.disabled = true;
+      authStatus.textContent = copy.authLoading;
+
+      try {
+        const data = state.authMode === 'signIn'
+          ? await authRequest('signInWithPassword', {
+              email,
+              password,
+              returnSecureToken: true,
+            })
+          : await authRequest('signUp', {
+              email,
+              password,
+              returnSecureToken: true,
+            });
+
+        const session = {
+          email: data.email,
+          refreshToken: data.refreshToken,
+          idToken: data.idToken,
+          localId: data.localId,
+          expiresAt: Date.now() + Number(data.expiresIn) * 1000,
+        };
+
+        persistSession(session);
+        await setSignedIn(session);
+        setAuthMessage(
+          state.authMode === 'signIn'
+            ? copy.authSignInSuccess
+            : copy.authCreateSuccess,
+        );
+      } catch (error) {
+        setAuthMessage(
+          `${copy.authErrorGeneric}: ${error.message}`,
+          true,
+        );
+      } finally {
+        authSubmit.disabled = false;
+        authToggle.disabled = false;
+      }
+    }
+
+    function handleSignOut() {
+      clearSession();
+      authForm.reset();
+      setAuthMode('signIn');
+      setSignedOut();
+      setAuthMessage(currentCopy().authSignOutSuccess);
+    }
+
+    authForm.addEventListener('submit', handleAuthSubmit);
+    authToggle.addEventListener('click', () => {
+      setAuthMode(state.authMode === 'signIn' ? 'create' : 'signIn');
+    });
+    signOutTop.addEventListener('click', handleSignOut);
+    addEventBtn.addEventListener('click', () => openEntityDialog('event'));
+    addWarehouseBtn.addEventListener('click', () => openEntityDialog('warehouse'));
+    eventListNode.addEventListener('click', handleEntityAction);
+    warehouseListNode.addEventListener('click', handleEntityAction);
+    entityForm.addEventListener('submit', handleEntitySubmit);
+    entityDialogClose.addEventListener('click', closeEntityDialog);
+    entityCancelBtn.addEventListener('click', closeEntityDialog);
+
+    select.addEventListener('change', (event) => {
+      renderLocale(event.target.value);
+      if (state.session) {
+        authUserPill.textContent = state.session.email;
+      }
+    });
+
+    renderLocale(state.locale);
+    restoreSession();
+  </script>
+</body>
+</html>
