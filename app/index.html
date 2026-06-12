@@ -91,106 +91,124 @@
         </aside>
       </section>
 
-      <section class="content dashboard-shell" id="dashboard">
-        <div class="panel section-card">
-          <div class="section-head">
-            <div>
-              <h2 data-i18n="workspaceTitle">雲端工作區</h2>
-              <p data-i18n="workspaceBody">這裡先放產品骨架。等你要接 Firebase 後，再把資料模型串進來。</p>
-            </div>
-            <span class="pill" data-i18n="workspacePill">Signed in</span>
+      <section class="content app-shell" id="dashboard">
+        <aside class="panel app-sidebar">
+          <div class="sidebar-workspace">
+            <span class="eyebrow" data-i18n="workspaceTitle">雲端工作區</span>
+            <div class="tag-row" id="workspace-selector"></div>
+            <p class="workspace-summary" id="workspace-summary" data-i18n="workspaceSummaryEmpty">登入後會顯示你的雲端工作區。</p>
+            <p class="workspace-message" id="workspace-message" data-i18n="workspaceMessageIdle">變更會即時寫入 Firestore。</p>
           </div>
+          <nav class="app-nav" aria-label="App navigation">
+            <button type="button" data-page-target="home"><span>⌂</span><strong data-i18n="navHome">總覽</strong></button>
+            <button type="button" data-page-target="events"><span>▣</span><strong data-i18n="eventsTitle">活動</strong></button>
+            <button type="button" data-page-target="warehouses"><span>▤</span><strong data-i18n="warehousesTitle">倉庫與裝備庫</strong></button>
+            <button type="button" data-page-target="account"><span>◎</span><strong data-i18n="accountTitle">帳戶與訂閱</strong></button>
+          </nav>
+          <section class="ad-slot compact">
+            <small data-i18n="adLabel">Advertisement</small>
+            <strong data-i18n="adTitle">功能頁廣告插槽</strong>
+          </section>
+        </aside>
 
-          <div class="metrics-grid">
-            <div class="metric">
-              <strong>12</strong>
-              <span data-i18n="metricEvents">活動</span>
-            </div>
-            <div class="metric">
-              <strong>4</strong>
-              <span data-i18n="metricWarehouses">倉庫 / 空間</span>
-            </div>
-            <div class="metric">
-              <strong>3</strong>
-              <span data-i18n="metricTransports">運輸工具</span>
-            </div>
-          </div>
-
-          <div style="height: 16px;"></div>
-
-          <section id="events" class="panel section-card" style="box-shadow: none; background: rgba(255,255,255,0.72);">
-            <div class="section-head">
+        <div class="app-main">
+          <section class="app-page" data-page="home">
+            <div class="page-title">
               <div>
-                <h2 data-i18n="eventsTitle">活動</h2>
-                <p data-i18n="eventsBody">活動、地點、裝備與搬運狀態都放在雲端，讓團隊同步查看。</p>
+                <p class="eyebrow">GearFlow Web</p>
+                <h1 data-i18n="workspaceTitle">雲端工作區</h1>
+                <p data-i18n="workspaceBody">管理活動、倉庫與雲端裝備。</p>
               </div>
-              <div class="section-head-actions">
-                <span class="pill" data-i18n="eventsBadge">Cloud sync</span>
-                <button class="secondary-button" type="button" id="add-event-btn" data-i18n="addEventButton">新增活動</button>
-              </div>
+              <span class="pill" data-i18n="workspacePill">Signed in</span>
             </div>
-            <div class="workspace-strip">
-              <div class="tag-row" id="workspace-selector"></div>
-              <p class="workspace-summary" id="workspace-summary" data-i18n="workspaceSummaryEmpty">登入後會顯示你的雲端工作區。</p>
-              <p class="workspace-message" id="workspace-message" data-i18n="workspaceMessageIdle">變更會即時寫入 Firestore。</p>
+            <div class="metrics-grid">
+              <button class="metric metric-button" type="button" data-page-target="events">
+                <strong id="metric-events-value">0</strong>
+                <span data-i18n="metricEvents">活動</span>
+              </button>
+              <button class="metric metric-button" type="button" data-page-target="warehouses">
+                <strong id="metric-warehouses-value">0</strong>
+                <span data-i18n="metricWarehouses">倉庫 / 空間</span>
+              </button>
+              <button class="metric metric-button" type="button" data-page-target="warehouses">
+                <strong id="metric-gear-value">0</strong>
+                <span data-i18n="metricGear">裝備</span>
+              </button>
+            </div>
+            <section class="panel section-card">
+              <div class="section-head">
+                <div>
+                  <h2 data-i18n="activityTitle">最近動態</h2>
+                  <p data-i18n="activityBody">雲端工作區目前的資料摘要。</p>
+                </div>
+              </div>
+              <div class="activity-list" id="activity-list"></div>
+            </section>
+            <section class="ad-slot">
+              <small data-i18n="adLabel">Advertisement</small>
+              <strong data-i18n="adTitle">功能頁廣告插槽</strong>
+              <p data-i18n="adBody">這裡先預留廣告版位。</p>
+            </section>
+          </section>
+
+          <section class="app-page" data-page="events" id="events">
+            <div class="page-title">
+              <div>
+                <p class="eyebrow" data-i18n="eventsBadge">Cloud sync</p>
+                <h1 data-i18n="eventsTitle">活動</h1>
+                <p data-i18n="eventsBody">點選活動進入地點、運輸與裝備管理。</p>
+              </div>
+              <button class="primary-button" type="button" id="add-event-btn" data-i18n="addEventButton">新增活動</button>
             </div>
             <div class="event-list" id="event-list"></div>
           </section>
 
-          <div style="height: 16px;"></div>
+          <section class="app-page" data-page="event-detail">
+            <div class="detail-pane" id="event-detail"></div>
+          </section>
 
-          <section id="warehouses" class="panel section-card" style="box-shadow: none; background: rgba(255,255,255,0.72);">
-            <div class="section-head">
+          <section class="app-page" data-page="warehouses" id="warehouses">
+            <div class="page-title">
               <div>
-                <h2 data-i18n="warehousesTitle">倉庫與裝備庫</h2>
-                <p data-i18n="warehousesBody">這裡對應 App 內的倉庫、裝備與目前存放位置。</p>
+                <p class="eyebrow" data-i18n="warehouseBadge">Library</p>
+                <h1 data-i18n="warehousesTitle">倉庫與裝備庫</h1>
+                <p data-i18n="warehousesBody">點選倉庫進入裝備與位置管理。</p>
               </div>
-              <div class="section-head-actions">
-                <span class="pill" data-i18n="warehouseBadge">Library</span>
-                <button class="secondary-button" type="button" id="add-warehouse-btn" data-i18n="addWarehouseButton">新增倉庫</button>
-              </div>
+              <button class="primary-button" type="button" id="add-warehouse-btn" data-i18n="addWarehouseButton">新增倉庫</button>
+            </div>
+            <div class="warehouse-tabs">
+              <button type="button" class="active" data-library-tab="warehouses" data-i18n="warehouseTab">倉庫</button>
+              <button type="button" data-library-tab="gear" data-i18n="gearTab">裝備庫</button>
             </div>
             <div class="warehouse-list" id="warehouse-list"></div>
+            <div class="gear-library-list" id="gear-library-list"></div>
+          </section>
+
+          <section class="app-page" data-page="warehouse-detail">
+            <div class="detail-pane" id="warehouse-detail"></div>
+          </section>
+
+          <section class="app-page" data-page="account" id="account">
+            <div class="page-title">
+              <div>
+                <p class="eyebrow" data-i18n="accountBadge">Interface only</p>
+                <h1 data-i18n="accountTitle">帳戶與訂閱</h1>
+                <p data-i18n="accountBody">訂閱接口保留，目前不限制功能。</p>
+              </div>
+            </div>
+            <section class="panel section-card">
+              <div class="subscription-card">
+                <div class="price" id="plan-name" data-i18n="planName">Free</div>
+                <div class="price-note" id="plan-note" data-i18n="planNote">目前不啟用限制。</div>
+                <div class="tag-row">
+                  <span class="tag green" data-i18n="planTagOne">Cloud enabled</span>
+                  <span class="tag" data-i18n="planTagTwo">Ads reserved</span>
+                  <span class="tag orange" data-i18n="planTagThree">Subscription later</span>
+                </div>
+              </div>
+            </section>
           </section>
         </div>
-
-        <aside class="content" style="display: grid; gap: 18px;">
-          <section id="account" class="panel section-card">
-            <div class="section-head">
-              <div>
-                <h2 data-i18n="accountTitle">帳戶與訂閱</h2>
-                <p data-i18n="accountBody">先把接口放好，等訂閱流程完成後再啟用限制。</p>
-              </div>
-              <span class="pill warn" data-i18n="accountBadge">Interface only</span>
-            </div>
-
-            <div class="subscription-card">
-              <div class="price" id="plan-name" data-i18n="planName">Free</div>
-              <div class="price-note" id="plan-note" data-i18n="planNote">目前不啟用限制，之後可直接接訂閱判斷。</div>
-              <div class="tag-row">
-                <span class="tag green" data-i18n="planTagOne">Cloud enabled</span>
-                <span class="tag" data-i18n="planTagTwo">Ads reserved</span>
-                <span class="tag orange" data-i18n="planTagThree">Subscription later</span>
-              </div>
-            </div>
-          </section>
-
-          <section class="panel section-card">
-            <div class="section-head">
-              <div>
-                <h2 data-i18n="activityTitle">最近動態</h2>
-                <p data-i18n="activityBody">未來這裡可以接雲端同步紀錄、權限變更與更新通知。</p>
-              </div>
-            </div>
-            <div class="activity-list" id="activity-list"></div>
-          </section>
-
-          <section class="ad-slot">
-            <small data-i18n="adLabel">Advertisement</small>
-            <strong data-i18n="adTitle">功能頁廣告插槽</strong>
-            <p data-i18n="adBody">這裡先預留廣告版位，未來可接 AdMob 或其他 Web 廣告服務。</p>
-          </section>
-        </aside>
       </section>
 
       <p class="footer-note" data-i18n="footerNote">這是一個 Web 版產品原型。下一步可以把 Firebase Auth、Firestore 與權限流程接上。</p>
@@ -218,12 +236,23 @@
         <input id="entity-date-label" type="date">
 
         <label for="entity-status" data-i18n="entityStatusLabel">狀態</label>
-        <input id="entity-status" type="text" maxlength="40" placeholder="draft">
+        <select id="entity-status">
+          <option value="draft">draft</option>
+          <option value="active">active</option>
+          <option value="completed">completed</option>
+          <option value="archived">archived</option>
+        </select>
       </div>
 
       <div class="entity-fields" data-kind="warehouse">
         <label for="entity-type" data-i18n="entityTypeLabel">類型</label>
-        <input id="entity-type" type="text" maxlength="40" placeholder="warehouse">
+        <select id="entity-type">
+          <option value="mainStorage">mainStorage</option>
+          <option value="office">office</option>
+          <option value="cabinet">cabinet</option>
+          <option value="vehicleStorage">vehicleStorage</option>
+          <option value="external">external</option>
+        </select>
 
         <label for="entity-location-label" data-i18n="entityLocationLabel">位置標記</label>
         <input id="entity-location-label" type="text" maxlength="120" placeholder="台北總倉">
@@ -247,10 +276,31 @@
     </form>
   </dialog>
 
+  <dialog id="move-dialog" class="entity-dialog">
+    <form id="move-form" class="entity-form">
+      <div class="entity-dialog-head">
+        <div>
+          <p class="eyebrow" data-i18n="moveItemEyebrow">物品位置</p>
+          <h3 id="move-dialog-title" data-i18n="moveItemTitle">移動物品</h3>
+        </div>
+        <button class="icon-button" id="move-dialog-close" type="button" aria-label="Close dialog">×</button>
+      </div>
+      <input type="hidden" id="move-kind">
+      <input type="hidden" id="move-item-id">
+      <label for="move-location" data-i18n="moveTargetLabel">移動到</label>
+      <select id="move-location" required></select>
+      <div class="entity-dialog-actions">
+        <button class="primary-button" id="move-save-btn" type="submit" data-i18n="moveSaveButton">確認移動</button>
+        <button class="secondary-button" id="move-cancel-btn" type="button" data-i18n="entityCancelButton">取消</button>
+      </div>
+    </form>
+  </dialog>
+
   <nav class="mobile-nav" aria-label="Quick navigation">
-    <a href="#events"><strong data-i18n="mobileNavEvents">活動</strong><span data-i18n="mobileNavEventsSub">Events</span></a>
-    <a href="#warehouses"><strong data-i18n="mobileNavWarehouses">倉庫</strong><span data-i18n="mobileNavWarehousesSub">Library</span></a>
-    <a href="#account"><strong data-i18n="mobileNavAccount">帳戶</strong><span data-i18n="mobileNavAccountSub">Account</span></a>
+    <button type="button" data-page-target="home"><strong data-i18n="navHome">總覽</strong><span>Home</span></button>
+    <button type="button" data-page-target="events"><strong data-i18n="mobileNavEvents">活動</strong><span>Events</span></button>
+    <button type="button" data-page-target="warehouses"><strong data-i18n="mobileNavWarehouses">倉庫</strong><span>Library</span></button>
+    <button type="button" data-page-target="account"><strong data-i18n="mobileNavAccount">帳戶</strong><span>Account</span></button>
   </nav>
 
   <script>
@@ -292,6 +342,19 @@
         metricEvents: '活動',
         metricWarehouses: '倉庫 / 空間',
         metricTransports: '運輸工具',
+        metricGear: '裝備',
+        navHome: '總覽',
+        warehouseTab: '倉庫',
+        gearTab: '裝備庫',
+        backToEvents: '返回活動',
+        backToWarehouses: '返回倉庫',
+        moveItemEyebrow: '物品位置',
+        moveItemTitle: '移動物品',
+        moveTargetLabel: '移動到',
+        moveSaveButton: '確認移動',
+        moveButton: '移動',
+        unassignedLabel: '未分配',
+        warehouseLocationLabel: '倉庫',
         eventsTitle: '活動',
         eventsBody: '活動、地點、裝備與搬運狀態都放在雲端，讓團隊同步查看。',
         eventsBadge: 'Cloud sync',
@@ -308,6 +371,18 @@
         planTagThree: 'Subscription later',
         addEventButton: '新增活動',
         addWarehouseButton: '新增倉庫',
+        selectEventHint: '點一下活動卡可進入詳細管理',
+        selectWarehouseHint: '點一下倉庫卡可管理裝備庫',
+        eventDetailEmpty: '選擇一個活動來管理運輸、地點與項目。',
+        warehouseDetailEmpty: '選擇一個倉庫來管理裝備與存放位置。',
+        addTransportButton: '新增運輸',
+        addSiteButton: '新增地點',
+        addPlanItemButton: '新增項目',
+        addGearButton: '新增裝備',
+        editLabel: '編輯',
+        deleteLabel: '刪除',
+        moveInLabel: '入庫',
+        moveOutLabel: '出庫',
         activityTitle: '最近動態',
         activityBody: '未來這裡可以接雲端同步紀錄、權限變更與更新通知。',
         adLabel: 'Advertisement',
@@ -451,6 +526,19 @@
         metricEvents: 'Events',
         metricWarehouses: 'Warehouses / spaces',
         metricTransports: 'Transport units',
+        metricGear: 'Gear',
+        navHome: 'Overview',
+        warehouseTab: 'Warehouses',
+        gearTab: 'Gear library',
+        backToEvents: 'Back to events',
+        backToWarehouses: 'Back to warehouses',
+        moveItemEyebrow: 'Item location',
+        moveItemTitle: 'Move item',
+        moveTargetLabel: 'Move to',
+        moveSaveButton: 'Move',
+        moveButton: 'Move',
+        unassignedLabel: 'Unassigned',
+        warehouseLocationLabel: 'Warehouse',
         eventsTitle: 'Events',
         eventsBody: 'Events, locations, gear, and loading status stay in the cloud so the team can stay in sync.',
         eventsBadge: 'Cloud sync',
@@ -467,6 +555,18 @@
         planTagThree: 'Subscription later',
         addEventButton: 'Add event',
         addWarehouseButton: 'Add warehouse',
+        selectEventHint: 'Tap an event card to manage details',
+        selectWarehouseHint: 'Tap a warehouse card to manage gear',
+        eventDetailEmpty: 'Select an event to manage transports, sites, and items.',
+        warehouseDetailEmpty: 'Select a warehouse to manage gear and storage.',
+        addTransportButton: 'Add transport',
+        addSiteButton: 'Add site',
+        addPlanItemButton: 'Add plan item',
+        addGearButton: 'Add gear',
+        editLabel: 'Edit',
+        deleteLabel: 'Delete',
+        moveInLabel: 'Move in',
+        moveOutLabel: 'Move out',
         activityTitle: 'Recent activity',
         activityBody: 'Cloud sync logs, permission changes, and updates can live here later.',
         adLabel: 'Advertisement',
@@ -610,6 +710,19 @@
         metricEvents: 'イベント',
         metricWarehouses: '倉庫 / スペース',
         metricTransports: '輸送手段',
+        metricGear: '装備',
+        navHome: '概要',
+        warehouseTab: '倉庫',
+        gearTab: '装備庫',
+        backToEvents: 'イベントに戻る',
+        backToWarehouses: '倉庫に戻る',
+        moveItemEyebrow: 'アイテム位置',
+        moveItemTitle: 'アイテム移動',
+        moveTargetLabel: '移動先',
+        moveSaveButton: '移動する',
+        moveButton: '移動',
+        unassignedLabel: '未割り当て',
+        warehouseLocationLabel: '倉庫',
         eventsTitle: 'イベント',
         eventsBody: 'イベント、場所、ギア、搬入状況はすべてクラウドに置き、チーム全員で共有します。',
         eventsBadge: 'Cloud sync',
@@ -626,6 +739,18 @@
         planTagThree: 'Subscription later',
         addEventButton: 'イベント追加',
         addWarehouseButton: '倉庫追加',
+        selectEventHint: 'イベントカードを押して詳細を管理',
+        selectWarehouseHint: '倉庫カードを押して装備を管理',
+        eventDetailEmpty: 'イベントを選択すると、輸送・場所・項目を管理できます。',
+        warehouseDetailEmpty: '倉庫を選択すると、装備と保管場所を管理できます。',
+        addTransportButton: '輸送追加',
+        addSiteButton: '地点追加',
+        addPlanItemButton: '項目追加',
+        addGearButton: '装備追加',
+        editLabel: '編集',
+        deleteLabel: '削除',
+        moveInLabel: '入庫',
+        moveOutLabel: '出庫',
         activityTitle: '最近の動き',
         activityBody: 'クラウド同期ログ、権限変更、更新通知をここに接続できます。',
         adLabel: 'Advertisement',
@@ -743,12 +868,17 @@
       locale: 'zh-Hant',
       authMode: 'signIn',
       session: null,
+      activePage: 'home',
+      libraryTab: 'warehouses',
+      moveContext: null,
       cloud: {
         loading: false,
         error: '',
         workspaces: [],
         selectedWorkspaceId: '',
         selectedWorkspace: null,
+        selectedEventId: '',
+        selectedWarehouseId: '',
         subscription: null,
       },
     };
@@ -770,7 +900,10 @@
     const planNoteNode = document.getElementById('plan-note');
     const eventListNode = document.getElementById('event-list');
     const warehouseListNode = document.getElementById('warehouse-list');
+    const gearLibraryListNode = document.getElementById('gear-library-list');
     const activityListNode = document.getElementById('activity-list');
+    const eventDetailNode = document.getElementById('event-detail');
+    const warehouseDetailNode = document.getElementById('warehouse-detail');
     const addEventBtn = document.getElementById('add-event-btn');
     const addWarehouseBtn = document.getElementById('add-warehouse-btn');
     const entityDialog = document.getElementById('entity-dialog');
@@ -791,9 +924,55 @@
     const entityDescriptionInput = document.getElementById('entity-description');
     const entityNoteInput = document.getElementById('entity-note');
     const entityFieldGroups = Array.from(document.querySelectorAll('.entity-fields'));
+    const metricEventsValue = document.getElementById('metric-events-value');
+    const metricWarehousesValue = document.getElementById('metric-warehouses-value');
+    const metricGearValue = document.getElementById('metric-gear-value');
+    const moveDialog = document.getElementById('move-dialog');
+    const moveForm = document.getElementById('move-form');
+    const moveDialogTitle = document.getElementById('move-dialog-title');
+    const moveKindInput = document.getElementById('move-kind');
+    const moveItemIdInput = document.getElementById('move-item-id');
+    const moveLocationSelect = document.getElementById('move-location');
+    const moveDialogClose = document.getElementById('move-dialog-close');
+    const moveCancelBtn = document.getElementById('move-cancel-btn');
+    const pageNodes = Array.from(document.querySelectorAll('.app-page'));
+    const pageButtons = Array.from(document.querySelectorAll('[data-page-target]'));
+    const libraryTabButtons = Array.from(document.querySelectorAll('[data-library-tab]'));
 
     function currentCopy() {
       return locales[state.locale] || locales['zh-Hant'];
+    }
+
+    function setActivePage(page, { updateHash = true } = {}) {
+      const allowedPages = ['home', 'events', 'event-detail', 'warehouses', 'warehouse-detail', 'account'];
+      state.activePage = allowedPages.includes(page) ? page : 'home';
+
+      pageNodes.forEach((node) => {
+        node.classList.toggle('active', node.dataset.page === state.activePage);
+      });
+      pageButtons.forEach((button) => {
+        const target = button.dataset.pageTarget;
+        const activeTarget = state.activePage === 'event-detail'
+          ? 'events'
+          : state.activePage === 'warehouse-detail'
+            ? 'warehouses'
+            : state.activePage;
+        button.classList.toggle('active', target === activeTarget);
+      });
+
+      if (updateHash) {
+        history.replaceState(null, '', `#${state.activePage}`);
+      }
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
+
+    function setLibraryTab(tab) {
+      state.libraryTab = tab === 'gear' ? 'gear' : 'warehouses';
+      libraryTabButtons.forEach((button) => {
+        button.classList.toggle('active', button.dataset.libraryTab === state.libraryTab);
+      });
+      warehouseListNode.hidden = state.libraryTab !== 'warehouses';
+      gearLibraryListNode.hidden = state.libraryTab !== 'gear';
     }
 
     function renderLocale(locale) {
@@ -1132,7 +1311,13 @@
         }
         eventListNode.innerHTML = emptyEvents;
         warehouseListNode.innerHTML = emptyWarehouses;
+        gearLibraryListNode.innerHTML = emptyWarehouses;
         activityListNode.innerHTML = emptyActivity;
+        eventDetailNode.innerHTML = `<article class="detail-card"><div class="item-title">${copy.eventDetailEmpty}</div></article>`;
+        warehouseDetailNode.innerHTML = `<article class="detail-card"><div class="item-title">${copy.warehouseDetailEmpty}</div></article>`;
+        metricEventsValue.textContent = '0';
+        metricWarehousesValue.textContent = '0';
+        metricGearValue.textContent = '0';
         return;
       }
 
@@ -1140,13 +1325,26 @@
       const warehouses = workspace.warehouses || [];
       const activity = workspace.activity || [];
 
+      if (!state.cloud.selectedEventId || !events.some((event) => event.id === state.cloud.selectedEventId)) {
+        state.cloud.selectedEventId = events[0]?.id || '';
+      }
+      if (!state.cloud.selectedWarehouseId || !warehouses.some((warehouse) => warehouse.id === state.cloud.selectedWarehouseId)) {
+        state.cloud.selectedWarehouseId = warehouses[0]?.id || '';
+      }
+
       workspaceSummary.textContent = workspace.name
         ? `${workspace.name} · ${workspace.ownerEmail || workspace.role}`
         : copy.workspaceSummaryEmpty;
 
       renderEventList(events);
       renderWarehouseList(warehouses);
+      renderGearLibrary(workspace.gearItems || []);
       renderActivity('activity-list', activity);
+      renderSelectedEventDetail();
+      renderSelectedWarehouseDetail();
+      metricEventsValue.textContent = String(events.length);
+      metricWarehousesValue.textContent = String(warehouses.length);
+      metricGearValue.textContent = String((workspace.gearItems || []).length);
 
       if (planNameNode) {
         planNameNode.textContent = workspace.subscription?.plan || copy.planName;
@@ -1179,7 +1377,7 @@
         return;
       }
       eventListNode.innerHTML = items.map((item) => `
-        <article class="list-item">
+        <article class="list-item${item.id === state.cloud.selectedEventId ? ' selected' : ''}" data-event-id="${escapeHtml(item.id)}">
           <div class="list-item-top">
             <div>
               <div class="item-title">${escapeHtml(item.title)}</div>
@@ -1190,6 +1388,17 @@
           <div class="tag-row">${item.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>
         </article>
       `).join('');
+
+      eventListNode.querySelectorAll('article[data-event-id]').forEach((article) => {
+        article.addEventListener('click', (event) => {
+          if (event.target.closest('button')) {
+            return;
+          }
+          state.cloud.selectedEventId = article.getAttribute('data-event-id') || '';
+          renderSelectedEventDetail();
+          setActivePage('event-detail');
+        });
+      });
     }
 
     function renderWarehouseList(items) {
@@ -1200,7 +1409,7 @@
         return;
       }
       warehouseListNode.innerHTML = items.map((item) => `
-        <article class="list-item">
+        <article class="list-item${item.id === state.cloud.selectedWarehouseId ? ' selected' : ''}" data-warehouse-id="${escapeHtml(item.id)}">
           <div class="list-item-top">
             <div>
               <div class="item-title">${escapeHtml(item.title)}</div>
@@ -1211,6 +1420,748 @@
           <div class="tag-row">${item.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>
         </article>
       `).join('');
+
+      warehouseListNode.querySelectorAll('article[data-warehouse-id]').forEach((article) => {
+        article.addEventListener('click', (event) => {
+          if (event.target.closest('button')) {
+            return;
+          }
+          state.cloud.selectedWarehouseId = article.getAttribute('data-warehouse-id') || '';
+          renderSelectedWarehouseDetail();
+          setActivePage('warehouse-detail');
+        });
+      });
+    }
+
+    function renderGearLibrary(items) {
+      if (!gearLibraryListNode) {
+        return;
+      }
+      const copy = currentCopy();
+      if (!items.length) {
+        gearLibraryListNode.innerHTML = `<article class="list-item"><div class="item-title">${copy.emptyWarehousesTitle}</div><div class="item-meta">No gear items yet</div></article>`;
+        return;
+      }
+
+      const warehouses = state.cloud.selectedWorkspace?.warehouses || [];
+      gearLibraryListNode.innerHTML = items.map((item) => {
+        const plannedWarehouse = warehouses.find((warehouse) => warehouse.id === item.fields?.warehouseId);
+        return `
+          <article class="list-item">
+            <div class="list-item-top">
+              <div>
+                <div class="item-title">${escapeHtml(item.title)}</div>
+                <div class="item-meta">${escapeHtml(item.fields?.category || '')} · ${escapeHtml(plannedWarehouse?.title || item.fields?.warehouseId || '')}</div>
+              </div>
+              <div class="card-actions">
+                <button class="icon-button" type="button" data-library-action="move" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.moveButton)}</button>
+                <button class="icon-button" type="button" data-library-action="edit" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.editLabel)}</button>
+                <button class="icon-button danger" type="button" data-library-action="delete" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.deleteLabel)}</button>
+              </div>
+            </div>
+            <div class="tag-row">
+              <span class="tag">${escapeHtml(item.fields?.currentLocationType || 'unassigned')}</span>
+              <span class="tag">${escapeHtml(locationNameForGear(item))}</span>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      gearLibraryListNode.querySelectorAll('[data-library-action]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const item = items.find((value) => value.id === button.dataset.gearId);
+          if (!item) {
+            return;
+          }
+          const action = button.dataset.libraryAction;
+          if (action === 'move') {
+            openMoveDialog('gear', item);
+          } else if (action === 'edit') {
+            const warehouse = warehouses.find((value) => value.id === item.fields?.warehouseId) || warehouses[0];
+            if (warehouse) {
+              promptUpsertGearItem(warehouse, item);
+            }
+          } else {
+            deleteGearRecord(item);
+          }
+        });
+      });
+    }
+
+    function renderSelectedEventDetail() {
+      if (!eventDetailNode) {
+        return;
+      }
+
+      const copy = currentCopy();
+      const workspace = state.cloud.selectedWorkspace;
+      const event = workspace?.events?.find((item) => item.id === state.cloud.selectedEventId);
+      if (!event) {
+        eventDetailNode.innerHTML = `<article class="detail-card"><div class="item-title">${copy.eventDetailEmpty}</div></article>`;
+        return;
+      }
+
+      const transports = event.fields?.transports || [];
+      const sites = event.fields?.sites || [];
+      const items = event.fields?.items || [];
+
+      eventDetailNode.innerHTML = `
+        <article class="detail-card selected">
+          <button class="back-button" type="button" id="event-detail-back">← ${escapeHtml(copy.backToEvents)}</button>
+          <div class="detail-head">
+            <div>
+              <h3>${escapeHtml(event.title)}</h3>
+              <p class="detail-subtitle">${escapeHtml(event.meta)}</p>
+            </div>
+            <div class="detail-actions">
+              <button class="secondary-button" type="button" id="event-add-transport">${escapeHtml(copy.addTransportButton)}</button>
+              <button class="secondary-button" type="button" id="event-add-site">${escapeHtml(copy.addSiteButton)}</button>
+              <button class="secondary-button" type="button" id="event-add-item">${escapeHtml(copy.addPlanItemButton)}</button>
+              <button class="secondary-button" type="button" id="event-edit">${escapeHtml(copy.editLabel)}</button>
+              <button class="secondary-button" type="button" id="event-delete">${escapeHtml(copy.deleteLabel)}</button>
+            </div>
+          </div>
+          <div class="tag-row">${event.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>
+          <div style="height: 14px;"></div>
+          <div class="detail-card" style="background: rgba(255,255,255,0.78);">
+            <div class="detail-head">
+              <div>
+                <h4>Transports</h4>
+                <p class="detail-subtitle">活動內的運輸工具。</p>
+              </div>
+            </div>
+            ${transports.length ? transports.map((transport, index) => `
+              <article class="list-item" style="margin-bottom: 10px;">
+                <div class="list-item-top">
+                  <div>
+                    <div class="item-title">${escapeHtml(transport.name || `Transport ${index + 1}`)}</div>
+                    <div class="item-meta">${escapeHtml([transport.representative, transport.plateNumber, transport.contactPhone].filter(Boolean).join(' · '))}</div>
+                  </div>
+                  <div class="card-actions">
+                    <button class="icon-button" type="button" data-transport-action="edit" data-transport-index="${index}">${escapeHtml(copy.editLabel)}</button>
+                    <button class="icon-button danger" type="button" data-transport-action="delete" data-transport-index="${index}">${escapeHtml(copy.deleteLabel)}</button>
+                  </div>
+                </div>
+                <div class="tag-row">
+                  <span class="tag">${escapeHtml(transport.type || 'transport')}</span>
+                  <span class="tag">${escapeHtml(transport.isActive === false ? 'disabled' : 'active')}</span>
+                </div>
+              </article>
+            `).join('') : `<div class="item-meta">No transports yet</div>`}
+          </div>
+          <div style="height: 12px;"></div>
+          <div class="detail-card" style="background: rgba(255,255,255,0.78);">
+            <div class="detail-head">
+              <div>
+                <h4>Sites</h4>
+                <p class="detail-subtitle">活動內的地點與時段。</p>
+              </div>
+            </div>
+            ${sites.length ? sites.map((site, index) => `
+              <article class="list-item" style="margin-bottom: 10px;">
+                <div class="list-item-top">
+                  <div>
+                    <div class="item-title">${escapeHtml(site.name || `Site ${index + 1}`)}</div>
+                    <div class="item-meta">${escapeHtml([site.timeLabel, site.address, site.note].filter(Boolean).join(' · '))}</div>
+                  </div>
+                  <div class="card-actions">
+                    <button class="icon-button" type="button" data-site-action="edit" data-site-index="${index}">${escapeHtml(copy.editLabel)}</button>
+                    <button class="icon-button danger" type="button" data-site-action="delete" data-site-index="${index}">${escapeHtml(copy.deleteLabel)}</button>
+                  </div>
+                </div>
+              </article>
+            `).join('') : `<div class="item-meta">No sites yet</div>`}
+          </div>
+          <div style="height: 12px;"></div>
+          <div class="detail-card" style="background: rgba(255,255,255,0.78);">
+            <div class="detail-head">
+              <div>
+                <h4>Plan Items</h4>
+                <p class="detail-subtitle">從倉庫挑選裝備加入活動。</p>
+              </div>
+            </div>
+            ${items.length ? items.map((item, index) => `
+              <article class="list-item" style="margin-bottom: 10px;">
+                <div class="list-item-top">
+                  <div>
+                    <div class="item-title">${escapeHtml(item.name || `Item ${index + 1}`)}</div>
+                    <div class="item-meta">${escapeHtml([item.category, item.updatedAtLabel].filter(Boolean).join(' · '))}</div>
+                  </div>
+                  <div class="card-actions">
+                    <button class="icon-button" type="button" data-item-action="move" data-item-index="${index}">${escapeHtml(copy.moveButton)}</button>
+                    <button class="icon-button" type="button" data-item-action="edit" data-item-index="${index}">${escapeHtml(copy.editLabel)}</button>
+                    <button class="icon-button danger" type="button" data-item-action="delete" data-item-index="${index}">${escapeHtml(copy.deleteLabel)}</button>
+                  </div>
+                </div>
+                <div class="tag-row">
+                  <span class="tag">${escapeHtml(item.status || 'planned')}</span>
+                  <span class="tag">${escapeHtml(item.currentLocationType || 'warehouse')}</span>
+                </div>
+              </article>
+            `).join('') : `<div class="item-meta">No plan items yet</div>`}
+          </div>
+        </article>
+      `;
+
+      eventDetailNode.querySelector('#event-detail-back')?.addEventListener('click', () => setActivePage('events'));
+      eventDetailNode.querySelector('#event-add-transport')?.addEventListener('click', () => promptUpsertTransport(event));
+      eventDetailNode.querySelector('#event-add-site')?.addEventListener('click', () => promptUpsertSite(event));
+      eventDetailNode.querySelector('#event-add-item')?.addEventListener('click', () => promptUpsertEventItem(event));
+      eventDetailNode.querySelector('#event-edit')?.addEventListener('click', () => openEntityDialog('event', event));
+      eventDetailNode.querySelector('#event-delete')?.addEventListener('click', () => deleteEventRecord(event));
+
+      eventDetailNode.querySelectorAll('[data-transport-action]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const index = Number(button.getAttribute('data-transport-index'));
+          if (button.getAttribute('data-transport-action') === 'edit') {
+            promptUpsertTransport(event, index);
+          } else {
+            deleteNestedRecord(event, 'transports', index);
+          }
+        });
+      });
+
+      eventDetailNode.querySelectorAll('[data-site-action]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const index = Number(button.getAttribute('data-site-index'));
+          if (button.getAttribute('data-site-action') === 'edit') {
+            promptUpsertSite(event, index);
+          } else {
+            deleteNestedRecord(event, 'sites', index);
+          }
+        });
+      });
+
+      eventDetailNode.querySelectorAll('[data-item-action]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const index = Number(button.getAttribute('data-item-index'));
+          if (button.getAttribute('data-item-action') === 'move') {
+            openMoveDialog('event-item', items[index], event);
+          } else if (button.getAttribute('data-item-action') === 'edit') {
+            promptUpsertEventItem(event, index);
+          } else {
+            deleteNestedRecord(event, 'items', index);
+          }
+        });
+      });
+    }
+
+    function renderSelectedWarehouseDetail() {
+      if (!warehouseDetailNode) {
+        return;
+      }
+
+      const copy = currentCopy();
+      const workspace = state.cloud.selectedWorkspace;
+      const warehouse = workspace?.warehouses?.find((item) => item.id === state.cloud.selectedWarehouseId);
+      if (!warehouse) {
+        warehouseDetailNode.innerHTML = `<article class="detail-card"><div class="item-title">${copy.warehouseDetailEmpty}</div></article>`;
+        return;
+      }
+
+      const gearItems = workspace?.gearItems || [];
+      const plannedGearItems = gearItems.filter((item) => item.fields?.warehouseId === warehouse.id);
+      const extraGearItems = gearItems.filter((item) =>
+        item.fields?.currentLocationType === 'warehouse' &&
+        item.fields?.currentLocationId === warehouse.id &&
+        item.fields?.warehouseId !== warehouse.id,
+      );
+
+      warehouseDetailNode.innerHTML = `
+        <article class="detail-card selected">
+          <button class="back-button" type="button" id="warehouse-detail-back">← ${escapeHtml(copy.backToWarehouses)}</button>
+          <div class="detail-head">
+            <div>
+              <h3>${escapeHtml(warehouse.title)}</h3>
+              <p class="detail-subtitle">${escapeHtml(warehouse.meta)}</p>
+            </div>
+            <div class="detail-actions">
+              <button class="secondary-button" type="button" id="warehouse-add-gear">${escapeHtml(copy.addGearButton)}</button>
+              <button class="secondary-button" type="button" id="warehouse-edit">${escapeHtml(copy.editLabel)}</button>
+              <button class="secondary-button" type="button" id="warehouse-delete">${escapeHtml(copy.deleteLabel)}</button>
+            </div>
+          </div>
+          <div class="tag-row">
+            ${warehouse.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+          </div>
+          <div style="height: 14px;"></div>
+          <div class="detail-head">
+            <div>
+              <h4>Planned gear</h4>
+              <p class="detail-subtitle">預計放在這個倉庫的裝備。</p>
+            </div>
+          </div>
+          ${plannedGearItems.length ? plannedGearItems.map((item) => `
+            <article class="list-item" style="margin-bottom: 10px;">
+              <div class="list-item-top">
+                <div>
+                  <div class="item-title">${escapeHtml(item.title)}</div>
+                  <div class="item-meta">${escapeHtml(item.meta)}</div>
+                </div>
+                <div class="card-actions">
+                  <button class="icon-button" type="button" data-gear-action="move-in" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.moveInLabel)}</button>
+                  <button class="icon-button" type="button" data-gear-action="move-out" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.moveOutLabel)}</button>
+                  <button class="icon-button" type="button" data-gear-action="edit" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.editLabel)}</button>
+                  <button class="icon-button danger" type="button" data-gear-action="delete" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.deleteLabel)}</button>
+                </div>
+              </div>
+              <div class="tag-row">
+                ${item.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+              </div>
+            </article>
+          `).join('') : `<div class="item-meta">No planned gear yet</div>`}
+          <div style="height: 12px;"></div>
+          <div class="detail-head">
+            <div>
+              <h4>Stored here now</h4>
+              <p class="detail-subtitle">目前實際放在這個倉庫的其他裝備。</p>
+            </div>
+          </div>
+          ${extraGearItems.length ? extraGearItems.map((item) => `
+            <article class="list-item" style="margin-bottom: 10px;">
+              <div class="list-item-top">
+                <div>
+                  <div class="item-title">${escapeHtml(item.title)}</div>
+                  <div class="item-meta">${escapeHtml(item.meta)}</div>
+                </div>
+                <div class="card-actions">
+                  <button class="icon-button" type="button" data-gear-action="move-out" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.moveOutLabel)}</button>
+                  <button class="icon-button" type="button" data-gear-action="edit" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.editLabel)}</button>
+                  <button class="icon-button danger" type="button" data-gear-action="delete" data-gear-id="${escapeHtml(item.id)}">${escapeHtml(copy.deleteLabel)}</button>
+                </div>
+              </div>
+              <div class="tag-row">
+                ${item.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+              </div>
+            </article>
+          `).join('') : `<div class="item-meta">No extra gear here</div>`}
+        </article>
+      `;
+
+      warehouseDetailNode.querySelector('#warehouse-detail-back')?.addEventListener('click', () => setActivePage('warehouses'));
+      warehouseDetailNode.querySelector('#warehouse-add-gear')?.addEventListener('click', () => promptUpsertGearItem(warehouse));
+      warehouseDetailNode.querySelector('#warehouse-edit')?.addEventListener('click', () => openEntityDialog('warehouse', warehouse));
+      warehouseDetailNode.querySelector('#warehouse-delete')?.addEventListener('click', () => deleteWarehouseRecord(warehouse));
+
+      warehouseDetailNode.querySelectorAll('[data-gear-action]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const gearId = button.getAttribute('data-gear-id');
+          const gearItem = gearItems.find((item) => item.id === gearId);
+          if (!gearItem) return;
+          if (button.getAttribute('data-gear-action') === 'edit') {
+            promptUpsertGearItem(warehouse, gearItem);
+          } else if (button.getAttribute('data-gear-action') === 'move-in') {
+            openMoveDialog('gear', gearItem, null, warehouse.id);
+          } else if (button.getAttribute('data-gear-action') === 'move-out') {
+            openMoveDialog('gear', gearItem);
+          } else {
+            deleteGearRecord(gearItem);
+          }
+        });
+      });
+    }
+
+    function getWorkspaceEvent(eventId = state.cloud.selectedEventId) {
+      return state.cloud.selectedWorkspace?.events?.find((item) => item.id === eventId) || null;
+    }
+
+    function getWorkspaceWarehouse(warehouseId = state.cloud.selectedWarehouseId) {
+      return state.cloud.selectedWorkspace?.warehouses?.find((item) => item.id === warehouseId) || null;
+    }
+
+    function formatNowLabel() {
+      return new Date().toLocaleString(
+        state.locale === 'en' ? 'en-US' : state.locale === 'ja' ? 'ja-JP' : 'zh-TW',
+        {
+          dateStyle: 'short',
+          timeStyle: 'short',
+        },
+      );
+    }
+
+    async function saveEventDocument(eventId, nextFields) {
+      const workspaceId = currentWorkspaceId();
+      if (!workspaceId || !state.session) {
+        return;
+      }
+      await firestoreUpdate(`workspaces/${workspaceId}/events/${eventId}`, state.session.idToken, nextFields);
+      await reloadCurrentWorkspace();
+    }
+
+    async function deleteEventRecord(event) {
+      if (!window.confirm(currentCopy().deleteConfirmEvent || 'Delete this event?')) {
+        return;
+      }
+      const workspaceId = currentWorkspaceId();
+      if (!workspaceId || !state.session) {
+        return;
+      }
+      await firestoreDelete(`workspaces/${workspaceId}/events/${event.id}`, state.session.idToken);
+      state.cloud.selectedEventId = '';
+      await reloadCurrentWorkspace();
+    }
+
+    async function deleteWarehouseRecord(warehouse) {
+      if (!window.confirm(currentCopy().deleteConfirmWarehouse || 'Delete this warehouse?')) {
+        return;
+      }
+      const workspaceId = currentWorkspaceId();
+      if (!workspaceId || !state.session) {
+        return;
+      }
+      await firestoreDelete(`workspaces/${workspaceId}/warehouses/${warehouse.id}`, state.session.idToken);
+      state.cloud.selectedWarehouseId = '';
+      await reloadCurrentWorkspace();
+    }
+
+    async function deleteNestedRecord(event, key, index) {
+      const next = [...(event.fields?.[key] || [])];
+      next.splice(index, 1);
+      await saveEventDocument(event.id, {
+        ...event.fields,
+        [key]: next,
+        updatedAtLabel: formatNowLabel(),
+      });
+    }
+
+    function promptField(label, value = '') {
+      const result = window.prompt(label, value);
+      if (result == null) {
+        throw new Error('cancelled');
+      }
+      return result.trim();
+    }
+
+    function promptOptionalField(label, value = '') {
+      const result = window.prompt(label, value);
+      if (result == null) {
+        throw new Error('cancelled');
+      }
+      return result.trim();
+    }
+
+    function promptChoice(label, choices, current = '') {
+      const lines = choices.map((choice, index) => `${index + 1}. ${choice}`).join('\n');
+      const raw = window.prompt(`${label}\n${lines}`, current ? String(current) : '1');
+      if (raw == null) {
+        throw new Error('cancelled');
+      }
+      const index = Number(raw.trim()) - 1;
+      if (Number.isInteger(index) && index >= 0 && index < choices.length) {
+        return choices[index];
+      }
+      return raw.trim();
+    }
+
+    async function promptUpsertTransport(event, index = null) {
+      const current = index == null ? null : (event.fields?.transports || [])[index];
+      try {
+        const next = {
+          id: current?.id || `transport-${Date.now()}`,
+          name: promptField('Transport name', current?.name || ''),
+          type: promptChoice('Transport type', ['car', 'truck', 'van', 'ship', 'plane', 'cart', 'storage', 'other'], current?.type || 'car'),
+          representative: promptField('Representative', current?.representative || ''),
+          plateNumber: promptOptionalField('Plate / ID', current?.plateNumber || ''),
+          contactPhone: promptOptionalField('Phone', current?.contactPhone || ''),
+          note: promptOptionalField('Note', current?.note || ''),
+          isActive: (window.prompt('Active? yes/no', current?.isActive === false ? 'no' : 'yes') || 'yes').toLowerCase().startsWith('y'),
+        };
+        const transports = [...(event.fields?.transports || [])];
+        if (current == null) {
+          transports.push(next);
+        } else {
+          transports[index] = next;
+        }
+        await saveEventDocument(event.id, {
+          ...event.fields,
+          transports,
+          updatedAtLabel: formatNowLabel(),
+        });
+      } catch {
+        // cancelled
+      }
+    }
+
+    async function promptUpsertSite(event, index = null) {
+      const current = index == null ? null : (event.fields?.sites || [])[index];
+      try {
+        const next = {
+          id: current?.id || `site-${Date.now()}`,
+          name: promptField('Site name', current?.name || ''),
+          timeLabel: promptField('Time slot', current?.timeLabel || ''),
+          address: promptOptionalField('Address', current?.address || ''),
+          note: promptOptionalField('Note', current?.note || ''),
+          sortOrder: current?.sortOrder ?? ((event.fields?.sites || []).length + 1) * 10,
+        };
+        const sites = [...(event.fields?.sites || [])];
+        if (current == null) {
+          sites.push(next);
+        } else {
+          sites[index] = next;
+        }
+        await saveEventDocument(event.id, {
+          ...event.fields,
+          sites,
+          updatedAtLabel: formatNowLabel(),
+        });
+      } catch {
+        // cancelled
+      }
+    }
+
+    async function promptUpsertEventItem(event, index = null) {
+      const workspace = state.cloud.selectedWorkspace;
+      if (!workspace) {
+        return;
+      }
+      const gearItems = workspace.gearItems || [];
+      if (!gearItems.length) {
+        window.alert('No gear items yet');
+        return;
+      }
+      const current = index == null ? null : (event.fields?.items || [])[index];
+      try {
+        const currentGearIndex = current
+          ? Math.max(0, gearItems.findIndex((gearItem) => gearItem.id === current.sourceItemId))
+          : 0;
+        const gearChoices = gearItems.map((gearItem, idx) => `${idx + 1}. ${gearItem.title}`).join('\n');
+        const rawGearIndex = window.prompt(
+          `Choose gear item\n${gearChoices}`,
+          String(currentGearIndex + 1),
+        );
+        if (rawGearIndex == null) {
+          return;
+        }
+        const parsedGearIndex = Number(rawGearIndex.trim()) - 1;
+        const selectedGear = gearItems[Number.isInteger(parsedGearIndex) && parsedGearIndex >= 0 && parsedGearIndex < gearItems.length
+          ? parsedGearIndex
+          : currentGearIndex] || gearItems[0];
+        const transports = event.fields?.transports || [];
+        const sites = event.fields?.sites || [];
+        const requiredSitesInput = window.prompt('Required site names (comma separated)', (current?.requiredSiteIds || []).join(', ')) || '';
+        const next = {
+          id: current?.id || `event-item-${Date.now()}`,
+          sourceItemId: selectedGear.id,
+          name: window.prompt('Plan item name', current?.name || selectedGear.title) || selectedGear.title,
+          category: window.prompt('Category', current?.category || selectedGear.fields?.category || '') || selectedGear.fields?.category || '',
+          quantity: Number(window.prompt('Quantity', String(current?.quantity || 1)) || '1'),
+          assignedTransportId: window.prompt('Responsible transport id', current?.assignedTransportId || '') || '',
+          currentLocationType: window.prompt('Current location type (unassigned/warehouse/transport/site)', current?.currentLocationType || 'warehouse') || 'warehouse',
+          currentLocationId: window.prompt('Current location id', current?.currentLocationId || state.cloud.selectedWarehouseId || 'warehouse') || 'warehouse',
+          requiredSiteIds: requiredSitesInput.split(',').map((value) => value.trim()).filter(Boolean),
+          status: window.prompt('Status (planned/loaded/onsite/returned/missing)', current?.status || 'planned') || 'planned',
+          updatedBy: state.session?.email || 'me',
+          updatedAtLabel: formatNowLabel(),
+        };
+        const items = [...(event.fields?.items || [])];
+        if (current == null) {
+          items.push(next);
+        } else {
+          items[index] = next;
+        }
+        await saveEventDocument(event.id, {
+          ...event.fields,
+          items,
+          updatedAtLabel: formatNowLabel(),
+        });
+      } catch {
+        // cancelled
+      }
+    }
+
+    async function promptUpsertGearItem(warehouse, initialItem = null) {
+      const workspace = state.cloud.selectedWorkspace;
+      if (!workspace || !state.session) {
+        return;
+      }
+      try {
+        const next = {
+          id: initialItem?.id || `gear-${Date.now()}`,
+          name: promptField('Gear name', initialItem?.title || ''),
+          warehouseId: warehouse.id,
+          category: promptField('Category', initialItem?.fields?.category || ''),
+          quantity: Number(promptOptionalField('Quantity', String(initialItem?.fields?.quantity || 1)) || '1'),
+          note: promptOptionalField('Note', initialItem?.fields?.note || ''),
+          currentLocationType: promptChoice('Current location type', ['warehouse', 'custom', 'unassigned'], initialItem?.fields?.currentLocationType || 'warehouse'),
+          currentLocationId: promptOptionalField('Current location id', initialItem?.fields?.currentLocationId || warehouse.id),
+          currentActivityName: promptOptionalField('Current activity name', initialItem?.fields?.currentActivityName || ''),
+        };
+        if (!next.currentLocationId) {
+          next.currentLocationId = next.warehouseId;
+        }
+        if (initialItem) {
+          await firestoreUpdate(
+            `workspaces/${workspace.id}/gearItems/${initialItem.id}`,
+            state.session.idToken,
+            next,
+          );
+        } else {
+          await firestoreCreate(
+            `workspaces/${workspace.id}/gearItems`,
+            state.session.idToken,
+            next,
+            next.id,
+          );
+        }
+        await reloadCurrentWorkspace();
+      } catch {
+        // cancelled
+      }
+    }
+
+    async function updateGearLocation(item, locationType, locationId) {
+      const workspace = state.cloud.selectedWorkspace;
+      if (!workspace || !state.session) {
+        return;
+      }
+      await firestoreUpdate(
+        `workspaces/${workspace.id}/gearItems/${item.id}`,
+        state.session.idToken,
+        {
+          ...item.fields,
+          currentLocationType: locationType,
+          currentLocationId: locationId,
+        },
+      );
+      await reloadCurrentWorkspace();
+    }
+
+    function locationNameForGear(item) {
+      const copy = currentCopy();
+      const fields = item.fields || {};
+      if (fields.currentLocationType === 'unassigned') {
+        return copy.unassignedLabel;
+      }
+      if (fields.currentLocationType === 'custom') {
+        return fields.currentActivityName || 'In use';
+      }
+      const warehouse = state.cloud.selectedWorkspace?.warehouses?.find(
+        (value) => value.id === fields.currentLocationId,
+      );
+      return warehouse?.title || fields.currentLocationId || copy.warehouseLocationLabel;
+    }
+
+    function openMoveDialog(kind, item, event = null, preferredWarehouseId = '') {
+      const copy = currentCopy();
+      const workspace = state.cloud.selectedWorkspace;
+      if (!workspace) {
+        return;
+      }
+
+      state.moveContext = { kind, item, event };
+      moveKindInput.value = kind;
+      moveItemIdInput.value = item.id;
+      moveDialogTitle.textContent = `${copy.moveItemTitle}: ${item.name || item.title}`;
+
+      const options = [{
+        value: 'unassigned:unassigned',
+        label: copy.unassignedLabel,
+      }];
+
+      if (kind === 'gear') {
+        workspace.warehouses.forEach((warehouse) => {
+          options.push({
+            value: `warehouse:${warehouse.id}`,
+            label: warehouse.title,
+          });
+        });
+      } else {
+        options.push({
+          value: 'warehouse:warehouse',
+          label: copy.warehouseLocationLabel,
+        });
+        (event?.fields?.transports || []).forEach((transport) => {
+          options.push({
+            value: `transport:${transport.id || transport.name}`,
+            label: transport.name,
+          });
+        });
+        (event?.fields?.sites || []).forEach((site) => {
+          options.push({
+            value: `site:${site.id || site.name}`,
+            label: site.name,
+          });
+        });
+      }
+
+      moveLocationSelect.innerHTML = options.map((option) =>
+        `<option value="${escapeHtml(option.value)}">${escapeHtml(option.label)}</option>`
+      ).join('');
+
+      const fields = item.fields || item;
+      const currentValue = preferredWarehouseId
+        ? `warehouse:${preferredWarehouseId}`
+        : `${fields.currentLocationType || 'unassigned'}:${fields.currentLocationId || 'unassigned'}`;
+      moveLocationSelect.value = options.some((option) => option.value === currentValue)
+        ? currentValue
+        : options[0].value;
+      moveDialog.showModal();
+    }
+
+    function closeMoveDialog() {
+      state.moveContext = null;
+      if (moveDialog.open) {
+        moveDialog.close();
+      }
+    }
+
+    async function handleMoveSubmit(event) {
+      event.preventDefault();
+      const context = state.moveContext;
+      if (!context) {
+        return;
+      }
+
+      const separatorIndex = moveLocationSelect.value.indexOf(':');
+      const locationType = moveLocationSelect.value.slice(0, separatorIndex);
+      const locationId = moveLocationSelect.value.slice(separatorIndex + 1);
+      closeMoveDialog();
+
+      if (context.kind === 'gear') {
+        await updateGearLocation(context.item, locationType, locationId);
+        return;
+      }
+
+      const sourceEvent = context.event;
+      if (!sourceEvent) {
+        return;
+      }
+      const items = [...(sourceEvent.fields?.items || [])];
+      const itemIndex = items.findIndex((item) => item.id === context.item.id);
+      if (itemIndex < 0) {
+        return;
+      }
+
+      const status = locationType === 'transport'
+        ? 'loaded'
+        : locationType === 'site'
+          ? 'onsite'
+          : 'planned';
+      items[itemIndex] = {
+        ...items[itemIndex],
+        currentLocationType: locationType,
+        currentLocationId: locationId,
+        status,
+        updatedBy: state.session?.email || 'me',
+        updatedAtLabel: formatNowLabel(),
+      };
+      await saveEventDocument(sourceEvent.id, {
+        ...sourceEvent.fields,
+        items,
+        updatedAtLabel: formatNowLabel(),
+      });
+    }
+
+    async function deleteGearRecord(item) {
+      const workspace = state.cloud.selectedWorkspace;
+      if (!workspace || !state.session) {
+        return;
+      }
+      if (!window.confirm(currentCopy().deleteLabel || 'Delete?')) {
+        return;
+      }
+      await firestoreDelete(`workspaces/${workspace.id}/gearItems/${item.id}`, state.session.idToken);
+      await reloadCurrentWorkspace();
     }
 
     function setWorkspaceMessage(message, kind = 'idle') {
@@ -1312,13 +2263,15 @@
           await firestoreUpdate(
             `workspaces/${workspaceId}/${kind === 'event' ? 'events' : 'warehouses'}/${entityIdInput.value}`,
             state.session.idToken,
-            baseFields,
+            { ...baseFields, id: entityIdInput.value },
           );
         } else {
+          const documentId = `${kind}-${Date.now()}`;
           await firestoreCreate(
             `workspaces/${workspaceId}/${kind === 'event' ? 'events' : 'warehouses'}`,
             state.session.idToken,
-            baseFields,
+            { ...baseFields, id: documentId },
+            documentId,
           );
         }
 
@@ -1428,6 +2381,8 @@
         state.cloud.workspaces = [];
         state.cloud.selectedWorkspace = null;
         state.cloud.selectedWorkspaceId = '';
+        state.cloud.selectedEventId = '';
+        state.cloud.selectedWarehouseId = '';
         setWorkspaceMessage(`${currentCopy().workspaceMessageError}: ${error.message}`, 'error');
       } finally {
         state.cloud.loading = false;
@@ -1463,6 +2418,7 @@
           const fields = decodeFirestoreFields(doc.fields || {});
           return {
             id: firestoreDocId(doc.name),
+            fields,
             title: fields.name || 'Gear',
             meta: [fields.warehouseId, fields.category, fields.note].filter(Boolean).join(' · '),
             tags: [
@@ -1557,8 +2513,10 @@
             ? 'ログインしました。'
           : '已登入。',
       );
-      dashboard.scrollIntoView({ behavior: 'smooth', block: 'start' });
       await loadCloudData(session);
+      const requestedPage = location.hash.replace('#', '');
+      setActivePage(requestedPage || 'home', { updateHash: false });
+      setLibraryTab(state.libraryTab);
     }
 
     function setSignedOut() {
@@ -1567,6 +2525,9 @@
       authUserPill.setAttribute('data-i18n', 'signedOutPill');
       authUserPill.textContent = currentCopy().signedOutPill;
       signOutTop.hidden = true;
+      state.cloud.selectedEventId = '';
+      state.cloud.selectedWarehouseId = '';
+      state.activePage = 'home';
       setAuthMessage(currentCopy().authHint);
       setWorkspaceMessage(currentCopy().workspaceMessageIdle, 'idle');
       renderWorkspaceSelector();
@@ -1723,6 +2684,21 @@
     entityForm.addEventListener('submit', handleEntitySubmit);
     entityDialogClose.addEventListener('click', closeEntityDialog);
     entityCancelBtn.addEventListener('click', closeEntityDialog);
+    moveForm.addEventListener('submit', handleMoveSubmit);
+    moveDialogClose.addEventListener('click', closeMoveDialog);
+    moveCancelBtn.addEventListener('click', closeMoveDialog);
+
+    pageButtons.forEach((button) => {
+      button.addEventListener('click', () => setActivePage(button.dataset.pageTarget));
+    });
+    libraryTabButtons.forEach((button) => {
+      button.addEventListener('click', () => setLibraryTab(button.dataset.libraryTab));
+    });
+    window.addEventListener('hashchange', () => {
+      if (state.session) {
+        setActivePage(location.hash.replace('#', '') || 'home', { updateHash: false });
+      }
+    });
 
     select.addEventListener('change', (event) => {
       renderLocale(event.target.value);
@@ -1732,6 +2708,8 @@
     });
 
     renderLocale(state.locale);
+    setActivePage('home', { updateHash: false });
+    setLibraryTab('warehouses');
     restoreSession();
   </script>
 </body>

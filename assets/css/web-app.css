@@ -21,6 +21,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -28,6 +32,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden;
   color: var(--ink);
   background:
     radial-gradient(circle at top left, rgba(24, 157, 230, 0.18), transparent 30%),
@@ -371,6 +376,51 @@ input {
   color: var(--blue-ink);
 }
 
+.detail-pane {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.detail-card {
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(216, 229, 239, 0.9);
+}
+
+.detail-card.selected {
+  border-color: rgba(24, 157, 230, 0.34);
+  box-shadow: 0 14px 30px rgba(24, 157, 230, 0.08);
+}
+
+.detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.detail-head h3,
+.detail-head h4 {
+  margin: 0;
+}
+
+.detail-subtitle {
+  margin: 6px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .workspace-selector .tag {
   cursor: pointer;
 }
@@ -393,9 +443,144 @@ body.signed-in .content {
   display: grid;
 }
 
-.dashboard-shell {
-  grid-template-columns: minmax(0, 1.5fr) minmax(320px, 0.9fr);
+.app-shell {
+  grid-template-columns: 250px minmax(0, 1fr);
   align-items: start;
+}
+
+.app-sidebar {
+  position: sticky;
+  top: 92px;
+  display: grid;
+  gap: 18px;
+  padding: 18px;
+}
+
+.sidebar-workspace {
+  display: grid;
+  gap: 10px;
+}
+
+.app-nav {
+  display: grid;
+  gap: 8px;
+}
+
+.app-nav button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 15px;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  cursor: pointer;
+}
+
+.app-nav button.active {
+  background: linear-gradient(135deg, rgba(24, 157, 230, 0.13), rgba(18, 184, 155, 0.11));
+  color: var(--ink);
+}
+
+.app-nav button span {
+  width: 24px;
+  color: var(--blue);
+  font-size: 1.15rem;
+  text-align: center;
+}
+
+.app-main {
+  min-width: 0;
+}
+
+.app-page {
+  display: none;
+  gap: 18px;
+}
+
+.app-page.active {
+  display: grid;
+}
+
+.page-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px;
+  border: 1px solid rgba(216, 229, 239, 0.9);
+  border-radius: 26px;
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.page-title h1 {
+  margin: 0;
+  font-size: clamp(1.7rem, 3vw, 2.5rem);
+}
+
+.page-title p:last-child {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.metric-button {
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.metric-button:hover {
+  border-color: rgba(24, 157, 230, 0.34);
+  transform: translateY(-1px);
+}
+
+.warehouse-tabs {
+  display: inline-flex;
+  width: fit-content;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.warehouse-tabs button {
+  min-height: 38px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.warehouse-tabs button.active {
+  background: var(--ink);
+  color: #fff;
+}
+
+.gear-library-list {
+  display: grid;
+  gap: 12px;
+}
+
+.back-button {
+  margin: 0 0 14px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--blue-ink);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.list-item.selected {
+  border-color: rgba(24, 157, 230, 0.36);
 }
 
 .section-card {
@@ -561,6 +746,7 @@ dialog.entity-dialog::backdrop {
 
 .entity-form input[type="text"],
 .entity-form input[type="date"],
+.entity-form select,
 .entity-form textarea {
   width: 100%;
   min-height: 48px;
@@ -579,6 +765,7 @@ dialog.entity-dialog::backdrop {
 
 .entity-form input[type="text"]:focus,
 .entity-form input[type="date"]:focus,
+.entity-form select:focus,
 .entity-form textarea:focus {
   border-color: rgba(24, 157, 230, 0.72);
   box-shadow: 0 0 0 4px rgba(24, 157, 230, 0.12);
@@ -643,6 +830,10 @@ dialog.entity-dialog::backdrop {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(236, 247, 253, 0.9));
 }
 
+.ad-slot.compact p {
+  display: none;
+}
+
 .ad-slot small {
   color: var(--muted);
   text-transform: uppercase;
@@ -691,7 +882,7 @@ dialog.entity-dialog::backdrop {
   bottom: 12px;
   z-index: 50;
   display: none;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
   padding: 10px;
   border-radius: 22px;
@@ -701,7 +892,7 @@ dialog.entity-dialog::backdrop {
   backdrop-filter: blur(18px);
 }
 
-.mobile-nav a {
+.mobile-nav button {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -709,19 +900,21 @@ dialog.entity-dialog::backdrop {
   gap: 6px;
   min-height: 58px;
   border-radius: 16px;
-  text-decoration: none;
+  border: 0;
+  background: transparent;
   color: var(--muted);
   font-size: 0.82rem;
   font-weight: 700;
 }
 
-.mobile-nav a strong {
+.mobile-nav button strong {
   color: var(--ink);
   font-size: 0.92rem;
 }
 
-.mobile-nav a:hover,
-.mobile-nav a:focus-visible {
+.mobile-nav button:hover,
+.mobile-nav button:focus-visible,
+.mobile-nav button.active {
   background: rgba(24, 157, 230, 0.08);
   outline: none;
 }
@@ -731,8 +924,12 @@ dialog.entity-dialog::backdrop {
     grid-template-columns: 1fr;
   }
 
-  .dashboard-shell {
+  .app-shell {
     grid-template-columns: 1fr;
+  }
+
+  .app-sidebar {
+    position: static;
   }
 }
 
@@ -763,15 +960,40 @@ dialog.entity-dialog::backdrop {
   }
 
   .topbar,
+  .topbar-actions,
+  .hero,
+  .hero > *,
+  .auth-form {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .topbar-actions > *,
+  .auth-form input,
+  .auth-form select {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .auth-form input,
+  .auth-form select {
+    width: 100%;
+  }
+
+  .topbar,
   .hero-copy,
   .login-card,
-  .section-card {
+  .section-card,
+  .page-title,
+  .detail-card {
     padding: 18px;
     border-radius: 22px;
   }
 
   .hero-copy h1 {
     max-width: none;
+    overflow-wrap: anywhere;
+    font-size: clamp(1.9rem, 9vw, 2.6rem);
   }
 
   .status-grid {
@@ -782,12 +1004,63 @@ dialog.entity-dialog::backdrop {
   .section-head-actions,
   .entity-dialog-head,
   .entity-dialog-actions,
-  .list-item-top {
+  .list-item-top,
+  .detail-head,
+  .page-title {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .mobile-nav {
+  .app-sidebar {
+    display: none;
+  }
+
+  .app-main,
+  .app-page,
+  .event-list,
+  .warehouse-list,
+  .gear-library-list,
+  .detail-pane {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .card-actions,
+  .detail-actions {
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding-bottom: 2px;
+  }
+
+  .card-actions .icon-button,
+  .detail-actions .secondary-button {
+    width: auto;
+    flex: 0 0 auto;
+  }
+
+  .list-item {
+    min-width: 0;
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .item-title,
+  .item-meta {
+    overflow-wrap: anywhere;
+  }
+
+  .warehouse-tabs {
+    width: 100%;
+  }
+
+  .warehouse-tabs button {
+    flex: 1;
+  }
+
+  body.signed-in .mobile-nav {
     display: grid;
   }
 
@@ -812,6 +1085,33 @@ dialog.entity-dialog::backdrop {
   .primary-button,
   .secondary-button {
     width: 100%;
+  }
+
+  .topbar-actions .pill {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .mobile-nav {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    gap: 4px;
+    padding: 6px;
+  }
+
+  .mobile-nav button {
+    min-width: 0;
+    min-height: 54px;
+    padding: 4px;
+    font-size: 0.72rem;
+  }
+
+  .mobile-nav button strong {
+    font-size: 0.82rem;
   }
 
   dialog.entity-dialog {
