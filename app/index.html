@@ -6,7 +6,7 @@
   <title>GearFlow Web</title>
   <meta name="description" content="GearFlow Web 版，登入後才能使用，所有資料只走雲端，並為行動版提供接近 App 的排版。">
   <link rel="icon" href="../assets/images/gearflow_icon_friendly.png">
-  <link rel="stylesheet" href="../assets/css/web-app.css?v=a7aee42e">
+  <link rel="stylesheet" href="../assets/css/web-app.css?v=20260612c">
 </head>
 <body>
   <div class="web-app">
@@ -18,9 +18,20 @@
           <span data-i18n="brandLine">Cloud-only web workspace</span>
         </span>
       </a>
-      <div class="topbar-actions">
-        <span class="pill" data-i18n="cloudPill">Cloud only</span>
-        <span class="pill warn" data-i18n="betaPill">Subscription interface reserved</span>
+      <button class="mobile-menu-toggle" id="mobile-menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="開啟選單">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="topbar-actions" id="mobile-menu">
+        <nav class="mobile-menu-nav" aria-label="Mobile navigation">
+          <button type="button" data-page-target="home" data-i18n="navHome">總覽</button>
+          <button type="button" data-page-target="events" data-i18n="eventsTitle">活動</button>
+          <button type="button" data-page-target="warehouses" data-i18n="warehousesTitle">倉庫與裝備庫</button>
+          <button type="button" data-page-target="account" data-i18n="accountTitle">帳戶與訂閱</button>
+        </nav>
+        <span class="pill topbar-meta" data-i18n="cloudPill">Cloud only</span>
+        <span class="pill warn topbar-meta" data-i18n="betaPill">Subscription interface reserved</span>
         <select id="lang-select" class="lang-select" aria-label="Language">
           <option value="zh-Hant">繁體中文</option>
           <option value="en">English</option>
@@ -105,10 +116,6 @@
             <button type="button" data-page-target="warehouses"><span>▤</span><strong data-i18n="warehousesTitle">倉庫與裝備庫</strong></button>
             <button type="button" data-page-target="account"><span>◎</span><strong data-i18n="accountTitle">帳戶與訂閱</strong></button>
           </nav>
-          <section class="ad-slot compact">
-            <small data-i18n="adLabel">Advertisement</small>
-            <strong data-i18n="adTitle">功能頁廣告插槽</strong>
-          </section>
         </aside>
 
         <div class="app-main">
@@ -143,11 +150,6 @@
                 </div>
               </div>
               <div class="activity-list" id="activity-list"></div>
-            </section>
-            <section class="ad-slot">
-              <small data-i18n="adLabel">Advertisement</small>
-              <strong data-i18n="adTitle">功能頁廣告插槽</strong>
-              <p data-i18n="adBody">這裡先預留廣告版位。</p>
             </section>
           </section>
 
@@ -212,6 +214,11 @@
       </section>
 
       <p class="footer-note" data-i18n="footerNote">這是一個 Web 版產品原型。下一步可以把 Firebase Auth、Firestore 與權限流程接上。</p>
+      <section class="ad-slot app-footer-ad">
+        <small data-i18n="adLabel">Advertisement</small>
+        <strong data-i18n="adTitle">功能頁廣告插槽</strong>
+        <p data-i18n="adBody">這裡先預留廣告版位。</p>
+      </section>
     </main>
   </div>
 
@@ -295,13 +302,6 @@
       </div>
     </form>
   </dialog>
-
-  <nav class="mobile-nav" aria-label="Quick navigation">
-    <button type="button" data-page-target="home"><strong data-i18n="navHome">總覽</strong><span>Home</span></button>
-    <button type="button" data-page-target="events"><strong data-i18n="mobileNavEvents">活動</strong><span>Events</span></button>
-    <button type="button" data-page-target="warehouses"><strong data-i18n="mobileNavWarehouses">倉庫</strong><span>Library</span></button>
-    <button type="button" data-page-target="account"><strong data-i18n="mobileNavAccount">帳戶</strong><span>Account</span></button>
-  </nav>
 
   <script>
     const FIREBASE_API_KEY = 'AIzaSyAzDJ2kG8FgbkeFbnHYyrhi1iloMRzOoEM';
@@ -896,6 +896,7 @@
     const authStatus = document.getElementById('auth-status');
     const authUserPill = document.getElementById('auth-user-pill');
     const signOutTop = document.getElementById('sign-out-top');
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
     const planNameNode = document.getElementById('plan-name');
     const planNoteNode = document.getElementById('plan-note');
     const eventListNode = document.getElementById('event-list');
@@ -943,6 +944,11 @@
       return locales[state.locale] || locales['zh-Hant'];
     }
 
+    function closeMobileMenu() {
+      document.body.classList.remove('mobile-menu-open');
+      mobileMenuToggle.setAttribute('aria-expanded', 'false');
+    }
+
     function setActivePage(page, { updateHash = true } = {}) {
       const allowedPages = ['home', 'events', 'event-detail', 'warehouses', 'warehouse-detail', 'account'];
       state.activePage = allowedPages.includes(page) ? page : 'home';
@@ -963,6 +969,7 @@
       if (updateHash) {
         history.replaceState(null, '', `#${state.activePage}`);
       }
+      closeMobileMenu();
       window.scrollTo({ top: 0, behavior: 'auto' });
     }
 
@@ -2503,6 +2510,7 @@
     async function setSignedIn(session) {
       state.session = session;
       document.body.classList.add('signed-in');
+      closeMobileMenu();
       authUserPill.textContent = session.email;
       authUserPill.removeAttribute('data-i18n');
       signOutTop.hidden = false;
@@ -2522,6 +2530,7 @@
     function setSignedOut() {
       state.session = null;
       document.body.classList.remove('signed-in');
+      closeMobileMenu();
       authUserPill.setAttribute('data-i18n', 'signedOutPill');
       authUserPill.textContent = currentCopy().signedOutPill;
       signOutTop.hidden = true;
@@ -2677,6 +2686,10 @@
       setAuthMode(state.authMode === 'signIn' ? 'create' : 'signIn');
     });
     signOutTop.addEventListener('click', handleSignOut);
+    mobileMenuToggle.addEventListener('click', () => {
+      const isOpen = document.body.classList.toggle('mobile-menu-open');
+      mobileMenuToggle.setAttribute('aria-expanded', String(isOpen));
+    });
     addEventBtn.addEventListener('click', () => openEntityDialog('event'));
     addWarehouseBtn.addEventListener('click', () => openEntityDialog('warehouse'));
     eventListNode.addEventListener('click', handleEntityAction);
@@ -2697,6 +2710,19 @@
     window.addEventListener('hashchange', () => {
       if (state.session) {
         setActivePage(location.hash.replace('#', '') || 'home', { updateHash: false });
+      }
+    });
+    document.addEventListener('click', (event) => {
+      if (
+        document.body.classList.contains('mobile-menu-open')
+        && !event.target.closest('.topbar')
+      ) {
+        closeMobileMenu();
+      }
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeMobileMenu();
       }
     });
 
