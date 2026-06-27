@@ -260,14 +260,16 @@
     }
 
     .events-layout.events-view-list,
-    .events-layout.events-view-detail {
+    .events-layout.events-view-detail,
+    .events-layout.events-view-subdetail {
       grid-template-columns: 1fr;
       width: min(760px, 100%);
       margin: 20px auto 0;
     }
 
     .events-layout.events-view-list .events-detail-panel,
-    .events-layout.events-view-detail .events-list-panel {
+    .events-layout.events-view-detail .events-list-panel,
+    .events-layout.events-view-subdetail .events-list-panel {
       display: none;
     }
 
@@ -603,6 +605,31 @@
       color: var(--muted);
       line-height: 1.5;
       word-break: break-word;
+    }
+
+    .related-detail-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .related-detail-card {
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .related-detail-card strong {
+      display: block;
+      color: var(--ink);
+    }
+
+    .related-detail-card span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      line-height: 1.5;
     }
 
     .event-empty {
@@ -990,15 +1017,18 @@
     function setAppView(view) {
       state.view = view;
       setVisible(workspaceShell, view === 'workspace');
-      setVisible(eventsShell, view === 'events' || view === 'detail');
+      setVisible(eventsShell, view === 'events' || view === 'detail' || view === 'subdetail');
       eventsShell.classList.toggle('events-view-list', view === 'events');
       eventsShell.classList.toggle('events-view-detail', view === 'detail');
+      eventsShell.classList.toggle('events-view-subdetail', view === 'subdetail');
       if (view === 'workspace') {
         setSystemMessage('請選擇工作區。');
       } else if (view === 'events') {
         setSystemMessage(`正在查看事件列表：${currentWorkspace()?.name || '未選擇工作區'}`);
       } else if (view === 'detail') {
         setSystemMessage(`正在查看事件內容：${currentEvent()?.name || '未選擇事件'}`);
+      } else if (view === 'subdetail') {
+        setSystemMessage('正在查看項目詳細內容。');
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1451,8 +1481,6 @@
       const totalTransports = event.transports.length;
       const totalPeople = event.people.length;
       const activeLabel = statusLabel(event.status);
-      const selected = getSelectedDetail(event);
-
       eventDetail.innerHTML = `
         <div class="page-section-head" style="margin-bottom:14px;">
           <div>
@@ -1493,25 +1521,23 @@
 
         <section class="event-detail-section">
           <h3>運輸資訊</h3>
-          ${detailList('transport', event.transports, selected)}
+          ${detailList('transport', event.transports, null)}
         </section>
 
         <section class="event-detail-section">
           <h3>站點</h3>
-          ${detailList('site', event.sites, selected)}
+          ${detailList('site', event.sites, null)}
         </section>
 
         <section class="event-detail-section">
           <h3>裝備項目</h3>
-          ${detailList('item', event.items, selected)}
+          ${detailList('item', event.items, null)}
         </section>
 
         <section class="event-detail-section">
           <h3>人員</h3>
-          ${detailList('person', event.people, selected)}
+          ${detailList('person', event.people, null)}
         </section>
-
-        ${renderDetailInspector(selected)}
       `;
 
       eventDetail.querySelector('[data-back-to-events]')?.addEventListener('click', () => {
@@ -1524,8 +1550,8 @@
             kind: button.getAttribute('data-detail-kind') || '',
             id: button.getAttribute('data-detail-id') || '',
           };
-          renderEventDetail();
-          eventDetail.querySelector('.detail-inspector')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          renderSubDetailPage();
+          setAppView('subdetail');
         });
       });
     }
@@ -1583,8 +1609,8 @@
     function detailSubtitle(kind, item) {
       if (kind === 'transport') return [transportTypeLabel(item.type), item.plate_number || item.plateNumber, item.representative].filter(Boolean).join(' · ') || '點擊查看車輛與聯絡資訊';
       if (kind === 'site') return [item.time_label || item.timeLabel, item.address].filter(Boolean).join(' · ') || '點擊查看站點資訊';
-      if (kind === 'item') return [item.category, item.status ? itemStatusLabel(item.status) : '', item.quantity ? `${item.quantity} 件` : ''].filter(Boolean).join(' · ') || '點擊查看裝備狀態';
-      if (kind === 'person') return [item.title, personStatusLabel(item.status), locationLabel(item.current_location_type, item.current_location_id)].filter(Boolean).join(' · ') || '點擊查看人員狀態';
+      if (kind === 'item') return [item.category, item.status ? itemStatusLabel(item.status) : '', item.quantity ? `${item.quantity} 件` : '', displayLocationLabel(item.current_location_type, item.current_location_id)].filter(Boolean).join(' · ') || '點擊查看裝備狀態';
+      if (kind === 'person') return [item.title, personStatusLabel(item.status), displayLocationLabel(item.current_location_type, item.current_location_id)].filter(Boolean).join(' · ') || '點擊查看人員狀態';
       return '點擊查看詳細資訊';
     }
 
@@ -1596,17 +1622,58 @@
       return '目前沒有資料。';
     }
 
-    function renderDetailInspector(selected) {
-      if (!selected) {
-        return '<section class="detail-inspector"><h3>詳細檢視</h3><p class="detail-inspector-note">點選上方的運輸、站點、裝備或人員，即可在這裡查看詳細欄位。</p></section>';
+    function renderSubDetailPage() {
+      const event = currentEvent();
+      const selected = event ? getSelectedDetail(event) : null;
+      if (!event || !selected) {
+        renderEventDetail();
+        setAppView('detail');
+        return;
       }
+
       const rows = detailRows(selected.kind, selected.item);
-      return `
+      const showRelations = selected.kind === 'transport' || selected.kind === 'site';
+      const relatedItems = showRelations ? relatedDetailItems(selected.kind, selected.item, 'item') : [];
+      const relatedPeople = showRelations ? relatedDetailItems(selected.kind, selected.item, 'person') : [];
+      const relationSections = showRelations
+        ? `${renderRelatedDetails('關聯裝備', relatedItems, 'item')}${renderRelatedDetails('關聯人員', relatedPeople, 'person')}`
+        : '';
+
+      eventDetail.innerHTML = `
+        <div class="page-section-head" style="margin-bottom:14px;">
+          <div>
+            <p class="eyebrow" style="margin:0 0 4px;">${escapeHtml(detailKindLabel(selected.kind))}</p>
+            <h2 style="margin:0;">${escapeHtml(detailTitle(selected.kind, selected.item))}</h2>
+          </div>
+          <button class="page-back-button" type="button" data-back-to-event-detail>返回事件內容</button>
+        </div>
+
         <section class="detail-inspector">
-          <h3>${escapeHtml(detailKindLabel(selected.kind))} · ${escapeHtml(detailTitle(selected.kind, selected.item))}</h3>
+          <h3>詳細欄位</h3>
           <p class="detail-inspector-note">唯讀資料，來源為目前事件的 Supabase 內容。</p>
           <div class="detail-inspector-grid">
             ${rows.map((row) => `<div class="detail-inspector-row"><strong>${escapeHtml(row.label)}</strong><span>${escapeHtml(row.value || '未設定')}</span></div>`).join('')}
+          </div>
+        </section>
+
+        ${relationSections}
+      `;
+
+      eventDetail.querySelector('[data-back-to-event-detail]')?.addEventListener('click', () => {
+        renderEventDetail();
+        setAppView('detail');
+      });
+    }
+
+    function renderRelatedDetails(title, items, kind) {
+      if (!items.length) {
+        return `<section class="event-detail-section"><h3>${escapeHtml(title)}</h3><div class="event-empty">目前沒有關聯${kind === 'item' ? '裝備' : '人員'}。</div></section>`;
+      }
+      return `
+        <section class="event-detail-section">
+          <h3>${escapeHtml(title)}</h3>
+          <div class="related-detail-list">
+            ${items.map((item) => `<div class="related-detail-card"><strong>${escapeHtml(detailTitle(kind, item))}</strong><span>${escapeHtml(detailSubtitle(kind, item))}</span></div>`).join('')}
           </div>
         </section>
       `;
@@ -1621,6 +1688,8 @@
           { label: '車牌 / 編號', value: item.plate_number || item.plateNumber },
           { label: '聯絡電話', value: item.contact_phone || item.contactPhone },
           { label: '備註', value: item.note },
+          { label: '關聯裝備', value: relatedDetailItems('transport', item, 'item').map((value) => detailTitle('item', value)).join('、') },
+          { label: '關聯人員', value: relatedDetailItems('transport', item, 'person').map((value) => detailTitle('person', value)).join('、') },
         ];
       }
       if (kind === 'site') {
@@ -1629,6 +1698,8 @@
           { label: '時間', value: item.time_label || item.timeLabel },
           { label: '地址', value: item.address },
           { label: '備註', value: item.note },
+          { label: '關聯裝備', value: relatedDetailItems('site', item, 'item').map((value) => detailTitle('item', value)).join('、') },
+          { label: '關聯人員', value: relatedDetailItems('site', item, 'person').map((value) => detailTitle('person', value)).join('、') },
         ];
       }
       if (kind === 'item') {
@@ -1637,8 +1708,9 @@
           { label: '分類', value: item.category },
           { label: '數量', value: item.quantity ? String(item.quantity) : '' },
           { label: '狀態', value: itemStatusLabel(item.status) },
-          { label: '指定運輸', value: item.assigned_transport_id || item.assignedTransportId },
-          { label: '目前位置', value: locationLabel(item.current_location_type, item.current_location_id) },
+          { label: '指定運輸', value: transportName(item.assigned_transport_id || item.assignedTransportId) },
+          { label: '需求站點', value: requiredSiteNames(item).join('、') },
+          { label: '目前位置', value: displayLocationLabel(item.current_location_type, item.current_location_id) },
           { label: '更新者', value: item.updated_by || item.updatedBy },
           { label: '更新時間', value: item.updated_at_label || item.updatedAtLabel },
         ];
@@ -1648,8 +1720,9 @@
           { label: '姓名', value: item.name },
           { label: '職稱', value: item.title },
           { label: '狀態', value: personStatusLabel(item.status) },
-          { label: '指定運輸', value: item.assigned_transport_id || item.assignedTransportId },
-          { label: '目前位置', value: locationLabel(item.current_location_type, item.current_location_id) },
+          { label: '指定運輸', value: transportName(item.assigned_transport_id || item.assignedTransportId) },
+          { label: '需求站點', value: requiredSiteNames(item).join('、') },
+          { label: '目前位置', value: displayLocationLabel(item.current_location_type, item.current_location_id) },
           { label: '更新者', value: item.updated_by || item.updatedBy },
           { label: '更新時間', value: item.updated_at_label || item.updatedAtLabel },
         ];
@@ -1680,10 +1753,60 @@
       return labels[status] || status || '';
     }
 
-    function locationLabel(type, id) {
-      const labels = { unassigned: '未指定', transport: '運輸', site: '站點', warehouse: '倉庫', custom: '自訂位置' };
-      const label = labels[type] || type || '';
-      return [label, id].filter(Boolean).join(' · ');
+    function relatedDetailItems(kind, item, targetKind) {
+      const event = currentEvent();
+      if (!event) return [];
+      const itemId = item.id;
+      const target = targetKind === 'item' ? event.items : event.people;
+      if (!itemId) return [];
+
+      if (kind === 'transport') {
+        return target.filter((value) => {
+          const assignedTransportId = value.assigned_transport_id || value.assignedTransportId;
+          return assignedTransportId === itemId
+            || (value.current_location_type === 'transport' && value.current_location_id === itemId);
+        });
+      }
+
+      if (kind === 'site') {
+        return target.filter((value) => {
+          const requiredSiteIds = Array.isArray(value.required_site_ids || value.requiredSiteIds)
+            ? (value.required_site_ids || value.requiredSiteIds)
+            : [];
+          return requiredSiteIds.includes(itemId)
+            || (value.current_location_type === 'site' && value.current_location_id === itemId);
+        });
+      }
+
+      return [];
+    }
+
+    function transportName(id) {
+      if (!id) return '';
+      const transport = currentEvent()?.transports.find((value) => value.id === id);
+      return transport ? detailTitle('transport', transport) : id;
+    }
+
+    function siteName(id) {
+      if (!id) return '';
+      const site = currentEvent()?.sites.find((value) => value.id === id);
+      return site ? detailTitle('site', site) : id;
+    }
+
+    function requiredSiteNames(item) {
+      const ids = Array.isArray(item.required_site_ids || item.requiredSiteIds)
+        ? (item.required_site_ids || item.requiredSiteIds)
+        : [];
+      return ids.map(siteName).filter(Boolean);
+    }
+
+    function displayLocationLabel(type, id) {
+      if (!type || type === 'unassigned') return '未指定';
+      if (type === 'transport') return ['運輸', transportName(id)].filter(Boolean).join(' · ');
+      if (type === 'site') return ['站點', siteName(id)].filter(Boolean).join(' · ');
+      if (type === 'warehouse') return ['倉庫', id].filter(Boolean).join(' · ');
+      if (type === 'custom') return ['自訂位置', id].filter(Boolean).join(' · ');
+      return [type, id].filter(Boolean).join(' · ');
     }
 
     function renderMetrics(events) {
