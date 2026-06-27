@@ -324,11 +324,44 @@
 
       <section id="step-2">
         <h2 data-i18n="stepTwoTitle">02. 整理裝備與地點</h2>
-        <p data-i18n="stepTwoBody">[待補內容] 說明如何把裝備、倉庫、車輛與目的地對應起來。</p>
+        <p data-i18n="stepTwoBody">活動開始前，先把物品、地點與運輸車輛對應清楚。GearFlow 會用 Site、Vehicle 與 Event Items 三個角度來追蹤物品與人員的位置，讓你知道哪些已到位、哪些還在車上、哪些是多出來的。</p>
+
+        <h3 data-i18n="stepTwoSiteTitle">Site：管理地點與到場物品</h3>
+        <figure class="guide-shot">
+          <img src="assets/images/event_location.jpg" loading="lazy" data-i18n-alt="eventLocationAlt" alt="Site 地點管理畫面">
+          <figcaption data-i18n="eventLocationCaption">點進 Site 後，可以查看該地點需要的物品與人員狀況。右上角「+」可從倉庫加入物品；如果加入的物品尚未在活動裡，系統會自動加入 Event Items。People 則需要在活動外層的 People 資料中管理。</figcaption>
+        </figure>
         <ul>
-          <li data-i18n="placeholderOne">[待補內容] 範例 1</li>
-          <li data-i18n="placeholderTwo">[待補內容] 範例 2</li>
+          <li data-i18n="stepTwoSiteBulletAdd">Site 裡可以編輯加入的 items，並從倉庫快速加入新的物品。</li>
+          <li data-i18n="stepTwoSiteBulletAuto">從 Site 加入且尚未存在於活動的物品，會自動新增到活動的 Event Items。</li>
+          <li data-i18n="stepTwoSiteBulletPeople">People 的新增與編輯要回到活動外層的 People 管理，不在 Site 內直接建立。</li>
+          <li data-i18n="stepTwoSiteBulletMove">在 Site 內可以把物品搬入或搬出，用來更新現場物品狀態。</li>
         </ul>
+
+        <h3 data-i18n="stepTwoItemsTitle">Event Items：移動物品與指定運輸車輛</h3>
+        <p data-i18n="stepTwoItemsBody">Event Items 是活動物品的總管理區。每個 item 右側的移動操作可以變更目前位置；在外層的 Event Items 管理中，也可以設定物品負責的運輸車輛，讓裝車與卸貨流程更清楚。</p>
+        <div class="guide-grid">
+          <figure class="guide-shot">
+            <img src="assets/images/event_items.jpg" loading="lazy" data-i18n-alt="stepTwoEventItemsAlt" alt="Event Items 活動物品管理">
+            <figcaption data-i18n="stepTwoEventItemsCaption">Event Items 可集中管理活動所需物品，並設定物品對應的運輸車輛。</figcaption>
+          </figure>
+          <figure class="guide-shot">
+            <img src="assets/images/move_item.jpg" loading="lazy" data-i18n-alt="moveItemAlt" alt="移動物品位置畫面">
+            <figcaption data-i18n="moveItemCaption">點 item 右側的移動操作，可將物品移到車輛、Site、倉庫或其他位置。</figcaption>
+          </figure>
+        </div>
+
+        <h3 data-i18n="stepTwoVehicleTitle">Vehicle：車輛、負責人與搬運狀態</h3>
+        <figure class="guide-shot">
+          <img src="assets/images/vehicle.jpg" loading="lazy" data-i18n-alt="vehicleAlt" alt="Vehicle 運輸車輛管理畫面">
+          <figcaption data-i18n="vehicleCaption">Vehicle 上方會顯示交通工具名稱與負責人。車輛內的物品可以搬入或搬出；如果出現多出的物品，也會在這裡標示。People 也可以在車輛或地點中 check in / check out。</figcaption>
+        </figure>
+
+        <h3 data-i18n="stepTwoOverviewTitle">活動總覽：應到、實到與多出</h3>
+        <figure class="guide-shot">
+          <img src="assets/images/event.jpg" loading="lazy" data-i18n-alt="stepTwoEventAlt" alt="活動總覽狀態畫面">
+          <figcaption data-i18n="stepTwoEventCaption">回到活動頁，可以看到交通工具與 Site 內的物品、人員狀況；應到、實到與多出的項目會集中顯示，方便快速檢查。</figcaption>
+        </figure>
       </section>
 
       <section id="step-3">
@@ -406,7 +439,26 @@
         stepOneBulletStatus: '日期與活動狀態會顯示在活動頁上方，方便快速確認目前進度。',
         stepOneBulletManage: '活動內可管理地點、運輸車輛、物品與人員，所有準備項目集中在同一頁。',
         stepTwoTitle: '02. 整理裝備與地點',
-        stepTwoBody: '[待補內容] 說明如何把裝備、倉庫、車輛與目的地對應起來。',
+        stepTwoBody: '活動開始前，先把物品、地點與運輸車輛對應清楚。GearFlow 會用 Site、Vehicle 與 Event Items 三個角度來追蹤物品與人員的位置，讓你知道哪些已到位、哪些還在車上、哪些是多出來的。',
+        stepTwoSiteTitle: 'Site：管理地點與到場物品',
+        eventLocationAlt: 'Site 地點管理畫面',
+        eventLocationCaption: '點進 Site 後，可以查看該地點需要的物品與人員狀況。右上角「+」可從倉庫加入物品；如果加入的物品尚未在活動裡，系統會自動加入 Event Items。People 則需要在活動外層的 People 資料中管理。',
+        stepTwoSiteBulletAdd: 'Site 裡可以編輯加入的 items，並從倉庫快速加入新的物品。',
+        stepTwoSiteBulletAuto: '從 Site 加入且尚未存在於活動的物品，會自動新增到活動的 Event Items。',
+        stepTwoSiteBulletPeople: 'People 的新增與編輯要回到活動外層的 People 管理，不在 Site 內直接建立。',
+        stepTwoSiteBulletMove: '在 Site 內可以把物品搬入或搬出，用來更新現場物品狀態。',
+        stepTwoItemsTitle: 'Event Items：移動物品與指定運輸車輛',
+        stepTwoItemsBody: 'Event Items 是活動物品的總管理區。每個 item 右側的移動操作可以變更目前位置；在外層的 Event Items 管理中，也可以設定物品負責的運輸車輛，讓裝車與卸貨流程更清楚。',
+        stepTwoEventItemsAlt: 'Event Items 活動物品管理',
+        stepTwoEventItemsCaption: 'Event Items 可集中管理活動所需物品，並設定物品對應的運輸車輛。',
+        moveItemAlt: '移動物品位置畫面',
+        moveItemCaption: '點 item 右側的移動操作，可將物品移到車輛、Site、倉庫或其他位置。',
+        stepTwoVehicleTitle: 'Vehicle：車輛、負責人與搬運狀態',
+        vehicleAlt: 'Vehicle 運輸車輛管理畫面',
+        vehicleCaption: 'Vehicle 上方會顯示交通工具名稱與負責人。車輛內的物品可以搬入或搬出；如果出現多出的物品，也會在這裡標示。People 也可以在車輛或地點中 check in / check out。',
+        stepTwoOverviewTitle: '活動總覽：應到、實到與多出',
+        stepTwoEventAlt: '活動總覽狀態畫面',
+        stepTwoEventCaption: '回到活動頁，可以看到交通工具與 Site 內的物品、人員狀況；應到、實到與多出的項目會集中顯示，方便快速檢查。',
         stepThreeTitle: '03. 團隊同步查看',
         stepThreeBody: '[待補內容] 說明多人協作、檢查流程與現場確認方式。',
         placeholderOne: '[待補內容] 範例 1',
@@ -465,7 +517,26 @@
         stepOneBulletStatus: 'The date and event status are shown near the top of the event page so progress is easy to check.',
         stepOneBulletManage: 'Sites, transport vehicles, gear, and people are all managed inside the event page.',
         stepTwoTitle: '02. Organize gear and locations',
-        stepTwoBody: '[Placeholder] Explain how to connect gear, warehouses, vehicles, and destinations.',
+        stepTwoBody: 'Before the event starts, connect gear, sites, and transport vehicles clearly. GearFlow tracks people and items through Site, Vehicle, and Event Items views, so you can see what is ready, what is still on a vehicle, and what is extra.',
+        stepTwoSiteTitle: 'Site: manage locations and on-site items',
+        eventLocationAlt: 'Site management screen',
+        eventLocationCaption: 'Open a Site to review the items and people needed there. The “+” in the top-right can add items from the warehouse. If the item is not already in the event, GearFlow adds it to Event Items automatically. People are managed from the event-level People data, not created inside the Site.',
+        stepTwoSiteBulletAdd: 'Inside a Site, you can edit assigned items and quickly add new items from the warehouse.',
+        stepTwoSiteBulletAuto: 'Items added from a Site are automatically added to Event Items if they are not already in the event.',
+        stepTwoSiteBulletPeople: 'People must be added and edited from the event-level People management area, not directly inside the Site.',
+        stepTwoSiteBulletMove: 'Inside a Site, items can be moved in or out to update the on-site item status.',
+        stepTwoItemsTitle: 'Event Items: move items and assign vehicles',
+        stepTwoItemsBody: 'Event Items is the central item management area for the event. The move action on the right side of each item changes its current location. In the event-level Event Items management, you can also assign the responsible transport vehicle for each item.',
+        stepTwoEventItemsAlt: 'Event Items management screen',
+        stepTwoEventItemsCaption: 'Event Items centralizes event gear and lets you assign items to transport vehicles.',
+        moveItemAlt: 'Move item location screen',
+        moveItemCaption: 'Use the move action on the right side of an item to move it to a vehicle, Site, warehouse, or another location.',
+        stepTwoVehicleTitle: 'Vehicle: transport owner and loading status',
+        vehicleAlt: 'Vehicle transport management screen',
+        vehicleCaption: 'Vehicle shows the transport name and responsible person at the top. Items can be moved in or out of the vehicle, and extra items are marked here as well. People can also check in and check out from vehicles or sites.',
+        stepTwoOverviewTitle: 'Event overview: expected, checked in, and extra',
+        stepTwoEventAlt: 'Event overview status screen',
+        stepTwoEventCaption: 'Back on the event page, you can see item and people status across vehicles and Sites. Expected, checked-in, and extra items are shown together for quick review.',
         stepThreeTitle: '03. Share with the team',
         stepThreeBody: '[Placeholder] Explain team collaboration, checks, and on-site confirmation.',
         placeholderOne: '[Placeholder] Example 1',
@@ -524,7 +595,26 @@
         stepOneBulletStatus: '日付とイベント状態は画面上部に表示され、現在の進行状況をすぐ確認できます。',
         stepOneBulletManage: '拠点、運搬車両、物品、人員はすべてイベント画面内で管理します。',
         stepTwoTitle: '02. 物品と場所を整理',
-        stepTwoBody: '[未入力] 物品、倉庫、車両、目的地の紐付けを説明します。',
+        stepTwoBody: 'イベント開始前に、物品、拠点、運搬車両の対応関係を整理します。GearFlow は Site、Vehicle、Event Items の3つの画面で物品と人員の位置を追跡し、到着済み、車内、余分なものを確認できます。',
+        stepTwoSiteTitle: 'Site：拠点と現地物品を管理',
+        eventLocationAlt: 'Site 拠点管理画面',
+        eventLocationCaption: 'Site を開くと、その拠点に必要な物品と人員の状況を確認できます。右上の「+」から倉庫の物品を追加できます。追加した物品がまだイベント内にない場合は、自動的に Event Items に追加されます。People は Site 内ではなく、イベント上位の People 管理で扱います。',
+        stepTwoSiteBulletAdd: 'Site 内では追加済み items を編集し、倉庫から新しい物品をすばやく追加できます。',
+        stepTwoSiteBulletAuto: 'Site から追加した物品がイベントに存在しない場合、自動的に Event Items に追加されます。',
+        stepTwoSiteBulletPeople: 'People の追加と編集は Site 内ではなく、イベント上位の People 管理で行います。',
+        stepTwoSiteBulletMove: 'Site 内では物品を搬入・搬出して、現地の物品状態を更新できます。',
+        stepTwoItemsTitle: 'Event Items：物品移動と運搬車両の指定',
+        stepTwoItemsBody: 'Event Items はイベント物品の総合管理エリアです。各 item 右側の移動操作で現在地を変更できます。イベント上位の Event Items 管理では、物品を担当する運搬車両も設定できます。',
+        stepTwoEventItemsAlt: 'Event Items 物品管理画面',
+        stepTwoEventItemsCaption: 'Event Items ではイベントに必要な物品をまとめて管理し、運搬車両との対応も設定できます。',
+        moveItemAlt: '物品の移動先選択画面',
+        moveItemCaption: 'item 右側の移動操作から、物品を車両、Site、倉庫、その他の場所へ移動できます。',
+        stepTwoVehicleTitle: 'Vehicle：車両、担当者、搬入状態',
+        vehicleAlt: 'Vehicle 運搬車両管理画面',
+        vehicleCaption: 'Vehicle の上部には交通手段名と担当者が表示されます。車両内の物品は搬入・搬出でき、余分な物品がある場合もここに表示されます。People も車両や拠点で check in / check out できます。',
+        stepTwoOverviewTitle: 'イベント総覧：予定、到着済み、余分',
+        stepTwoEventAlt: 'イベント総覧ステータス画面',
+        stepTwoEventCaption: 'イベント画面に戻ると、交通手段と Site 内の物品・人員状況を確認できます。予定、到着済み、余分な項目がまとめて表示され、すばやく確認できます。',
         stepThreeTitle: '03. チームで共有',
         stepThreeBody: '[未入力] 複数人での確認、チェック手順、現場確認を説明します。',
         placeholderOne: '[未入力] 例 1',
