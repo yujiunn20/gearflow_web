@@ -1,0 +1,1269 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GearFlow | 事件頁</title>
+  <link rel="icon" href="assets/images/gearflow_icon_friendly.png">
+  <link rel="stylesheet" href="assets/css/site.css?v=1.2">
+  <style>
+    body.events-page {
+      background: linear-gradient(180deg, #f3f8fb 0%, #ffffff 45%, #f7fbf9 100%);
+    }
+
+    .events-shell {
+      width: min(1280px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 64px;
+    }
+
+    .events-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 0;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .events-top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .events-top-actions a,
+    .events-top-actions button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      text-decoration: none;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .events-top-actions a:hover,
+    .events-top-actions a:focus-visible,
+    .events-top-actions button:hover,
+    .events-top-actions button:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent-ink);
+      outline: none;
+    }
+
+    .auth-shell,
+    .workspace-shell,
+    .events-layout,
+    .events-hero {
+      display: grid;
+      gap: 20px;
+    }
+
+    .auth-shell {
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+      align-items: stretch;
+    }
+
+    .events-hero,
+    .auth-panel,
+    .workspace-panel,
+    .events-list-panel,
+    .events-detail-panel {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 16px 40px rgba(24, 48, 71, 0.06);
+    }
+
+    .auth-panel,
+    .workspace-panel,
+    .events-list-panel,
+    .events-detail-panel {
+      padding: 22px;
+    }
+
+    .auth-hero {
+      padding: 28px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, #f8fcfe 0%, #ffffff 100%);
+      border: 1px solid var(--line);
+      box-shadow: 0 20px 48px rgba(24, 48, 71, 0.08);
+    }
+
+    .auth-hero h1,
+    .events-hero h1 {
+      margin: 10px 0 12px;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.05;
+    }
+
+    .auth-hero p,
+    .events-hero p,
+    .workspace-panel p,
+    .auth-panel p {
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .auth-form {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .auth-form label {
+      display: block;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .auth-form input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      font: inherit;
+      color: var(--ink);
+    }
+
+    .auth-form input:focus {
+      border-color: var(--accent);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(19, 185, 154, 0.12);
+    }
+
+    .auth-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .primary-button,
+    .secondary-button {
+      border: none;
+      border-radius: 999px;
+      padding: 13px 20px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .primary-button {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .primary-button:hover,
+    .primary-button:focus-visible {
+      background: var(--blue);
+      outline: none;
+    }
+
+    .secondary-button {
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .secondary-button:hover,
+    .secondary-button:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent-ink);
+      outline: none;
+    }
+
+    .auth-status {
+      margin: 6px 0 0;
+      color: var(--muted);
+      min-height: 1.5em;
+    }
+
+    .system-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 0 20px;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%);
+      color: var(--muted);
+      box-shadow: 0 10px 24px rgba(24, 48, 71, 0.05);
+    }
+
+    .system-banner strong {
+      color: var(--ink);
+    }
+
+    .system-banner.error {
+      border-color: rgba(219, 91, 91, 0.35);
+      background: rgba(255, 245, 245, 0.95);
+      color: #9c3f3f;
+    }
+
+    .system-banner.error strong {
+      color: #9c3f3f;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .status-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      background: #fff;
+    }
+
+    .status-card strong {
+      display: block;
+      font-size: 1.2rem;
+      color: var(--ink);
+    }
+
+    .status-card span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .workspace-shell {
+      grid-template-columns: minmax(280px, 0.95fr) minmax(0, 1.35fr);
+      margin-top: 20px;
+    }
+
+    .workspace-panel {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .workspace-selector {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .workspace-card {
+      width: 100%;
+      display: grid;
+      gap: 4px;
+      text-align: left;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: #fff;
+      cursor: pointer;
+      color: inherit;
+      font: inherit;
+    }
+
+    .workspace-card:hover,
+    .workspace-card:focus-visible {
+      border-color: var(--accent);
+      outline: none;
+      box-shadow: 0 12px 28px rgba(19, 185, 154, 0.12);
+    }
+
+    .workspace-card.active {
+      border-color: var(--blue);
+      box-shadow: 0 12px 28px rgba(24, 157, 230, 0.12);
+    }
+
+    .workspace-card strong {
+      font-size: 1rem;
+    }
+
+    .workspace-card span {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .workspace-note,
+    .events-hero-note {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .workspace-badges,
+    .event-card-meta,
+    .detail-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f4f8fb;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .pill.active {
+      background: rgba(19, 185, 154, 0.14);
+      color: var(--accent-ink);
+    }
+
+    .events-layout {
+      grid-template-columns: minmax(320px, 0.95fr) minmax(0, 1.25fr);
+      align-items: start;
+    }
+
+    .events-hero {
+      grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.85fr);
+      padding: 28px;
+      align-items: start;
+    }
+
+    .events-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .event-card {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      width: 100%;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: #fff;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+      font: inherit;
+      color: inherit;
+    }
+
+    .event-card:hover,
+    .event-card:focus-visible {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      box-shadow: 0 14px 30px rgba(19, 185, 154, 0.12);
+      outline: none;
+    }
+
+    .event-card.active {
+      border-color: var(--blue);
+      box-shadow: 0 18px 36px rgba(24, 157, 230, 0.16);
+    }
+
+    .event-card-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      background: linear-gradient(135deg, rgba(24, 157, 230, 0.14), rgba(19, 185, 154, 0.14));
+      color: var(--accent-ink);
+      font-weight: 900;
+    }
+
+    .event-card-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .event-card-main h3 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .event-card-main p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .events-detail-panel {
+      padding: 22px;
+    }
+
+    .event-detail-hero {
+      padding: 24px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, #f8fcfe 0%, #ffffff 100%);
+      border: 1px solid var(--line);
+    }
+
+    .event-detail-hero h2 {
+      margin: 10px 0 10px;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+    }
+
+    .event-detail-summary {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 62ch;
+    }
+
+    .event-detail-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .event-detail-stat {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: #fff;
+    }
+
+    .event-detail-stat strong {
+      display: block;
+      font-size: 1.15rem;
+    }
+
+    .event-detail-stat span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 0.92rem;
+    }
+
+    .event-detail-section {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: #fff;
+    }
+
+    .event-detail-section h3 {
+      margin: 0 0 12px;
+      font-size: 1.05rem;
+    }
+
+    .event-detail-list {
+      margin: 0;
+      padding-left: 1.2rem;
+      color: #365266;
+      line-height: 1.8;
+    }
+
+    .event-empty {
+      padding: 20px;
+      border: 1px dashed var(--line);
+      border-radius: 22px;
+      color: var(--muted);
+      background: var(--soft);
+      line-height: 1.7;
+    }
+
+    .event-top-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .event-top-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .event-top-links a:hover,
+    .event-top-links a:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent-ink);
+      outline: none;
+    }
+
+    .event-toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      margin: 6px 0 14px;
+    }
+
+    .event-search {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .event-search:focus {
+      border-color: var(--accent);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(19, 185, 154, 0.12);
+    }
+
+    .event-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      padding: 8px 12px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .filter-chip.active {
+      border-color: var(--accent);
+      color: var(--accent-ink);
+      background: rgba(19, 185, 154, 0.12);
+    }
+
+    .workspace-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .workspace-meta-row .pill {
+      background: rgba(255,255,255,0.88);
+    }
+
+    .event-detail-kicker {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .event-detail-kicker p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .event-detail-note {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.6;
+    }
+
+    .login-hidden,
+    .app-hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 920px) {
+      .auth-shell,
+      .events-hero,
+      .workspace-shell,
+      .events-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .status-grid,
+      .event-detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="events-page">
+  <div class="events-shell">
+    <div class="events-topbar">
+      <a class="brand-link" href="index.html">
+        <img src="assets/images/gearflow_icon_friendly.png" alt="GearFlow">
+        <span>GearFlow</span>
+      </a>
+      <div class="events-top-actions">
+        <a href="index.html">回首頁</a>
+        <a href="guide.html">使用說明</a>
+        <button id="sign-out-btn" type="button" class="login-hidden">登出</button>
+      </div>
+    </div>
+
+    <div class="system-banner" id="system-status" role="status" aria-live="polite">
+      <strong>系統</strong>
+      <span id="system-status-text">準備連線 Supabase。</span>
+    </div>
+
+    <section class="auth-shell" id="auth-shell">
+      <div class="auth-hero">
+        <p class="eyebrow" style="margin-top: 0;">Supabase</p>
+        <h1>登入後先選雲端空間，再看事件</h1>
+        <p class="events-hero-note">這一版是唯讀查看台。登入後先挑選你的雲端空間，再點進事件頁檢視內容，不提供編輯功能。</p>
+      </div>
+
+      <div class="auth-panel">
+        <p class="eyebrow" style="margin-top: 0;">登入</p>
+        <form id="auth-form" class="auth-form">
+          <div>
+            <label for="auth-email">Email</label>
+            <input id="auth-email" type="email" autocomplete="email" required>
+          </div>
+          <div>
+            <label for="auth-password">Password</label>
+            <input id="auth-password" type="password" autocomplete="current-password" minlength="6" required>
+          </div>
+          <div class="auth-actions">
+            <button class="primary-button" id="auth-submit" type="submit">登入</button>
+            <button class="secondary-button" id="auth-toggle" type="button">建立帳號</button>
+          </div>
+          <p id="auth-status" class="auth-status">請先登入 Supabase 帳號。</p>
+        </form>
+        <div class="status-grid">
+          <div class="status-card">
+            <strong>Login</strong>
+            <span>登入後才看到工作區與事件</span>
+          </div>
+          <div class="status-card">
+            <strong>Workspace</strong>
+            <span>先選雲端空間，再選事件</span>
+          </div>
+          <div class="status-card">
+            <strong>Viewer</strong>
+            <span>目前只讀，不開放編輯</span>
+          </div>
+          <div class="status-card">
+            <strong>Supabase</strong>
+            <span>和 App 使用同一組雲端資料</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="workspace-shell app-hidden" id="workspace-shell">
+      <aside class="workspace-panel">
+        <div>
+          <p class="eyebrow" style="margin-top: 0;">雲端空間</p>
+          <h2 style="margin: 0 0 8px;">選擇工作區</h2>
+          <p class="workspace-note">登入後會列出你有權限查看的雲端空間。點一個工作區，就會載入該空間底下的事件。</p>
+        </div>
+        <div class="workspace-selector" id="workspace-list"></div>
+      </aside>
+
+      <div class="events-hero">
+        <div>
+          <p class="eyebrow" style="margin-top: 0;">Web View</p>
+          <h1 id="workspace-title">事件頁</h1>
+          <p class="events-hero-note" id="workspace-summary">尚未選擇工作區。</p>
+          <div class="workspace-badges" id="workspace-badges"></div>
+        </div>
+        <div class="events-metrics" style="grid-template-columns: repeat(2, minmax(0, 1fr));">
+          <div class="event-metric">
+            <strong id="metric-event-count">0</strong>
+            <span>事件數量</span>
+          </div>
+          <div class="event-metric">
+            <strong id="metric-active-count">0</strong>
+            <span>進行中</span>
+          </div>
+          <div class="event-metric">
+            <strong id="metric-site-count">0</strong>
+            <span>站點數量</span>
+          </div>
+          <div class="event-metric">
+            <strong id="metric-item-count">0</strong>
+            <span>裝備項目</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="events-layout app-hidden" id="events-shell">
+      <aside class="events-list-panel">
+        <div class="events-list-head">
+          <div>
+            <h2>事件列表</h2>
+            <p>點選事件即可查看詳情。</p>
+          </div>
+        </div>
+        <div class="event-toolbar">
+          <input id="event-search" class="event-search" type="search" placeholder="搜尋事件、描述、日期">
+          <div class="event-filters" id="event-filters">
+            <button class="filter-chip active" type="button" data-filter="all">全部</button>
+            <button class="filter-chip" type="button" data-filter="active">進行中</button>
+            <button class="filter-chip" type="button" data-filter="draft">草稿</button>
+            <button class="filter-chip" type="button" data-filter="completed">已完成</button>
+          </div>
+        </div>
+        <div class="events-list" id="event-list"></div>
+      </aside>
+
+      <article class="events-detail-panel" id="event-detail"></article>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlqc3VoZmV6bmZucHFweGt3bW5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxODc2NTgsImV4cCI6MjA5Nzc2MzY1OH0.Ca-TuNTvBD8RaPYP_mULtDuLpLuJS-ew4QMIL4A4JA4';
+    const WORKSPACE_CACHE_KEY = 'gearflow-web-selected-workspace';
+    const WORKSPACE_EVENT_CACHE_PREFIX = 'gearflow-web-selected-event:';
+    const { createClient } = supabase;
+    const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const authShell = document.getElementById('auth-shell');
+    const workspaceShell = document.getElementById('workspace-shell');
+    const eventsShell = document.getElementById('events-shell');
+    const authForm = document.getElementById('auth-form');
+    const authEmail = document.getElementById('auth-email');
+    const authPassword = document.getElementById('auth-password');
+    const authSubmit = document.getElementById('auth-submit');
+    const authToggle = document.getElementById('auth-toggle');
+    const authStatus = document.getElementById('auth-status');
+    const systemStatus = document.getElementById('system-status');
+    const systemStatusText = document.getElementById('system-status-text');
+    const signOutBtn = document.getElementById('sign-out-btn');
+    const workspaceList = document.getElementById('workspace-list');
+    const workspaceTitle = document.getElementById('workspace-title');
+    const workspaceSummary = document.getElementById('workspace-summary');
+    const workspaceBadges = document.getElementById('workspace-badges');
+    const eventList = document.getElementById('event-list');
+    const eventDetail = document.getElementById('event-detail');
+    const eventSearch = document.getElementById('event-search');
+    const eventFilters = document.getElementById('event-filters');
+    const metricEventCount = document.getElementById('metric-event-count');
+    const metricActiveCount = document.getElementById('metric-active-count');
+    const metricSiteCount = document.getElementById('metric-site-count');
+    const metricItemCount = document.getElementById('metric-item-count');
+
+    const state = {
+      session: null,
+      authMode: 'signIn',
+      workspaces: [],
+      selectedWorkspaceId: '',
+      events: [],
+      selectedEventId: '',
+      loading: false,
+      filter: 'all',
+      query: '',
+    };
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function setSystemMessage(message, isError = false) {
+      if (systemStatusText) {
+        systemStatusText.textContent = message;
+      }
+      if (systemStatus) {
+        systemStatus.classList.toggle('error', isError);
+      }
+    }
+
+    function setAuthMessage(message, isError = false) {
+      authStatus.textContent = message;
+      authStatus.style.color = isError ? 'var(--accent-ink)' : 'var(--muted)';
+      setSystemMessage(message, isError);
+    }
+
+    function setVisible(node, visible) {
+      node.classList.toggle('app-hidden', !visible);
+    }
+
+    window.addEventListener('error', (event) => {
+      const message = event?.message || '未知腳本錯誤';
+      setSystemMessage(`頁面錯誤：${message}`, true);
+    });
+
+    window.addEventListener('unhandledrejection', (event) => {
+      const reason = event?.reason instanceof Error ? event.reason.message : String(event?.reason || '未知 Promise 錯誤');
+      setSystemMessage(`載入失敗：${reason}`, true);
+    });
+
+    function currentWorkspace() {
+      return state.workspaces.find((workspace) => workspace.id === state.selectedWorkspaceId) || null;
+    }
+
+    function currentEvent() {
+      return state.events.find((event) => event.id === state.selectedEventId) || null;
+    }
+
+    function loadSelectedWorkspaceId() {
+      try {
+        return localStorage.getItem(WORKSPACE_CACHE_KEY) || '';
+      } catch {
+        return '';
+      }
+    }
+
+    function persistSelectedWorkspaceId(workspaceId) {
+      try {
+        localStorage.setItem(WORKSPACE_CACHE_KEY, workspaceId);
+      } catch {
+        // ignore
+      }
+    }
+
+    function loadSelectedEventId(workspaceId) {
+      try {
+        return localStorage.getItem(WORKSPACE_EVENT_CACHE_PREFIX + workspaceId) || '';
+      } catch {
+        return '';
+      }
+    }
+
+    function persistSelectedEventId(workspaceId, eventId) {
+      try {
+        localStorage.setItem(WORKSPACE_EVENT_CACHE_PREFIX + workspaceId, eventId);
+      } catch {
+        // ignore
+      }
+    }
+
+    async function restoreSession() {
+      try {
+        setSystemMessage('正在確認登入狀態...');
+        const { data, error } = await client.auth.getSession();
+        if (error) {
+          setAuthMessage(error.message, true);
+          return;
+        }
+        state.session = data.session;
+        if (state.session) {
+          await afterSignIn();
+        } else {
+          renderAuthState();
+        }
+      } catch (error) {
+        setAuthMessage(error.message || '無法取得登入狀態', true);
+      }
+    }
+
+    async function signIn() {
+      const email = authEmail.value.trim();
+      const password = authPassword.value;
+      if (!email || !password) {
+        setAuthMessage('請輸入 Email 與密碼。', true);
+        return;
+      }
+
+      authSubmit.disabled = true;
+      authToggle.disabled = true;
+      setAuthMessage(state.authMode === 'signIn' ? '登入中...' : '建立帳號中...');
+
+      try {
+        const result = state.authMode === 'signIn'
+          ? await client.auth.signInWithPassword({ email, password })
+          : await client.auth.signUp({ email, password });
+
+        if (result.error) {
+          throw result.error;
+        }
+
+        if (!result.data.session) {
+          setAuthMessage('帳號已建立，請先完成 Email 驗證後再登入。', false);
+          return;
+        }
+
+        state.session = result.data.session;
+        await afterSignIn();
+      } catch (error) {
+        setAuthMessage(error.message || '登入失敗', true);
+      } finally {
+        authSubmit.disabled = false;
+        authToggle.disabled = false;
+      }
+    }
+
+    async function signOut() {
+      try {
+        await client.auth.signOut();
+      } catch (error) {
+        setAuthMessage(error.message || '登出失敗，已回到登入畫面。', true);
+      }
+      state.session = null;
+      state.workspaces = [];
+      state.selectedWorkspaceId = '';
+      state.events = [];
+      state.selectedEventId = '';
+      renderAuthState();
+    }
+
+    async function afterSignIn() {
+      setAuthMessage(`已登入 ${state.session.user.email}`);
+      setVisible(authShell, false);
+      setVisible(workspaceShell, true);
+      setVisible(eventsShell, true);
+      signOutBtn.classList.remove('login-hidden');
+      await loadWorkspaces();
+    }
+
+    function renderAuthState() {
+      setVisible(authShell, true);
+      setVisible(workspaceShell, false);
+      setVisible(eventsShell, false);
+      signOutBtn.classList.add('login-hidden');
+      setAuthMessage('請先登入 Supabase 帳號。');
+    }
+
+    async function loadWorkspaces() {
+      if (!state.session) return;
+
+      setSystemMessage('正在載入你的雲端空間...');
+
+      const userId = state.session.user.id;
+      const { data: membershipRows, error: memberError } = await client
+        .from('workspace_members')
+        .select('workspace_id, role')
+        .eq('user_id', userId);
+
+      if (memberError) {
+        setAuthMessage(`載入工作區失敗：${memberError.message}`, true);
+        return;
+      }
+
+      const workspaceIds = (membershipRows || []).map((row) => row.workspace_id);
+      if (!workspaceIds.length) {
+        state.workspaces = [];
+        state.selectedWorkspaceId = '';
+        workspaceList.innerHTML = '<div class="event-empty">你目前沒有可查看的雲端空間。</div>';
+        setSystemMessage('你目前沒有可查看的雲端空間。', true);
+        workspaceTitle.textContent = '事件頁';
+        workspaceSummary.textContent = '尚未加入任何雲端空間。';
+        workspaceBadges.innerHTML = '';
+        renderEvents([]);
+        renderMetrics([]);
+        return;
+      }
+
+      const { data: workspaces, error: workspaceError } = await client
+        .from('workspaces')
+        .select('id, name, owner_email')
+        .in('id', workspaceIds)
+        .order('name', { ascending: true });
+
+      if (workspaceError) {
+        setAuthMessage(`載入雲端空間失敗：${workspaceError.message}`, true);
+        return;
+      }
+
+      const roleMap = new Map((membershipRows || []).map((row) => [row.workspace_id, row.role]));
+      state.workspaces = (workspaces || []).map((workspace) => ({
+        id: workspace.id,
+        name: workspace.name,
+        ownerEmail: workspace.owner_email || '',
+        role: roleMap.get(workspace.id) || 'viewer',
+      }));
+
+      const savedWorkspaceId = loadSelectedWorkspaceId();
+      const savedExists = state.workspaces.some((workspace) => workspace.id === savedWorkspaceId);
+      state.selectedWorkspaceId = savedExists ? savedWorkspaceId : state.workspaces[0]?.id || '';
+      persistSelectedWorkspaceId(state.selectedWorkspaceId);
+      renderWorkspaceList();
+      await loadEventsForWorkspace(state.selectedWorkspaceId);
+    }
+
+    function renderWorkspaceList() {
+      if (!workspaceList) return;
+
+      if (!state.workspaces.length) {
+        workspaceList.innerHTML = '<div class="event-empty">沒有可用的雲端空間。</div>';
+        return;
+      }
+
+      workspaceList.innerHTML = state.workspaces.map((workspace) => `
+        <button class="workspace-card${workspace.id === state.selectedWorkspaceId ? ' active' : ''}" type="button" data-workspace-id="${escapeHtml(workspace.id)}">
+          <strong>${escapeHtml(workspace.name)}</strong>
+          <span>${escapeHtml(workspace.ownerEmail || '無 owner') || '無 owner'}</span>
+          <div class="workspace-badges">
+            <span class="pill active">${escapeHtml(workspace.role)}</span>
+            <span class="pill">${escapeHtml(workspace.id)}</span>
+          </div>
+        </button>
+      `).join('');
+
+      workspaceList.querySelectorAll('[data-workspace-id]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const workspaceId = button.getAttribute('data-workspace-id') || '';
+          if (workspaceId === state.selectedWorkspaceId) return;
+          const previousWorkspaceId = state.selectedWorkspaceId;
+          const previousEventId = state.selectedEventId;
+          if (previousWorkspaceId && previousEventId) {
+            persistSelectedEventId(previousWorkspaceId, previousEventId);
+          }
+          state.selectedWorkspaceId = workspaceId;
+          persistSelectedWorkspaceId(workspaceId);
+          renderWorkspaceList();
+          await loadEventsForWorkspace(workspaceId);
+        });
+      });
+    }
+
+    async function loadEventsForWorkspace(workspaceId) {
+      const workspace = state.workspaces.find((item) => item.id === workspaceId);
+      if (!workspace) return;
+
+      setSystemMessage(`正在載入事件：${workspace.name}`);
+      workspaceTitle.textContent = workspace.name;
+      workspaceSummary.textContent = `owner: ${workspace.ownerEmail || 'N/A'} · role: ${workspace.role}`;
+      workspaceBadges.innerHTML = `
+        <span class="pill active">Cloud workspace</span>
+        <span class="pill">${escapeHtml(workspace.role)}</span>
+        <span class="pill">只讀查看</span>
+      `;
+
+      const { data, error } = await client
+        .from('events')
+        .select('*, event_transports(*), event_sites(*), event_items(*), event_people(*)')
+        .eq('workspace_id', workspaceId)
+        .order('name', { ascending: true });
+
+      if (error) {
+        eventList.innerHTML = `<div class="event-empty">載入事件失敗：${escapeHtml(error.message)}</div>`;
+        eventDetail.innerHTML = `<div class="event-empty">${escapeHtml(error.message)}</div>`;
+        setAuthMessage(`載入事件失敗：${error.message}`, true);
+        renderMetrics([]);
+        return;
+      }
+
+      state.events = (data || []).map(normalizeEvent);
+      const savedEventId = loadSelectedEventId(workspaceId);
+      state.selectedEventId = state.events.find((event) => event.id === savedEventId)?.id || state.events[0]?.id || '';
+      persistSelectedEventId(workspaceId, state.selectedEventId);
+      renderWorkspaceList();
+      renderEvents();
+      renderMetrics(state.events);
+      setSystemMessage(`已載入 ${state.events.length} 個事件。`);
+    }
+
+    function normalizeEvent(row) {
+      return {
+        id: row.id,
+        name: row.name || '未命名事件',
+        dateLabel: row.date_label || '',
+        status: row.status || 'draft',
+        description: row.description || '',
+        createdAtLabel: row.created_at_label || '',
+        updatedAtLabel: row.updated_at_label || '',
+        transports: (row.event_transports || []).slice().sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)),
+        sites: (row.event_sites || []).slice().sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)),
+        items: row.event_items || [],
+        people: row.event_people || [],
+      };
+    }
+
+    function statusLabel(status) {
+      switch (status) {
+        case 'active': return '進行中';
+        case 'completed': return '已完成';
+        case 'archived': return '已封存';
+        default: return '草稿';
+      }
+    }
+
+    function filteredEvents(events = state.events) {
+      const query = state.query.trim().toLowerCase();
+      return events.filter((event) => state.filter === 'all' || event.status === state.filter).filter((event) => {
+        if (!query) return true;
+        const haystack = [
+          event.name,
+          event.description,
+          event.dateLabel,
+          event.id,
+          ...(event.transports || []).map((item) => item.name || item.representative || ''),
+          ...(event.sites || []).map((item) => item.name || ''),
+          ...(event.items || []).map((item) => item.name || ''),
+        ].join(' ').toLowerCase();
+        return haystack.includes(query);
+      });
+    }
+
+    function renderEvents(events = state.events) {
+      events = filteredEvents(events);
+      if (!events.length) {
+        eventList.innerHTML = '<div class="event-empty">這個雲端空間目前還沒有事件。</div>';
+        eventDetail.innerHTML = '<div class="event-empty">請先建立或同步事件，這裡才會顯示內容。</div>';
+        if (currentWorkspace()) { setSystemMessage(`目前工作區還沒有事件：${currentWorkspace().name}`); }
+        return;
+      }
+
+      eventList.innerHTML = events.map((event) => `
+        <button class="event-card${event.id === state.selectedEventId ? ' active' : ''}" type="button" data-event-id="${escapeHtml(event.id)}">
+          <span class="event-card-badge">${escapeHtml(event.name.slice(0, 2).toUpperCase())}</span>
+          <span class="event-card-main">
+            <h3>${escapeHtml(event.name)}</h3>
+            <p>${escapeHtml(event.description || '無描述')}</p>
+            <div class="event-card-meta">
+              <span class="pill${event.status === 'active' ? ' active' : ''}">${escapeHtml(statusLabel(event.status))}</span>
+              <span class="pill">${escapeHtml(event.dateLabel || '未設定日期')}</span>
+              <span class="pill">${escapeHtml(String(event.items.length))} 項目</span>
+            </div>
+          </span>
+        </button>
+      `).join('');
+
+      eventList.querySelectorAll('[data-event-id]').forEach((button) => {
+        button.addEventListener('click', () => {
+          state.selectedEventId = button.getAttribute('data-event-id') || '';
+          if (state.selectedWorkspaceId && state.selectedEventId) {
+            persistSelectedEventId(state.selectedWorkspaceId, state.selectedEventId);
+          }
+          renderEvents();
+        });
+      });
+
+      renderEventDetail();
+    }
+
+    function renderEventDetail() {
+      const event = currentEvent();
+      if (!event) {
+        eventDetail.innerHTML = '<div class="event-empty">請先選擇一個事件。</div>';
+        setSystemMessage('請先選擇一個事件。');
+        return;
+      }
+
+      const totalItems = event.items.length;
+      const totalSites = event.sites.length;
+      const totalTransports = event.transports.length;
+      const totalPeople = event.people.length;
+      const activeLabel = statusLabel(event.status);
+
+      eventDetail.innerHTML = `
+        <div class="event-detail-hero">
+          <div class="event-detail-kicker">
+            <div>
+              <div class="detail-badges">
+                <span class="pill${event.status === 'active' ? ' active' : ''}">${escapeHtml(activeLabel)}</span>
+                <span class="pill">${escapeHtml(event.dateLabel || '未設定日期')}</span>
+                <span class="pill">${escapeHtml(event.id)}</span>
+              </div>
+              <h2>${escapeHtml(event.name)}</h2>
+            </div>
+            <span class="pill active">唯讀檢視</span>
+          </div>
+          <p class="event-detail-summary">${escapeHtml(event.description || '這個事件還沒有描述。')}</p>
+          <p class="event-detail-note">資訊來源：Supabase · ${escapeHtml(currentWorkspace()?.name || '未選擇工作區')}</p>
+          <div class="event-detail-grid">
+            <div class="event-detail-stat"><strong>${escapeHtml(String(totalTransports))}</strong><span>運輸資訊</span></div>
+            <div class="event-detail-stat"><strong>${escapeHtml(String(totalSites))}</strong><span>站點</span></div>
+            <div class="event-detail-stat"><strong>${escapeHtml(String(totalItems))}</strong><span>裝備項目</span></div>
+          </div>
+        </div>
+
+        <section class="event-detail-section">
+          <h3>事件資訊</h3>
+          <p class="event-detail-summary" style="margin:0;">建立活動後，這裡會顯示說明、時程與工作重點。</p>
+          <div class="detail-badges" style="margin-top:12px;">
+            <span class="pill">Created: ${escapeHtml(event.createdAtLabel || '未設定')}</span>
+            <span class="pill">Updated: ${escapeHtml(event.updatedAtLabel || '未設定')}</span>
+          </div>
+        </section>
+
+        <section class="event-detail-section">
+          <h3>運輸資訊</h3>
+          ${totalTransports ? `<ul class="event-detail-list">${event.transports.map((transport) => `<li>${escapeHtml(transport.name || transport.representative || '未命名運輸')}</li>`).join('')}</ul>` : '<div class="event-empty">目前沒有運輸資料。</div>'}
+        </section>
+
+        <section class="event-detail-section">
+          <h3>站點與裝備</h3>
+          ${totalSites ? `<ul class="event-detail-list">${event.sites.map((site) => `<li>${escapeHtml(site.name || '未命名站點')}</li>`).join('')}</ul>` : '<div class="event-empty">目前沒有站點資料。</div>'}
+          ${totalItems ? `<ul class="event-detail-list" style="margin-top:12px;">${event.items.map((item) => `<li>${escapeHtml(item.name || '未命名裝備')}</li>`).join('')}</ul>` : '<div class="event-empty" style="margin-top:12px;">目前沒有裝備項目。</div>'}
+        </section>
+
+        <section class="event-detail-section">
+          <h3>人員</h3>
+          ${totalPeople ? `<ul class="event-detail-list">${event.people.map((person) => `<li>${escapeHtml(person.name || '未命名人員')}</li>`).join('')}</ul>` : '<div class="event-empty">目前沒有花名冊資料。</div>'}
+        </section>
+      `;
+    }
+
+    function renderMetrics(events) {
+      metricEventCount.textContent = String(events.length);
+      metricActiveCount.textContent = String(events.filter((event) => event.status === 'active').length);
+      metricSiteCount.textContent = String(events.reduce((sum, event) => sum + event.sites.length, 0));
+      metricItemCount.textContent = String(events.reduce((sum, event) => sum + event.items.length, 0));
+    }
+
+    eventSearch.addEventListener('input', () => {
+      state.query = eventSearch.value;
+      renderEvents();
+    });
+
+    eventFilters.addEventListener('click', (event) => {
+      const chip = event.target.closest('[data-filter]');
+      if (!chip) return;
+      state.filter = chip.getAttribute('data-filter') || 'all';
+      eventFilters.querySelectorAll('[data-filter]').forEach((button) => {
+        button.classList.toggle('active', button === chip);
+      });
+      renderEvents();
+    });
+
+    authForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      signIn();
+    });
+
+    authToggle.addEventListener('click', () => {
+      state.authMode = state.authMode === 'signIn' ? 'create' : 'signIn';
+      authSubmit.textContent = state.authMode === 'signIn' ? '登入' : '建立帳號';
+      authToggle.textContent = state.authMode === 'signIn' ? '建立帳號' : '使用既有帳號';
+    });
+
+    signOutBtn.addEventListener('click', signOut);
+
+    client.auth.onAuthStateChange(async (_, session) => {
+      state.session = session;
+      if (session) {
+        await afterSignIn();
+      }
+    });
+
+    restoreSession();
+  </script>
+</body>
+</html>

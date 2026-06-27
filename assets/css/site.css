@@ -512,3 +512,37 @@ body.nav-open .hamburger span:nth-child(3) {
   font-size: 0.95rem;
   line-height: 1.6;
 }
+
+
+.usage-legacy-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 20px;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.usage-legacy-link:hover,
+.usage-legacy-link:focus-visible {
+  transform: translateY(-3px);
+  outline: none;
+}
+
+.usage-legacy-grid {
+  align-items: center;
+}
+
+.usage-legacy-image {
+  width: 200px;
+  margin: 0 auto;
+  display: block;
+}
+
+.usage-legacy-list {
+  margin: 0;
+}
+
+@media (max-width: 880px) {
+  .usage-legacy-grid { grid-template-columns: 1fr; gap: 40px; }
+  .usage-legacy-image { width: 180px; }
+}
