@@ -28,30 +28,39 @@
     }
 
     .guide-shot {
-      width: min(100%, 720px);
-      margin: 18px auto 34px;
+      width: min(100%, 360px);
+      margin: 18px auto 30px;
       overflow: hidden;
       border: 1px solid var(--line);
-      border-radius: 24px;
+      border-radius: 22px;
       background: #fbfdf9;
-      box-shadow: 0 18px 36px rgba(24, 48, 71, 0.08);
+      box-shadow: 0 14px 28px rgba(24, 48, 71, 0.07);
     }
 
     .guide-grid .guide-shot {
       width: 100%;
-      max-width: 430px;
+      max-width: 320px;
     }
 
     .guide-shot img {
       display: block;
       width: 100%;
-      height: clamp(420px, 58vw, 680px);
+      height: clamp(260px, 33vw, 360px);
       object-fit: cover;
       object-position: top center;
+      cursor: zoom-in;
+      transition: transform 160ms ease, filter 160ms ease;
+    }
+
+    .guide-shot img:hover,
+    .guide-shot img:focus-visible {
+      filter: saturate(1.04) contrast(1.02);
+      transform: scale(1.01);
+      outline: none;
     }
 
     .guide-grid .guide-shot img {
-      height: clamp(360px, 42vw, 540px);
+      height: clamp(240px, 28vw, 330px);
     }
 
     .guide-shot figcaption {
@@ -65,6 +74,8 @@
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 22px;
+      justify-items: center;
+      align-items: start;
       margin: 18px 0 28px;
     }
 
@@ -101,14 +112,86 @@
       background: rgba(19, 185, 154, 0.08);
     }
 
+    .image-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 34px 18px;
+      background: rgba(18, 28, 35, 0.78);
+      backdrop-filter: blur(3px);
+    }
+
+    .image-lightbox.is-open {
+      display: flex;
+    }
+
+    .image-lightbox__panel {
+      position: relative;
+      display: flex;
+      max-width: min(92vw, 520px);
+      max-height: 92vh;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .image-lightbox__image {
+      display: block;
+      width: auto;
+      max-width: 100%;
+      max-height: 84vh;
+      border-radius: 18px;
+      background: #fbfdf9;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
+    }
+
+    .image-lightbox__caption {
+      max-width: 520px;
+      margin: 0;
+      color: #fff;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .image-lightbox__close {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      width: 52px;
+      height: 52px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.96);
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 2rem;
+      line-height: 1;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
+    }
+
+    .image-lightbox__close:focus-visible {
+      outline: 3px solid rgba(19, 185, 154, 0.65);
+      outline-offset: 3px;
+    }
+
     @media (max-width: 760px) {
       .guide-grid,
       .guide-card-grid {
         grid-template-columns: 1fr;
       }
 
-      .guide-shot img {
-        border-radius: 16px;
+      .guide-shot {
+        width: min(100%, 340px);
+        border-radius: 18px;
+      }
+
+      .guide-shot img,
+      .guide-grid .guide-shot img {
+        height: min(82vw, 360px);
       }
     }
   </style>
@@ -235,6 +318,14 @@
         </ul>
       </section>
     </article>
+  </div>
+
+  <div class="image-lightbox" id="image-lightbox" aria-hidden="true">
+    <button class="image-lightbox__close" type="button" aria-label="Close image preview">×</button>
+    <div class="image-lightbox__panel" role="dialog" aria-modal="true">
+      <img class="image-lightbox__image" id="image-lightbox-image" src="" alt="">
+      <p class="image-lightbox__caption" id="image-lightbox-caption"></p>
+    </div>
   </div>
 
   <script>
@@ -381,6 +472,47 @@
     };
 
     const languageSelect = document.getElementById('language-select');
+    const lightbox = document.getElementById('image-lightbox');
+    const lightboxImage = document.getElementById('image-lightbox-image');
+    const lightboxCaption = document.getElementById('image-lightbox-caption');
+    const lightboxClose = lightbox.querySelector('.image-lightbox__close');
+
+    function openLightbox(image) {
+      const caption = image.closest('figure')?.querySelector('figcaption')?.textContent || image.alt || '';
+      lightboxImage.src = image.currentSrc || image.src;
+      lightboxImage.alt = image.alt || caption;
+      lightboxCaption.textContent = caption;
+      lightbox.classList.add('is-open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      lightboxClose.focus();
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('is-open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      lightboxImage.removeAttribute('src');
+    }
+
+    document.querySelectorAll('.guide-shot img').forEach((image) => {
+      image.tabIndex = 0;
+      image.addEventListener('click', () => openLightbox(image));
+      image.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openLightbox(image);
+        }
+      });
+    });
+
+    lightbox.addEventListener('click', (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    lightboxClose.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
+    });
 
     function homeUrlForLanguage(language) {
       if (language === 'en') return 'en/index.html';
