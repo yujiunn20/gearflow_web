@@ -274,12 +274,12 @@
       <h1 data-i18n="title">GearFlow 操作模板</h1>
       <p class="updated guide-intro" data-i18n="intro">以下內容先保留為模板，之後可直接補上正式說明。</p>
 
-      <nav class="guide-pager" aria-label="Guide sections">
+      <nav class="guide-pager" aria-label="Guide sections" data-i18n-aria-label="guideSectionsLabel">
         <button type="button" data-guide-target="step-0" data-i18n="navBasic" aria-current="page">00. 基本設定</button>
         <button type="button" data-guide-target="step-1" data-i18n="navEvent">01. 建立活動</button>
         <button type="button" data-guide-target="step-2" data-i18n="navGear">02. 整理裝備與地點</button>
         <button type="button" data-guide-target="step-3" data-i18n="navCloud">03. 團隊同步查看</button>
-        <button type="button" data-guide-target="step-collab" data-i18n="navCollaboration">Collaboration design</button>
+        <button type="button" data-guide-target="step-collab" data-i18n="navCollaboration">協作設計</button>
       </nav>
 
       <section class="guide-section guide-page" id="step-0" data-guide-page="step-0">
@@ -467,7 +467,7 @@
         </ul>
       </section>
 
-      <nav class="guide-step-nav" aria-label="Guide previous and next">
+      <nav class="guide-step-nav" aria-label="Guide previous and next" data-i18n-aria-label="guideStepNavLabel">
         <button type="button" id="guide-prev" data-i18n="previousPage">上一頁</button>
         <button type="button" id="guide-next" data-i18n="nextPage">下一頁</button>
       </nav>
@@ -495,7 +495,9 @@
         navEvent: '01. 建立活動',
         navGear: '02. 整理裝備與地點',
         navCloud: '03. 團隊同步查看',
-        navCollaboration: 'Collaboration design',
+        navCollaboration: '協作設計',
+        guideSectionsLabel: '教學分頁',
+        guideStepNavLabel: '教學上一頁與下一頁',
         previousPage: '上一頁',
         nextPage: '下一頁',
         basicTitle: '00. 基本設定',
@@ -599,6 +601,8 @@
         navGear: '02. Gear and locations',
         navCloud: '03. Cloud sync',
         navCollaboration: 'Collaboration design',
+        guideSectionsLabel: 'Guide sections',
+        guideStepNavLabel: 'Guide previous and next',
         previousPage: 'Previous',
         nextPage: 'Next',
         basicTitle: '00. Basic setup',
@@ -701,7 +705,9 @@
         navEvent: '01. イベント作成',
         navGear: '02. 物品と場所',
         navCloud: '03. クラウド同期',
-        navCollaboration: 'Collaboration design',
+        navCollaboration: '共同作業設計',
+        guideSectionsLabel: 'ガイドのページ',
+        guideStepNavLabel: 'ガイドの前後移動',
         previousPage: '前へ',
         nextPage: '次へ',
         basicTitle: '00. 基本設定',
@@ -930,6 +936,9 @@
       });
       document.querySelectorAll('[data-i18n-alt]').forEach((node) => {
         node.setAttribute('alt', copy[node.dataset.i18nAlt] || node.getAttribute('alt') || '');
+      });
+      document.querySelectorAll('[data-i18n-aria-label]').forEach((node) => {
+        node.setAttribute('aria-label', copy[node.dataset.i18nAriaLabel] || node.getAttribute('aria-label') || '');
       });
       document.getElementById('home-link').href = homeUrlForLanguage(language);
       document.getElementById('home-brand-link').href = homeUrlForLanguage(language);
