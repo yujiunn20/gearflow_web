@@ -955,17 +955,20 @@
     }
 
     async function signOut() {
+      setSystemMessage('正在登出...');
       try {
         await client.auth.signOut();
       } catch (error) {
-        setAuthMessage(error.message || '登出失敗，已回到登入畫面。', true);
+        setAuthMessage(error.message || '登出時發生錯誤，已先切回登入畫面。', true);
+      } finally {
+        state.session = null;
+        state.workspaces = [];
+        state.selectedWorkspaceId = '';
+        state.events = [];
+        state.selectedEventId = '';
+        renderAuthState();
+        setTimeout(() => window.location.replace('/'), 150);
       }
-      state.session = null;
-      state.workspaces = [];
-      state.selectedWorkspaceId = '';
-      state.events = [];
-      state.selectedEventId = '';
-      renderAuthState();
     }
 
     async function afterSignIn() {
@@ -1005,8 +1008,8 @@
       if (!workspaceIds.length) {
         state.workspaces = [];
         state.selectedWorkspaceId = '';
-        workspaceList.innerHTML = '<div class="event-empty">你目前沒有可查看的雲端空間。</div>';
-        setSystemMessage('你目前沒有可查看的雲端空間。', true);
+        workspaceList.innerHTML = '<div class="event-empty">目前這個帳號沒有被加入任何雲端空間。請確認 Supabase 的 `workspace_members` 是否有你的 user_id。<br><br>如果你只是想退出，右上角可直接登出。</div>';
+        setSystemMessage('目前這個帳號沒有可查看的雲端空間。請確認 workspace_members 與權限設定。', true);
         workspaceTitle.textContent = '事件頁';
         workspaceSummary.textContent = '尚未加入任何雲端空間。';
         workspaceBadges.innerHTML = '';
