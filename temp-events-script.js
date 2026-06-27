@@ -41,6 +41,7 @@
       loading: false,
       filter: 'all',
       query: '',
+      scrollRequested: false,
     };
 
     function escapeHtml(value) {
@@ -70,6 +71,7 @@
     function setVisible(node, visible) {
       node.classList.toggle('app-hidden', !visible);
     }
+
 
     window.addEventListener('error', (event) => {
       const message = event?.message || '未知腳本錯誤';
@@ -335,6 +337,7 @@
       renderEvents();
       renderMetrics(state.events);
       setSystemMessage(`已載入 ${state.events.length} 個事件。`);
+      scrollToDetailIfNeeded();
     }
 
     function normalizeEvent(row) {
@@ -410,6 +413,7 @@
             persistSelectedEventId(state.selectedWorkspaceId, state.selectedEventId);
           }
           renderEvents();
+          scrollToDetailIfNeeded();
         });
       });
 

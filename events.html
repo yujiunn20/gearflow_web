@@ -606,6 +606,33 @@
         grid-template-columns: 1fr;
       }
 
+      .events-layout {
+        gap: 16px;
+      }
+
+      .events-hero {
+        padding: 22px;
+      }
+
+      .events-list-panel,
+      .events-detail-panel {
+        padding: 18px;
+      }
+
+      .event-toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .event-card {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .event-card-badge {
+        width: 40px;
+        height: 40px;
+      }
+
       .status-grid,
       .event-detail-grid {
         grid-template-columns: 1fr;
@@ -783,6 +810,7 @@
       loading: false,
       filter: 'all',
       query: '',
+      scrollRequested: false,
     };
 
     function escapeHtml(value) {
@@ -811,6 +839,14 @@
 
     function setVisible(node, visible) {
       node.classList.toggle('app-hidden', !visible);
+    }
+
+    function scrollToDetailIfNeeded() {
+      if (window.matchMedia('(max-width: 920px)').matches) {
+        window.requestAnimationFrame(() => {
+          eventDetail?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
     }
 
     window.addEventListener('error', (event) => {
@@ -1077,6 +1113,7 @@
       renderEvents();
       renderMetrics(state.events);
       setSystemMessage(`已載入 ${state.events.length} 個事件。`);
+      scrollToDetailIfNeeded();
     }
 
     function normalizeEvent(row) {
@@ -1152,6 +1189,7 @@
             persistSelectedEventId(state.selectedWorkspaceId, state.selectedEventId);
           }
           renderEvents();
+          scrollToDetailIfNeeded();
         });
       });
 
