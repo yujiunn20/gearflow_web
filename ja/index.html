@@ -18,10 +18,10 @@
       <a href="#usage">使い方</a>
       <a href="#pricing">プラン</a>
       <a href="#web">ウェブ版</a>
-      <select class="lang-select" onchange="location = this.value;">
-        <option value="../index.html">繁體中文</option>
-        <option value="../en/index.html">English</option>
-        <option value="index.html" selected>日本語</option>
+      <select class="lang-select" data-current-language="ja">
+        <option value="../index.html" data-language="zh">繁體中文</option>
+        <option value="../en/index.html" data-language="en">English</option>
+        <option value="index.html" data-language="ja" selected>日本語</option>
       </select>
     </nav>
     <button class="hamburger" aria-label="メニュー" onclick="document.body.classList.toggle('nav-open')">
@@ -108,7 +108,7 @@
           <rect x="20" y="40" width="30" height="30" rx="2" fill="var(--line)"/><rect x="60" y="40" width="40" height="10" rx="2" fill="var(--line)"/><rect x="60" y="55" width="40" height="10" rx="2" fill="var(--line)"/>
         </svg>
         <p style="color: var(--muted); font-weight: 600; margin: 0;">Web Dashboard Coming Soon</p>
-        <a class="web-entry-link" href="../app/index.html">ウェブ版へ進む</a>
+        <a class="web-entry-link" href="../events.html?lang=ja">ウェブ版へ進む</a>
         <p class="web-entry-note">サインイン後にクラウドワークスペースへ入ります。モバイルではアプリに近いレイアウトになります。</p>
       </div>
     </section>
@@ -121,6 +121,15 @@
     <p>&copy; 2026 GearFlow. All rights reserved.</p>
   </footer>
   <script>
+    const languageSelect = document.querySelector('.lang-select');
+    if (languageSelect) {
+      localStorage.setItem('gearflow-language', languageSelect.dataset.currentLanguage || 'zh');
+      languageSelect.addEventListener('change', function() {
+        const option = languageSelect.options[languageSelect.selectedIndex];
+        localStorage.setItem('gearflow-language', option.dataset.language || 'zh');
+        location = languageSelect.value;
+      });
+    }
     document.querySelectorAll('.nav-links a').forEach(function(a) {
       a.addEventListener('click', function() { document.body.classList.remove('nav-open'); });
     });

@@ -34,7 +34,8 @@
     }
 
     .events-top-actions a,
-    .events-top-actions button {
+    .events-top-actions button,
+    .language-control {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -47,6 +48,21 @@
       font: inherit;
       font-weight: 700;
       cursor: pointer;
+    }
+
+    .language-control {
+      gap: 8px;
+      cursor: default;
+    }
+
+    .language-select {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      outline: none;
     }
 
     .events-top-actions a:hover,
@@ -296,6 +312,7 @@
       cursor: pointer;
     }
 
+
     .page-back-button:hover,
     .page-back-button:focus-visible {
       border-color: var(--accent);
@@ -544,6 +561,7 @@
       cursor: pointer;
     }
 
+
     .event-detail-item:hover,
     .event-detail-item:focus-visible {
       border-color: var(--accent);
@@ -708,6 +726,7 @@
       cursor: pointer;
     }
 
+
     .filter-chip.active {
       border-color: var(--accent);
       color: var(--accent-ink);
@@ -803,26 +822,33 @@
         <span>GearFlow</span>
       </a>
       <div class="events-top-actions">
-        <a href="index.html">回首頁</a>
-        <a href="guide.html">使用說明</a>
-        <button id="sign-out-btn" type="button" class="login-hidden">登出</button>
+        <a href="index.html" data-i18n="home">回首頁</a>
+        <label class="language-control">
+          <span data-i18n="language">語言</span>
+          <select id="language-select" class="language-select" aria-label="Language">
+            <option value="zh">中文</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+          </select>
+        </label>
+        <button id="sign-out-btn" type="button" class="login-hidden" data-i18n="signOut">登出</button>
       </div>
     </div>
 
     <div class="system-banner" id="system-status" role="status" aria-live="polite">
-      <strong>系統</strong>
-      <span id="system-status-text">準備連線 Supabase。</span>
+      <strong data-i18n="system">系統</strong>
+      <span id="system-status-text" data-i18n="readyConnect">準備連線 Supabase。</span>
     </div>
 
     <section class="auth-shell" id="auth-shell">
       <div class="auth-hero">
         <p class="eyebrow" style="margin-top: 0;">Supabase</p>
-        <h1>登入後先選雲端空間，再看事件</h1>
-        <p class="events-hero-note">這一版是唯讀查看台。登入後先挑選你的雲端空間，再點進事件頁檢視內容，不提供編輯功能。</p>
+        <h1 data-i18n="authTitle">登入後先選雲端空間，再看事件</h1>
+        <p class="events-hero-note" data-i18n="authIntro">這一版是唯讀查看台。登入後先挑選你的雲端空間，再點進事件頁檢視內容，不提供編輯功能。</p>
       </div>
 
       <div class="auth-panel">
-        <p class="eyebrow" style="margin-top: 0;">登入</p>
+        <p class="eyebrow" style="margin-top: 0;" data-i18n="signIn">登入</p>
         <form id="auth-form" class="auth-form">
           <div>
             <label for="auth-email">Email</label>
@@ -833,27 +859,27 @@
             <input id="auth-password" type="password" autocomplete="current-password" minlength="6" required>
           </div>
           <div class="auth-actions">
-            <button class="primary-button" id="auth-submit" type="submit">登入</button>
-            <button class="secondary-button" id="auth-toggle" type="button">建立帳號</button>
+            <button class="primary-button" id="auth-submit" type="submit" data-i18n="signIn">登入</button>
+            <button class="secondary-button" id="auth-toggle" type="button" data-i18n="createAccount">建立帳號</button>
           </div>
-          <p id="auth-status" class="auth-status">請先登入 Supabase 帳號。</p>
+          <p id="auth-status" class="auth-status" data-i18n="signInPrompt">請先登入 Supabase 帳號。</p>
         </form>
         <div class="status-grid">
           <div class="status-card">
             <strong>Login</strong>
-            <span>登入後才看到工作區與事件</span>
+            <span data-i18n="loginCard">登入後才看到工作區與事件</span>
           </div>
           <div class="status-card">
             <strong>Workspace</strong>
-            <span>先選雲端空間，再選事件</span>
+            <span data-i18n="workspaceCard">先選雲端空間，再選事件</span>
           </div>
           <div class="status-card">
             <strong>Viewer</strong>
-            <span>目前只讀，不開放編輯</span>
+            <span data-i18n="viewerCard">目前只讀，不開放編輯</span>
           </div>
           <div class="status-card">
             <strong>Supabase</strong>
-            <span>和 App 使用同一組雲端資料</span>
+            <span data-i18n="supabaseCard">和 App 使用同一組雲端資料</span>
           </div>
         </div>
       </div>
@@ -862,9 +888,9 @@
     <section class="workspace-shell app-hidden app-page" id="workspace-shell">
       <aside class="workspace-panel">
         <div>
-          <p class="eyebrow" style="margin-top: 0;">雲端空間</p>
-          <h2 style="margin: 0 0 8px;">選擇工作區</h2>
-          <p class="workspace-note">登入後會列出你有權限查看的雲端空間。點一個工作區，就會載入該空間底下的事件。</p>
+          <p class="eyebrow" style="margin-top: 0;" data-i18n="cloudWorkspace">雲端空間</p>
+          <h2 style="margin: 0 0 8px;" data-i18n="selectWorkspace">選擇工作區</h2>
+          <p class="workspace-note" data-i18n="workspaceNote">登入後會列出你有權限查看的雲端空間。點一個工作區，就會載入該空間底下的事件。</p>
         </div>
         <div class="workspace-selector" id="workspace-list"></div>
       </aside>
@@ -872,26 +898,26 @@
       <div class="events-hero app-page">
         <div>
           <p class="eyebrow" style="margin-top: 0;">Web View</p>
-          <h1 id="workspace-title">事件頁</h1>
-          <p class="events-hero-note" id="workspace-summary">尚未選擇工作區。</p>
+          <h1 id="workspace-title" data-i18n="eventPage">事件頁</h1>
+          <p class="events-hero-note" id="workspace-summary" data-i18n="noWorkspaceSelected">尚未選擇工作區。</p>
           <div class="workspace-badges" id="workspace-badges"></div>
         </div>
         <div class="events-metrics" style="grid-template-columns: repeat(2, minmax(0, 1fr));">
           <div class="event-metric">
             <strong id="metric-event-count">0</strong>
-            <span>事件數量</span>
+            <span data-i18n="eventCount">事件數量</span>
           </div>
           <div class="event-metric">
             <strong id="metric-active-count">0</strong>
-            <span>進行中</span>
+            <span data-i18n="active">進行中</span>
           </div>
           <div class="event-metric">
             <strong id="metric-site-count">0</strong>
-            <span>站點數量</span>
+            <span data-i18n="siteCount">站點數量</span>
           </div>
           <div class="event-metric">
             <strong id="metric-item-count">0</strong>
-            <span>裝備項目</span>
+            <span data-i18n="gearItems">裝備項目</span>
           </div>
         </div>
       </div>
@@ -901,18 +927,18 @@
       <aside class="events-list-panel">
         <div class="events-list-head">
           <div>
-            <h2>事件列表</h2>
-            <p id="event-list-context">點選事件即可查看詳情。</p>
+            <h2 data-i18n="eventList">事件列表</h2>
+            <p id="event-list-context" data-i18n="eventListHint">點選事件即可查看詳情。</p>
           </div>
-          <button class="page-back-button" id="back-to-workspaces" type="button">返回工作區</button>
+          <button class="page-back-button" id="back-to-workspaces" type="button" data-i18n="backToWorkspaces">返回工作區</button>
         </div>
         <div class="event-toolbar">
-          <input id="event-search" class="event-search" type="search" placeholder="搜尋事件、描述、日期">
+          <input id="event-search" class="event-search" type="search" placeholder="搜尋事件、描述、日期" data-i18n-placeholder="searchEvents">
           <div class="event-filters" id="event-filters">
-            <button class="filter-chip active" type="button" data-filter="all">全部</button>
-            <button class="filter-chip" type="button" data-filter="active">進行中</button>
-            <button class="filter-chip" type="button" data-filter="draft">草稿</button>
-            <button class="filter-chip" type="button" data-filter="completed">已完成</button>
+            <button class="filter-chip active" type="button" data-filter="all" data-i18n="all">全部</button>
+            <button class="filter-chip" type="button" data-filter="active" data-i18n="active">進行中</button>
+            <button class="filter-chip" type="button" data-filter="draft" data-i18n="draft">草稿</button>
+            <button class="filter-chip" type="button" data-filter="completed" data-i18n="completed">已完成</button>
           </div>
         </div>
         <div class="events-list" id="event-list"></div>
@@ -928,6 +954,24 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlqc3VoZmV6bmZucHFweGt3bW5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxODc2NTgsImV4cCI6MjA5Nzc2MzY1OH0.Ca-TuNTvBD8RaPYP_mULtDuLpLuJS-ew4QMIL4A4JA4';
     const WORKSPACE_CACHE_KEY = 'gearflow-web-selected-workspace';
     const WORKSPACE_EVENT_CACHE_PREFIX = 'gearflow-web-selected-event:';
+    const LANGUAGE_CACHE_KEY = 'gearflow-language';
+
+    const messages = {
+      zh: {
+        home: '回首頁', language: '語言', signOut: '登出', system: '系統', readyConnect: '準備連線 Supabase。',
+        authTitle: '登入後先選雲端空間，再看事件', authIntro: '這一版是唯讀查看台。登入後先挑選你的雲端空間，再點進事件頁檢視內容，不提供編輯功能。',
+        signIn: '登入', createAccount: '建立帳號', useExistingAccount: '使用既有帳號', signInPrompt: '請先登入 Supabase 帳號。', loginCard: '登入後才看到工作區與事件', workspaceCard: '先選雲端空間，再選事件', viewerCard: '目前只讀，不開放編輯', supabaseCard: '和 App 使用同一組雲端資料',
+        cloudWorkspace: '雲端空間', selectWorkspace: '選擇工作區', workspaceNote: '登入後會列出你有權限查看的雲端空間。點一個工作區，就會載入該空間底下的事件。', eventPage: '事件頁', noWorkspaceSelected: '尚未選擇工作區。', eventCount: '事件數量', siteCount: '站點數量', gearItems: '裝備項目',
+        eventList: '事件列表', eventListHint: '點選事件即可查看詳情。', backToWorkspaces: '返回工作區', backToEventList: '返回事件列表', backToEventDetail: '返回事件內容', searchEvents: '搜尋事件、描述、日期', all: '全部', active: '進行中', draft: '草稿', completed: '已完成', archived: '已封存',
+        selectWorkspaceStatus: '請選擇工作區。', viewingEventList: '正在查看事件列表', viewingEventDetail: '正在查看事件內容', viewingItemDetail: '正在查看項目詳細內容。', checkingSession: '正在確認登入狀態...', getSession: '取得登入狀態', cannotGetSession: '無法取得登入狀態', signInLoading: '登入中...', createLoading: '建立帳號中...', verifyEmail: '帳號已建立，請先完成 Email 驗證後再登入。', signInFailed: '登入失敗', signingOut: '正在登出...', signedInAs: '已登入', loadingWorkspaces: '正在載入工作區...', loadWorkspaceAccess: '載入工作區權限', loadCloudWorkspaces: '載入雲端工作區', unnamedWorkspace: '未命名工作區', noViewableWorkspace: '這個帳號目前沒有可查看的雲端空間。', noViewableWorkspaceHint: '請用 App 專案既有 RLS 檢查 workspace_members 是否能以這個 user_id 讀到資料。', noWorkspaceFound: '沒有找到可查看的雲端空間。', loadWorkspaceFailed: '載入工作區失敗', workspaceLoadFailed: '工作區載入失敗，無法載入事件。', refreshOrRelogin: '請重新整理頁面，或先登出後再登入。', noWorkspaceAvailable: '沒有可用的雲端空間。', noOwner: '無 owner', readOnly: '只讀查看', loadingEvents: '正在載入事件', loadingEventContent: '正在載入內容...', loadEvents: '載入事件', loadEventsFailed: '載入事件失敗', loadedEvents: '已載入', noEvents: '這個雲端空間目前還沒有事件。', syncEventsHint: '請先建立或同步事件，這裡才會顯示內容。', noDescription: '無描述', unsetDate: '未設定日期', itemsUnit: '項目', chooseEvent: '請先選擇一個事件。', eventDetail: '事件內容', eventInfo: '事件資訊', eventInfoHint: '建立活動後，這裡會顯示說明、時程與工作重點。', source: '資訊來源', transports: '運輸資訊', sites: '站點', people: '人員', detailFields: '詳細欄位', readonlySource: '唯讀資料，來源為目前事件的 Supabase 內容。', relatedItems: '關聯裝備', relatedPeople: '關聯人員', noRelatedItems: '目前沒有關聯裝備。', noRelatedPeople: '目前沒有關聯人員。', noTransports: '目前沒有運輸資料。', noSites: '目前沒有站點資料。', noItems: '目前沒有裝備項目。', noPeople: '目前沒有花名冊資料。', unnamedEvent: '未命名事件', unnamedTransport: '未命名運輸', unnamedSite: '未命名站點', unnamedItem: '未命名裝備', unnamedPerson: '未命名人員', clickTransport: '點擊查看車輛與聯絡資訊', clickSite: '點擊查看站點資訊', clickItem: '點擊查看裝備狀態', clickPerson: '點擊查看人員狀態', name: '名稱', type: '類型', representative: '代表人', plateId: '車牌 / 編號', phone: '聯絡電話', note: '備註', time: '時間', address: '地址', category: '分類', quantity: '數量', status: '狀態', assignedTransport: '指定運輸', requiredSites: '需求站點', currentLocation: '目前位置', updatedBy: '更新者', updatedAt: '更新時間', title: '職稱', unset: '未設定', unassigned: '未指定', transport: '運輸', site: '站點', warehouse: '倉庫', customLocation: '自訂位置', car: '汽車', truck: '貨車', van: '廂型車', ship: '船', plane: '飛機', cart: '推車', storage: '暫存', other: '其他', planned: '已規劃', loaded: '已上車', onsite: '已到場', returned: '已返回', missing: '遺失', expected: '預計到場', checkedIn: '已報到', absent: '未到', pageError: '頁面錯誤', loadFailed: '載入失敗', timeoutSuffix: '逾時，請重新整理或稍後再試。', enterEmailPassword: '請輸入 Email 與密碼。', readOnlyView: '唯讀檢視', noWorkspaceForUser: '這個帳號目前沒有可查看的雲端空間。', currentUserId: '目前登入 user_id', currentAccount: '目前帳號', noWorkspaceForSignedIn: '但沒有找到可查看的工作區。', cloudWorkspaceLabel: 'Cloud workspace', loadWorkspaceErrorPrefix: '載入工作區失敗', loadEventErrorPrefix: '載入事件失敗', eventNoDescription: '這個事件還沒有描述。', created: 'Created', updated: 'Updated', unnamedDetail: '未命名項目', clickDetail: '點擊查看詳細資訊', noData: '目前沒有資料。', gear: '裝備', pieceUnit: '件'
+      },
+      en: {
+        home: 'Home', language: 'Language', signOut: 'Sign out', system: 'System', readyConnect: 'Ready to connect to Supabase.', authTitle: 'Sign in, choose a cloud workspace, then view events', authIntro: 'This is a read-only web viewer. Pick a cloud workspace, open an event, and review the contents. Editing is not available.', signIn: 'Sign in', createAccount: 'Create account', useExistingAccount: 'Use existing account', signInPrompt: 'Sign in to your Supabase account first.', loginCard: 'Workspaces and events are shown after sign-in', workspaceCard: 'Choose workspace first, then event', viewerCard: 'Read-only. Editing is disabled.', supabaseCard: 'Uses the same cloud data as the app', cloudWorkspace: 'Cloud workspace', selectWorkspace: 'Select workspace', workspaceNote: 'After sign-in, your accessible cloud workspaces are listed here. Select one to load its events.', eventPage: 'Events', noWorkspaceSelected: 'No workspace selected.', eventCount: 'Events', siteCount: 'Sites', gearItems: 'Gear items', eventList: 'Event list', eventListHint: 'Select an event to view details.', backToWorkspaces: 'Back to workspaces', backToEventList: 'Back to event list', backToEventDetail: 'Back to event detail', searchEvents: 'Search events, descriptions, dates', all: 'All', active: 'Active', draft: 'Draft', completed: 'Completed', archived: 'Archived', selectWorkspaceStatus: 'Select a workspace.', viewingEventList: 'Viewing event list', viewingEventDetail: 'Viewing event detail', viewingItemDetail: 'Viewing item detail.', checkingSession: 'Checking sign-in status...', getSession: 'Get session', cannotGetSession: 'Could not get sign-in status', signInLoading: 'Signing in...', createLoading: 'Creating account...', verifyEmail: 'Account created. Verify your email before signing in.', signInFailed: 'Sign-in failed', signingOut: 'Signing out...', signedInAs: 'Signed in as', loadingWorkspaces: 'Loading workspaces...', loadWorkspaceAccess: 'Load workspace access', loadCloudWorkspaces: 'Load cloud workspaces', unnamedWorkspace: 'Untitled workspace', noViewableWorkspace: 'This account has no viewable cloud workspace.', noViewableWorkspaceHint: 'Check existing App RLS and workspace_members for this user_id.', noWorkspaceFound: 'No viewable cloud workspace found.', loadWorkspaceFailed: 'Workspace load failed', workspaceLoadFailed: 'Workspace failed to load, so events cannot be loaded.', refreshOrRelogin: 'Refresh the page or sign out and sign in again.', noWorkspaceAvailable: 'No available cloud workspace.', noOwner: 'No owner', readOnly: 'Read-only', loadingEvents: 'Loading events', loadingEventContent: 'Loading content...', loadEvents: 'Load events', loadEventsFailed: 'Event load failed', loadedEvents: 'Loaded', noEvents: 'This cloud workspace has no events yet.', syncEventsHint: 'Create or sync events first, then content will appear here.', noDescription: 'No description', unsetDate: 'Date not set', itemsUnit: 'items', chooseEvent: 'Select an event first.', eventDetail: 'Event detail', eventInfo: 'Event info', eventInfoHint: 'Event notes, schedule, and work focus will appear here after setup.', source: 'Source', transports: 'Transports', sites: 'Sites', people: 'People', detailFields: 'Detail fields', readonlySource: 'Read-only data from this event in Supabase.', relatedItems: 'Related gear', relatedPeople: 'Related people', noRelatedItems: 'No related gear.', noRelatedPeople: 'No related people.', noTransports: 'No transport data.', noSites: 'No site data.', noItems: 'No gear items.', noPeople: 'No people data.', unnamedEvent: 'Untitled event', unnamedTransport: 'Untitled transport', unnamedSite: 'Untitled site', unnamedItem: 'Untitled gear', unnamedPerson: 'Unnamed person', clickTransport: 'View vehicle and contact details', clickSite: 'View site details', clickItem: 'View gear status', clickPerson: 'View person status', name: 'Name', type: 'Type', representative: 'Representative', plateId: 'Plate / ID', phone: 'Phone', note: 'Note', time: 'Time', address: 'Address', category: 'Category', quantity: 'Quantity', status: 'Status', assignedTransport: 'Assigned transport', requiredSites: 'Required sites', currentLocation: 'Current location', updatedBy: 'Updated by', updatedAt: 'Updated at', title: 'Title', unset: 'Not set', unassigned: 'Unassigned', transport: 'Transport', site: 'Site', warehouse: 'Warehouse', customLocation: 'Custom location', car: 'Car', truck: 'Truck', van: 'Van', ship: 'Boat', plane: 'Plane', cart: 'Cart', storage: 'Staging area', other: 'Other', planned: 'Planned', loaded: 'Loaded', onsite: 'Onsite', returned: 'Returned', missing: 'Missing', expected: 'Expected', checkedIn: 'Checked in', absent: 'Absent', pageError: 'Page error', loadFailed: 'Load failed', timeoutSuffix: 'timed out. Refresh or try again later.', enterEmailPassword: 'Enter email and password.', readOnlyView: 'Read-only view', noWorkspaceForUser: 'This account has no viewable cloud workspace.', currentUserId: 'Current signed-in user_id', currentAccount: 'current account', noWorkspaceForSignedIn: 'but no viewable workspace was found.', cloudWorkspaceLabel: 'Cloud workspace', loadWorkspaceErrorPrefix: 'Workspace load failed', loadEventErrorPrefix: 'Event load failed', eventNoDescription: 'This event has no description yet.', created: 'Created', updated: 'Updated', unnamedDetail: 'Untitled item', clickDetail: 'View details', noData: 'No data.', gear: 'Gear', pieceUnit: 'pcs'
+      },
+      ja: {
+        home: 'ホーム', language: '言語', signOut: 'ログアウト', system: 'システム', readyConnect: 'Supabase に接続できます。', authTitle: 'ログインしてワークスペースを選び、イベントを見る', authIntro: 'このWeb版は読み取り専用です。クラウドワークスペースを選び、イベント内容を確認できます。編集はできません。', signIn: 'ログイン', createAccount: 'アカウント作成', useExistingAccount: '既存アカウントを使う', signInPrompt: 'Supabase アカウントでログインしてください。', loginCard: 'ログイン後にワークスペースとイベントを表示', workspaceCard: '先にワークスペース、次にイベントを選択', viewerCard: '読み取り専用。編集は無効です。', supabaseCard: 'App と同じクラウドデータを使用', cloudWorkspace: 'クラウドワークスペース', selectWorkspace: 'ワークスペース選択', workspaceNote: 'ログイン後、閲覧可能なクラウドワークスペースが表示されます。選択するとイベントを読み込みます。', eventPage: 'イベント', noWorkspaceSelected: 'ワークスペース未選択。', eventCount: 'イベント数', siteCount: '拠点数', gearItems: '物品', eventList: 'イベント一覧', eventListHint: 'イベントを選択して詳細を表示します。', backToWorkspaces: 'ワークスペースへ戻る', backToEventList: 'イベント一覧へ戻る', backToEventDetail: 'イベント内容へ戻る', searchEvents: 'イベント、説明、日付を検索', all: 'すべて', active: '進行中', draft: '下書き', completed: '完了', archived: 'アーカイブ済み', selectWorkspaceStatus: 'ワークスペースを選択してください。', viewingEventList: 'イベント一覧を表示中', viewingEventDetail: 'イベント内容を表示中', viewingItemDetail: '項目詳細を表示中。', checkingSession: 'ログイン状態を確認中...', getSession: 'ログイン状態取得', cannotGetSession: 'ログイン状態を取得できません', signInLoading: 'ログイン中...', createLoading: 'アカウント作成中...', verifyEmail: 'アカウントを作成しました。メール確認後にログインしてください。', signInFailed: 'ログインに失敗しました', signingOut: 'ログアウト中...', signedInAs: 'ログイン中', loadingWorkspaces: 'ワークスペースを読み込み中...', loadWorkspaceAccess: 'ワークスペース権限を読み込み', loadCloudWorkspaces: 'クラウドワークスペースを読み込み', unnamedWorkspace: '名称未設定のワークスペース', noViewableWorkspace: 'このアカウントで閲覧できるクラウドワークスペースはありません。', noViewableWorkspaceHint: 'App 既存の RLS と workspace_members の user_id を確認してください。', noWorkspaceFound: '閲覧可能なワークスペースがありません。', loadWorkspaceFailed: 'ワークスペース読み込み失敗', workspaceLoadFailed: 'ワークスペースを読み込めないため、イベントを読み込めません。', refreshOrRelogin: 'ページを更新するか、ログアウト後に再ログインしてください。', noWorkspaceAvailable: '利用できるワークスペースがありません。', noOwner: 'owner なし', readOnly: '読み取り専用', loadingEvents: 'イベント読み込み中', loadingEventContent: '内容を読み込み中...', loadEvents: 'イベント読み込み', loadEventsFailed: 'イベント読み込み失敗', loadedEvents: '読み込み完了', noEvents: 'このワークスペースにはまだイベントがありません。', syncEventsHint: '先にイベントを作成または同期すると、ここに表示されます。', noDescription: '説明なし', unsetDate: '日付未設定', itemsUnit: '点', chooseEvent: '先にイベントを選択してください。', eventDetail: 'イベント内容', eventInfo: 'イベント情報', eventInfoHint: 'イベント作成後、説明・時程・作業重点がここに表示されます。', source: '情報元', transports: '交通手段', sites: '拠点', people: '人員', detailFields: '詳細項目', readonlySource: 'Supabase の現在イベントから取得した読み取り専用データです。', relatedItems: '関連物品', relatedPeople: '関連人員', noRelatedItems: '関連物品はありません。', noRelatedPeople: '関連人員はありません。', noTransports: '交通手段データはありません。', noSites: '拠点データはありません。', noItems: '物品はありません。', noPeople: '人員データはありません。', unnamedEvent: '名称未設定イベント', unnamedTransport: '名称未設定交通手段', unnamedSite: '名称未設定拠点', unnamedItem: '名称未設定物品', unnamedPerson: '名称未設定人員', clickTransport: '車両と連絡先を表示', clickSite: '拠点情報を表示', clickItem: '物品状態を表示', clickPerson: '人員状態を表示', name: '名前', type: '種類', representative: '担当者', plateId: 'ナンバー / ID', phone: '電話', note: 'メモ', time: '時間', address: '住所', category: 'カテゴリ', quantity: '数量', status: '状態', assignedTransport: '担当交通手段', requiredSites: '必要拠点', currentLocation: '現在地', updatedBy: '更新者', updatedAt: '更新時間', title: '役職', unset: '未設定', unassigned: '未定', transport: '交通手段', site: '拠点', warehouse: '倉庫', customLocation: 'カスタム位置', car: '車', truck: 'トラック', van: 'バン', ship: '船', plane: '飛行機', cart: 'カート', storage: '一時置き場', other: 'その他', planned: '予定', loaded: '積載済み', onsite: '現地到着', returned: '返却済み', missing: '紛失', expected: '未到着', checkedIn: '到着済み', absent: '欠席', pageError: 'ページエラー', loadFailed: '読み込み失敗', timeoutSuffix: 'タイムアウトしました。更新するか後で再試行してください。', enterEmailPassword: 'メールとパスワードを入力してください。', readOnlyView: '読み取り専用表示', noWorkspaceForUser: 'このアカウントで閲覧できるクラウドワークスペースはありません。', currentUserId: '現在ログイン中の user_id', currentAccount: '現在のアカウント', noWorkspaceForSignedIn: '閲覧可能なワークスペースがありません。', cloudWorkspaceLabel: 'Cloud workspace', loadWorkspaceErrorPrefix: 'ワークスペース読み込み失敗', loadEventErrorPrefix: 'イベント読み込み失敗', eventNoDescription: 'このイベントにはまだ説明がありません。', created: 'Created', updated: 'Updated', unnamedDetail: '名称未設定項目', clickDetail: '詳細を表示', noData: 'データはありません。', gear: '物品', pieceUnit: '個'
+      }
+    };
     const { createClient } = supabase;
     const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -943,6 +987,7 @@
     const systemStatus = document.getElementById('system-status');
     const systemStatusText = document.getElementById('system-status-text');
     const signOutBtn = document.getElementById('sign-out-btn');
+    const languageSelect = document.getElementById('language-select');
     const workspaceList = document.getElementById('workspace-list');
 
     const backToWorkspacesBtn = document.getElementById('back-to-workspaces');
@@ -973,6 +1018,7 @@
       diagnostics: [],
       selectedDetail: null,
       view: 'workspace',
+      language: loadLanguage(),
     };
 
     function escapeHtml(value) {
@@ -982,6 +1028,64 @@
         .replaceAll('>', '&gt;')
         .replaceAll('"', '&quot;')
         .replaceAll("'", '&#39;');
+    }
+
+    function loadLanguage() {
+      const params = new URLSearchParams(window.location.search);
+      const urlLanguage = params.get('lang');
+      if (urlLanguage && messages[urlLanguage]) {
+        persistLanguage(urlLanguage);
+        return urlLanguage;
+      }
+      try {
+        const saved = localStorage.getItem(LANGUAGE_CACHE_KEY);
+        if (saved && messages[saved]) return saved;
+      } catch {
+        // ignore
+      }
+      const browserLanguage = (navigator.language || '').toLowerCase();
+      if (browserLanguage.startsWith('ja')) return 'ja';
+      if (browserLanguage.startsWith('zh')) return 'zh';
+      return 'en';
+    }
+
+    function persistLanguage(language) {
+      try {
+        localStorage.setItem(LANGUAGE_CACHE_KEY, language);
+      } catch {
+        // ignore
+      }
+    }
+
+    function t(key) {
+      return messages[state.language]?.[key] || messages.en[key] || key;
+    }
+
+    function applyTranslations() {
+      document.documentElement.lang = state.language === 'zh' ? 'zh-Hant' : state.language;
+      if (languageSelect) languageSelect.value = state.language;
+      document.querySelectorAll('[data-i18n]').forEach((node) => {
+        node.textContent = t(node.getAttribute('data-i18n'));
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach((node) => {
+        node.setAttribute('placeholder', t(node.getAttribute('data-i18n-placeholder')));
+      });
+      authSubmit.textContent = state.authMode === 'signIn' ? t('signIn') : t('createAccount');
+      authToggle.textContent = state.authMode === 'signIn' ? t('createAccount') : t('useExistingAccount');
+    }
+
+    function rerenderCurrentView() {
+      applyTranslations();
+      renderMetrics(state.events);
+      if (!state.session) {
+        setAuthMessage(t('signInPrompt'));
+        return;
+      }
+      renderWorkspaceList();
+      if (state.events.length) renderEvents();
+      if (state.view === 'detail') renderEventDetail();
+      if (state.view === 'subdetail') renderSubDetailPage();
+      setAppView(state.view);
     }
 
     function setSystemMessage(message, isError = false) {
@@ -1022,13 +1126,13 @@
       eventsShell.classList.toggle('events-view-detail', view === 'detail');
       eventsShell.classList.toggle('events-view-subdetail', view === 'subdetail');
       if (view === 'workspace') {
-        setSystemMessage('請選擇工作區。');
+        setSystemMessage(t('selectWorkspaceStatus'));
       } else if (view === 'events') {
-        setSystemMessage(`正在查看事件列表：${currentWorkspace()?.name || '未選擇工作區'}`);
+        setSystemMessage(`${t('viewingEventList')}：${currentWorkspace()?.name || t('noWorkspaceSelected')}`);
       } else if (view === 'detail') {
-        setSystemMessage(`正在查看事件內容：${currentEvent()?.name || '未選擇事件'}`);
+        setSystemMessage(`${t('viewingEventDetail')}：${currentEvent()?.name || t('chooseEvent')}`);
       } else if (view === 'subdetail') {
-        setSystemMessage('正在查看項目詳細內容。');
+        setSystemMessage(t('viewingItemDetail'));
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1049,8 +1153,8 @@
       state.selectedDetail = null;
       state.view = 'workspace';
       workspaceList.innerHTML = '';
-      workspaceTitle.textContent = '事件頁';
-      workspaceSummary.textContent = '尚未選擇工作區。';
+      workspaceTitle.textContent = t('eventPage');
+      workspaceSummary.textContent = t('noWorkspaceSelected');
       workspaceBadges.innerHTML = '';
       eventList.innerHTML = '';
       eventDetail.innerHTML = '';
@@ -1123,8 +1227,8 @@
 
     async function restoreSession() {
       try {
-        setSystemMessage('正在確認登入狀態...');
-        const { data, error } = await withTimeout(client.auth.getSession(), '取得登入狀態');
+        setSystemMessage(t('checkingSession'));
+        const { data, error } = await withTimeout(client.auth.getSession(), t('getSession'));
         if (error) {
           setAuthMessage(error.message, true);
           renderAuthState();
@@ -1137,7 +1241,7 @@
           renderAuthState();
         }
       } catch (error) {
-        setAuthMessage(error.message || '無法取得登入狀態', true);
+        setAuthMessage(error.message || t('cannotGetSession'), true);
         renderAuthState();
       }
     }
@@ -1146,13 +1250,13 @@
       const email = authEmail.value.trim();
       const password = authPassword.value;
       if (!email || !password) {
-        setAuthMessage('請輸入 Email 與密碼。', true);
+        setAuthMessage(t('enterEmailPassword'), true);
         return;
       }
 
       authSubmit.disabled = true;
       authToggle.disabled = true;
-      setAuthMessage(state.authMode === 'signIn' ? '登入中...' : '建立帳號中...');
+      setAuthMessage(state.authMode === 'signIn' ? t('signInLoading') : t('createLoading'));
 
       try {
         const result = state.authMode === 'signIn'
@@ -1164,14 +1268,14 @@
         }
 
         if (!result.data.session) {
-          setAuthMessage('帳號已建立，請先完成 Email 驗證後再登入。', false);
+          setAuthMessage(t('verifyEmail'), false);
           return;
         }
 
         state.session = result.data.session;
         await afterSignIn();
       } catch (error) {
-        setAuthMessage(error.message || '登入失敗', true);
+        setAuthMessage(error.message || t('signInFailed'), true);
       } finally {
         authSubmit.disabled = false;
         authToggle.disabled = false;
@@ -1183,7 +1287,7 @@
       if (state.isSigningOut) return;
       state.isSigningOut = true;
       signOutBtn.disabled = true;
-      setSystemMessage('正在登出...');
+      setSystemMessage(t('signingOut'));
       state.session = null;
       resetViewerState();
       clearLocalAuthState();
@@ -1199,7 +1303,7 @@
     async function afterSignIn() {
       clearDiagnostics();
       addDiagnostic(`user ${state.session.user.id}`);
-      setAuthMessage(`已登入 ${state.session.user.email}`);
+      setAuthMessage(`${t('signedInAs')} ${state.session.user.email}`);
       setVisible(authShell, false);
       signOutBtn.classList.remove('login-hidden');
       await loadWorkspaces();
@@ -1213,14 +1317,14 @@
       setVisible(eventsShell, false);
       signOutBtn.classList.add('login-hidden');
       signOutBtn.disabled = false;
-      setAuthMessage('請先登入 Supabase 帳號。');
+      setAuthMessage(t('signInPrompt'));
     }
 
     async function loadWorkspaces() {
       if (!state.session) return;
 
-      setSystemMessage('正在載入你的雲端空間...');
-      workspaceList.innerHTML = '<div class="event-empty">正在載入工作區...</div>';
+      setSystemMessage(t('loadingWorkspaces'));
+      workspaceList.innerHTML = `<div class="event-empty">${escapeHtml(t('loadingWorkspaces'))}</div>`;
 
       try {
         const user = state.session.user;
@@ -1229,7 +1333,7 @@
             .from('workspace_members')
             .select('workspace_id, role, email')
             .eq('user_id', user.id),
-          '載入工作區權限'
+          t('loadWorkspaceAccess')
         );
 
         if (memberResult.error) {
@@ -1249,7 +1353,7 @@
               .select('id, name, owner_email')
               .in('id', workspaceIds)
               .order('name', { ascending: true }),
-            '載入雲端空間'
+            t('loadCloudWorkspaces')
           );
           if (workspaceResult.error) throw workspaceResult.error;
           workspaces = workspaceResult.data || [];
@@ -1259,7 +1363,7 @@
 
         state.workspaces = workspaces.map((workspace) => ({
           id: workspace.id,
-          name: workspace.name || '未命名工作區',
+          name: workspace.name || t('unnamedWorkspace'),
           ownerEmail: workspace.owner_email || '',
           role: roleMap.get(workspace.id) || 'viewer',
         }));
@@ -1267,12 +1371,12 @@
         if (!state.workspaces.length) {
           state.selectedWorkspaceId = '';
           workspaceList.innerHTML = `<div class="event-empty">這個帳號目前沒有可查看的雲端空間。<br>目前登入 user_id：${escapeHtml(user.id)}<br>Email：${escapeHtml(user.email || '')}<br>請用 App 專案既有 RLS 檢查 workspace_members 是否能以這個 user_id 讀到資料。</div>`;
-          workspaceTitle.textContent = '事件頁';
+          workspaceTitle.textContent = t('eventPage');
           workspaceSummary.textContent = `已登入 ${escapeHtml(user.email || '目前帳號')}，但沒有找到可查看的工作區。`;
           workspaceBadges.innerHTML = '';
           renderEvents([]);
           renderMetrics([]);
-          setSystemMessage('沒有找到可查看的雲端空間。', true);
+          setSystemMessage(t('noWorkspaceFound'), true);
           return;
         }
 
@@ -1285,10 +1389,10 @@
       } catch (error) {
         addDiagnostic(error.message || String(error));
         workspaceList.innerHTML = `<div class="event-empty">載入工作區失敗：${escapeHtml(error.message || error)}</div>`;
-        eventList.innerHTML = '<div class="event-empty">工作區載入失敗，無法載入事件。</div>';
-        eventDetail.innerHTML = '<div class="event-empty">請重新整理頁面，或先登出後再登入。</div>';
+        eventList.innerHTML = `<div class="event-empty">${escapeHtml(t('workspaceLoadFailed'))}</div>`;
+        eventDetail.innerHTML = `<div class="event-empty">${escapeHtml(t('refreshOrRelogin'))}</div>`;
         renderMetrics([]);
-        setAuthMessage(`載入工作區失敗：${error.message || error}`, true);
+        setAuthMessage(`${t('loadWorkspaceFailed')}：${error.message || error}`, true);
       }
     }
 
@@ -1296,7 +1400,7 @@
       if (!workspaceList) return;
 
       if (!state.workspaces.length) {
-        workspaceList.innerHTML = '<div class="event-empty">沒有可用的雲端空間。</div>';
+        workspaceList.innerHTML = `<div class="event-empty">${escapeHtml(t('noWorkspaceAvailable'))}</div>`;
         return;
       }
 
@@ -1336,22 +1440,22 @@
       const workspace = state.workspaces.find((item) => item.id === workspaceId);
       if (!workspace) return;
 
-      setSystemMessage(`正在載入事件：${workspace.name}`);
+      setSystemMessage(`${t('loadingEvents')}：${workspace.name}`);
       const keepView = options.keepView === true;
       workspaceTitle.textContent = workspace.name;
       workspaceSummary.textContent = `owner: ${workspace.ownerEmail || 'N/A'} · role: ${workspace.role}`;
       workspaceBadges.innerHTML = `
         <span class="pill active">Cloud workspace</span>
         <span class="pill">${escapeHtml(workspace.role)}</span>
-        <span class="pill">只讀查看</span>
+        <span class="pill">${escapeHtml(t('readOnly'))}</span>
       `;
       const eventListContext = document.getElementById('event-list-context');
       if (eventListContext) {
         eventListContext.textContent = `${workspace.name} · 點選事件即可查看詳情。`;
       }
 
-      eventList.innerHTML = '<div class="event-empty">正在載入事件...</div>';
-      eventDetail.innerHTML = '<div class="event-empty">正在載入內容...</div>';
+      eventList.innerHTML = `<div class="event-empty">${escapeHtml(t('loadingEvents'))}</div>`;
+      eventDetail.innerHTML = `<div class="event-empty">${escapeHtml(t('loadingEventContent'))}</div>`;
 
       const { data, error } = await withTimeout(
         client
@@ -1359,14 +1463,14 @@
           .select('*, event_transports(*), event_sites(*), event_items(*), event_people(*)')
           .eq('workspace_id', workspaceId)
           .order('name', { ascending: true }),
-        '載入事件'
+        t('loadEvents')
       );
 
       if (error) {
         addDiagnostic(error.message || String(error));
         eventList.innerHTML = `<div class="event-empty">載入事件失敗：${escapeHtml(error.message)}</div>`;
         eventDetail.innerHTML = `<div class="event-empty">${escapeHtml(error.message)}</div>`;
-        setAuthMessage(`載入事件失敗：${error.message}`, true);
+        setAuthMessage(`${t('loadEventsFailed')}：${error.message}`, true);
         renderMetrics([]);
         return;
       }
@@ -1380,7 +1484,7 @@
       renderWorkspaceList();
       renderEvents();
       renderMetrics(state.events);
-      setSystemMessage(`已載入 ${state.events.length} 個事件。`);
+      setSystemMessage(`${t('loadedEvents')} ${state.events.length}`);
       if (!keepView) {
         setAppView('events');
       }
@@ -1389,7 +1493,7 @@
     function normalizeEvent(row) {
       return {
         id: row.id,
-        name: row.name || '未命名事件',
+        name: row.name || t('unnamedEvent'),
         dateLabel: row.date_label || '',
         status: row.status || 'draft',
         description: row.description || '',
@@ -1431,9 +1535,9 @@
     function renderEvents(events = state.events) {
       events = filteredEvents(events);
       if (!events.length) {
-        eventList.innerHTML = '<div class="event-empty">這個雲端空間目前還沒有事件。</div>';
-        eventDetail.innerHTML = '<div class="event-empty">請先建立或同步事件，這裡才會顯示內容。</div>';
-        if (currentWorkspace()) { setSystemMessage(`目前工作區還沒有事件：${currentWorkspace().name}`); }
+        eventList.innerHTML = `<div class="event-empty">${escapeHtml(t('noEvents'))}</div>`;
+        eventDetail.innerHTML = `<div class="event-empty">${escapeHtml(t('syncEventsHint'))}</div>`;
+        if (currentWorkspace()) { setSystemMessage(`${t('noEvents')}：${currentWorkspace().name}`); }
         return;
       }
 
@@ -1471,8 +1575,8 @@
     function renderEventDetail() {
       const event = currentEvent();
       if (!event) {
-        eventDetail.innerHTML = '<div class="event-empty">請先選擇一個事件。</div>';
-        setSystemMessage('請先選擇一個事件。');
+        eventDetail.innerHTML = `<div class="event-empty">${escapeHtml(t('chooseEvent'))}</div>`;
+        setSystemMessage(t('chooseEvent'));
         return;
       }
 
@@ -1506,7 +1610,7 @@
           <div class="event-detail-grid">
             <div class="event-detail-stat"><strong>${escapeHtml(String(totalTransports))}</strong><span>運輸資訊</span></div>
             <div class="event-detail-stat"><strong>${escapeHtml(String(totalSites))}</strong><span>站點</span></div>
-            <div class="event-detail-stat"><strong>${escapeHtml(String(totalItems))}</strong><span>裝備項目</span></div>
+            <div class="event-detail-stat"><strong>${escapeHtml(String(totalItems))}</strong><span data-i18n="gearItems">裝備項目</span></div>
           </div>
         </div>
 
@@ -1835,6 +1939,12 @@
       renderEvents();
     });
 
+    languageSelect?.addEventListener('change', () => {
+      state.language = languageSelect.value;
+      persistLanguage(state.language);
+      rerenderCurrentView();
+    });
+
     authForm.addEventListener('submit', (event) => {
       event.preventDefault();
       signIn();
@@ -1842,8 +1952,8 @@
 
     authToggle.addEventListener('click', () => {
       state.authMode = state.authMode === 'signIn' ? 'create' : 'signIn';
-      authSubmit.textContent = state.authMode === 'signIn' ? '登入' : '建立帳號';
-      authToggle.textContent = state.authMode === 'signIn' ? '建立帳號' : '使用既有帳號';
+      authSubmit.textContent = state.authMode === 'signIn' ? t('signIn') : t('createAccount');
+      authToggle.textContent = state.authMode === 'signIn' ? t('createAccount') : t('useExistingAccount');
     });
 
     signOutBtn.addEventListener('click', signOut);
@@ -1860,6 +1970,7 @@
       }
     });
 
+    applyTranslations();
     restoreSession();
   </script>
 </body>
