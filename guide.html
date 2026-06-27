@@ -366,10 +366,37 @@
 
       <section id="step-3">
         <h2 data-i18n="stepThreeTitle">03. 團隊同步查看</h2>
-        <p data-i18n="stepThreeBody">[待補內容] 說明多人協作、檢查流程與現場確認方式。</p>
+        <p data-i18n="stepThreeBody">需要多人一起查看或更新活動時，可以把資料放到雲端空間。雲端空間可建立新的空白工作區，也可以把目前本地資料複製成新的雲端工作區，讓團隊用同一份活動資料協作。</p>
+
+        <h3 data-i18n="stepThreeCloudTitle">建立或切換雲端空間</h3>
+        <figure class="guide-shot">
+          <img src="assets/images/cloud.jpg" loading="lazy" data-i18n-alt="stepThreeCloudAlt" alt="雲端空間管理畫面">
+          <figcaption data-i18n="stepThreeCloudCaption">在 Account 的 Cloud Workspaces 裡，可以新增空白雲端空間，或把本地資料 copy 到新的雲端空間。雲端空間右側的切換圖示可以移動到該空間；回到 Events 後，就會看到目前選取的雲端空間資料。</figcaption>
+        </figure>
         <ul>
-          <li data-i18n="placeholderOne">[待補內容] 範例 1</li>
-          <li data-i18n="placeholderTwo">[待補內容] 範例 2</li>
+          <li data-i18n="stepThreeCloudBulletCreate">可以建立新的雲端空間，或把本地資料複製到新的雲端空間。</li>
+          <li data-i18n="stepThreeCloudBulletSwitch">點雲端空間右側的切換 / 移動圖示後，系統會切到該雲端空間。</li>
+          <li data-i18n="stepThreeCloudBulletEvents">切換後回到 Events，看到的就是該雲端空間裡的活動資料。</li>
+        </ul>
+
+        <h3 data-i18n="stepThreeMemberTitle">加入成員與管理權限</h3>
+        <figure class="guide-shot">
+          <img src="assets/images/addmember.jpg" loading="lazy" data-i18n-alt="addMemberAlt" alt="加入雲端成員與管理權限畫面">
+          <figcaption data-i18n="addMemberCaption">雲端空間右側選項中有 Manage members。你可以建立邀請碼讓對方加入，也可以輸入對方 Email 直接加入成員，並設定對方的權限角色。</figcaption>
+        </figure>
+        <ul>
+          <li data-i18n="stepThreeMemberBulletInvite">邀請碼適合讓對方自行加入雲端空間。</li>
+          <li data-i18n="stepThreeMemberBulletEmail">Email 加入適合直接指定已註冊 GearFlow 的使用者。</li>
+          <li data-i18n="stepThreeMemberBulletRole">加入後可以管理成員權限，控制對方能編輯、操作或只查看內容。</li>
+        </ul>
+
+        <h3 data-i18n="stepThreeWorkflowTitle">協作設計：同一份活動資料、不同現場角色</h3>
+        <p data-i18n="stepThreeWorkflowBody">GearFlow 的設計重點不是讓每個人各自記一份清單，而是讓團隊共用同一個活動狀態。規劃者先設定活動、地點、車輛、人員與物品；現場人員只要依照自己的角色更新物品位置與人員報到狀態；只需要查看的人則可以用較低權限確認進度。</p>
+        <ul>
+          <li data-i18n="stepThreeWorkflowBulletRoles">權限分成 owner、plan editor、operator、viewer：管理者可調整工作區與成員，規劃者可編輯計畫，現場操作人員可更新搬運與報到狀態，viewer 則只負責查看。</li>
+          <li data-i18n="stepThreeWorkflowBulletStatus">活動頁會把 Site 與 Vehicle 的物品、人員狀態整理成應到 / 實到 / 多出，現場不用到處翻清單就能知道哪裡還沒完成。</li>
+          <li data-i18n="stepThreeWorkflowBulletMovement">物品與人員的每一次搬入、搬出、check in、check out 都會回到同一份活動資料，減少口頭回報造成的落差。</li>
+          <li data-i18n="stepThreeWorkflowBulletContacts">聯絡資訊只給需要操作活動的人查看；單純 viewer 可以確認誰應該在哪裡，但不會直接看到電話、Email 或 LINE。</li>
         </ul>
       </section>
     </article>
@@ -460,7 +487,25 @@
         stepTwoEventAlt: '活動總覽狀態畫面',
         stepTwoEventCaption: '回到活動頁，可以看到交通工具與 Site 內的物品、人員狀況；應到、實到與多出的項目會集中顯示，方便快速檢查。',
         stepThreeTitle: '03. 團隊同步查看',
-        stepThreeBody: '[待補內容] 說明多人協作、檢查流程與現場確認方式。',
+        stepThreeBody: '需要多人一起查看或更新活動時，可以把資料放到雲端空間。雲端空間可建立新的空白工作區，也可以把目前本地資料複製成新的雲端工作區，讓團隊用同一份活動資料協作。',
+        stepThreeCloudTitle: '建立或切換雲端空間',
+        stepThreeCloudAlt: '雲端空間管理畫面',
+        stepThreeCloudCaption: '在 Account 的 Cloud Workspaces 裡，可以新增空白雲端空間，或把本地資料 copy 到新的雲端空間。雲端空間右側的切換圖示可以移動到該空間；回到 Events 後，就會看到目前選取的雲端空間資料。',
+        stepThreeCloudBulletCreate: '可以建立新的雲端空間，或把本地資料複製到新的雲端空間。',
+        stepThreeCloudBulletSwitch: '點雲端空間右側的切換 / 移動圖示後，系統會切到該雲端空間。',
+        stepThreeCloudBulletEvents: '切換後回到 Events，看到的就是該雲端空間裡的活動資料。',
+        stepThreeMemberTitle: '加入成員與管理權限',
+        addMemberAlt: '加入雲端成員與管理權限畫面',
+        addMemberCaption: '雲端空間右側選項中有 Manage members。你可以建立邀請碼讓對方加入，也可以輸入對方 Email 直接加入成員，並設定對方的權限角色。',
+        stepThreeMemberBulletInvite: '邀請碼適合讓對方自行加入雲端空間。',
+        stepThreeMemberBulletEmail: 'Email 加入適合直接指定已註冊 GearFlow 的使用者。',
+        stepThreeMemberBulletRole: '加入後可以管理成員權限，控制對方能編輯、操作或只查看內容。',
+        stepThreeWorkflowTitle: '協作設計：同一份活動資料、不同現場角色',
+        stepThreeWorkflowBody: 'GearFlow 的設計重點不是讓每個人各自記一份清單，而是讓團隊共用同一個活動狀態。規劃者先設定活動、地點、車輛、人員與物品；現場人員只要依照自己的角色更新物品位置與人員報到狀態；只需要查看的人則可以用較低權限確認進度。',
+        stepThreeWorkflowBulletRoles: '權限分成 owner、plan editor、operator、viewer：管理者可調整工作區與成員，規劃者可編輯計畫，現場操作人員可更新搬運與報到狀態，viewer 則只負責查看。',
+        stepThreeWorkflowBulletStatus: '活動頁會把 Site 與 Vehicle 的物品、人員狀態整理成應到 / 實到 / 多出，現場不用到處翻清單就能知道哪裡還沒完成。',
+        stepThreeWorkflowBulletMovement: '物品與人員的每一次搬入、搬出、check in、check out 都會回到同一份活動資料，減少口頭回報造成的落差。',
+        stepThreeWorkflowBulletContacts: '聯絡資訊只給需要操作活動的人查看；單純 viewer 可以確認誰應該在哪裡，但不會直接看到電話、Email 或 LINE。',
         placeholderOne: '[待補內容] 範例 1',
         placeholderTwo: '[待補內容] 範例 2'
       },
@@ -538,7 +583,25 @@
         stepTwoEventAlt: 'Event overview status screen',
         stepTwoEventCaption: 'Back on the event page, you can see item and people status across vehicles and Sites. Expected, checked-in, and extra items are shown together for quick review.',
         stepThreeTitle: '03. Share with the team',
-        stepThreeBody: '[Placeholder] Explain team collaboration, checks, and on-site confirmation.',
+        stepThreeBody: 'When multiple people need to view or update an event, move the data into a cloud workspace. You can create a blank cloud workspace or copy your current local data into a new cloud workspace so the team works from the same event data.',
+        stepThreeCloudTitle: 'Create or switch cloud workspaces',
+        stepThreeCloudAlt: 'Cloud workspace management screen',
+        stepThreeCloudCaption: 'In Account > Cloud Workspaces, you can create a blank cloud workspace or copy local data into a new cloud workspace. Use the switch icon on the right side of a cloud workspace to move into it; when you return to Events, you will see the data from the selected cloud workspace.',
+        stepThreeCloudBulletCreate: 'Create a new cloud workspace, or copy local data into a new cloud workspace.',
+        stepThreeCloudBulletSwitch: 'Use the switch / move icon on the right side of a cloud workspace to select it.',
+        stepThreeCloudBulletEvents: 'After switching, Events shows the event data inside that cloud workspace.',
+        stepThreeMemberTitle: 'Add members and manage roles',
+        addMemberAlt: 'Add cloud members and manage permissions screen',
+        addMemberCaption: 'The menu on the right side of a cloud workspace includes Manage members. You can create an invite code for someone to join, or enter an email address to add a member directly and assign their role.',
+        stepThreeMemberBulletInvite: 'Invite codes are useful when the other person will join the cloud workspace by themselves.',
+        stepThreeMemberBulletEmail: 'Email add is useful when you want to directly add a registered GearFlow user.',
+        stepThreeMemberBulletRole: 'After adding members, manage their roles to control whether they can edit, operate, or only view content.',
+        stepThreeWorkflowTitle: 'Collaboration design: one event state, different field roles',
+        stepThreeWorkflowBody: 'GearFlow is designed so the team shares one event state instead of each person keeping a separate checklist. Planners set up events, sites, vehicles, people, and gear first. Field operators update item locations and people check-in status according to their role. People who only need visibility can use lower-permission access to confirm progress.',
+        stepThreeWorkflowBulletRoles: 'Roles are owner, plan editor, operator, and viewer: owners manage workspaces and members, planners edit plans, operators update movement and check-in status, and viewers only review progress.',
+        stepThreeWorkflowBulletStatus: 'The event page summarizes Site and Vehicle status as expected, checked in, and extra, so the field team does not need to search through separate lists to find what is unfinished.',
+        stepThreeWorkflowBulletMovement: 'Every item move in/out and every people check in/out updates the same event data, reducing gaps caused by verbal updates.',
+        stepThreeWorkflowBulletContacts: 'Contact info is shown only to people who operate the event. A viewer can confirm who should be where, but does not directly see phone, email, or LINE details.',
         placeholderOne: '[Placeholder] Example 1',
         placeholderTwo: '[Placeholder] Example 2'
       },
@@ -616,7 +679,25 @@
         stepTwoEventAlt: 'イベント総覧ステータス画面',
         stepTwoEventCaption: 'イベント画面に戻ると、交通手段と Site 内の物品・人員状況を確認できます。予定、到着済み、余分な項目がまとめて表示され、すばやく確認できます。',
         stepThreeTitle: '03. チームで共有',
-        stepThreeBody: '[未入力] 複数人での確認、チェック手順、現場確認を説明します。',
+        stepThreeBody: '複数人でイベントを確認・更新する場合は、データをクラウドワークスペースに移します。空のクラウドワークスペースを作成することも、現在のローカルデータを新しいクラウドワークスペースへコピーすることもできます。チーム全員が同じイベントデータを使って作業できます。',
+        stepThreeCloudTitle: 'クラウドワークスペースを作成・切り替え',
+        stepThreeCloudAlt: 'クラウドワークスペース管理画面',
+        stepThreeCloudCaption: 'Account の Cloud Workspaces では、空のクラウドワークスペースを作成したり、ローカルデータを新しいクラウドワークスペースへ copy したりできます。クラウドワークスペース右側の切り替えアイコンでその空間へ移動できます。Events に戻ると、選択中のクラウドワークスペースのデータが表示されます。',
+        stepThreeCloudBulletCreate: '新しいクラウドワークスペースを作成するか、ローカルデータを新しいクラウドワークスペースへコピーできます。',
+        stepThreeCloudBulletSwitch: 'クラウドワークスペース右側の切り替え / 移動アイコンを押すと、その空間に切り替わります。',
+        stepThreeCloudBulletEvents: '切り替え後に Events へ戻ると、そのクラウドワークスペース内のイベントデータが表示されます。',
+        stepThreeMemberTitle: 'メンバー追加と権限管理',
+        addMemberAlt: 'クラウドメンバー追加と権限管理画面',
+        addMemberCaption: 'クラウドワークスペース右側のメニューには Manage members があります。招待コードを作成して相手に参加してもらうことも、Email を入力して直接メンバーに追加し、権限ロールを設定することもできます。',
+        stepThreeMemberBulletInvite: '招待コードは、相手が自分でクラウドワークスペースに参加する場合に使えます。',
+        stepThreeMemberBulletEmail: 'Email 追加は、登録済みの GearFlow ユーザーを直接追加したい場合に使えます。',
+        stepThreeMemberBulletRole: '追加後はメンバー権限を管理し、編集、操作、閲覧のみなどの範囲を制御できます。',
+        stepThreeWorkflowTitle: '共同作業の設計：1つのイベント状態を役割ごとに共有',
+        stepThreeWorkflowBody: 'GearFlow は、各自が別々のチェックリストを持つのではなく、チーム全員が同じイベント状態を共有する設計です。計画担当者がイベント、拠点、車両、人員、物品を先に設定し、現場担当者は自分の役割に応じて物品の位置や人員のチェックイン状態を更新します。確認だけが必要な人は、低い権限で進捗を確認できます。',
+        stepThreeWorkflowBulletRoles: '権限は owner、plan editor、operator、viewer に分かれます。管理者はワークスペースとメンバーを管理し、計画担当者は計画を編集し、現場担当者は搬入・搬出やチェックイン状態を更新し、viewer は進捗確認だけを行います。',
+        stepThreeWorkflowBulletStatus: 'イベント画面では Site と Vehicle の物品・人員状態を、予定 / 到着済み / 余分として整理します。現場で複数のリストを探さなくても、未完了の場所が分かります。',
+        stepThreeWorkflowBulletMovement: '物品の搬入・搬出、人員の check in / check out はすべて同じイベントデータに反映され、口頭報告によるズレを減らします。',
+        stepThreeWorkflowBulletContacts: '連絡先情報はイベントを操作する人だけに表示されます。viewer は誰がどこにいるべきかを確認できますが、電話、Email、LINE は直接表示されません。',
         placeholderOne: '[未入力] 例 1',
         placeholderTwo: '[未入力] 例 2'
       }
