@@ -817,12 +817,12 @@
 <body class="events-page">
   <div class="events-shell">
     <div class="events-topbar">
-      <a class="brand-link" href="index.html">
+      <a class="brand-link" id="home-brand-link" href="index.html">
         <img src="assets/images/gearflow_icon_friendly.png" alt="GearFlow">
         <span>GearFlow</span>
       </a>
       <div class="events-top-actions">
-        <a href="index.html" data-i18n="home">回首頁</a>
+        <a href="index.html" id="home-nav-link" data-i18n="home">回首頁</a>
         <label class="language-control">
           <span data-i18n="language">語言</span>
           <select id="language-select" class="language-select" aria-label="Language">
@@ -1061,6 +1061,12 @@
       return messages[state.language]?.[key] || messages.en[key] || key;
     }
 
+    function homeUrlForLanguage(language) {
+      if (language === 'en') return 'en/index.html';
+      if (language === 'ja') return 'ja/index.html';
+      return 'index.html';
+    }
+
     function applyTranslations() {
       document.documentElement.lang = state.language === 'zh' ? 'zh-Hant' : state.language;
       if (languageSelect) languageSelect.value = state.language;
@@ -1070,6 +1076,8 @@
       document.querySelectorAll('[data-i18n-placeholder]').forEach((node) => {
         node.setAttribute('placeholder', t(node.getAttribute('data-i18n-placeholder')));
       });
+      document.getElementById('home-brand-link')?.setAttribute('href', homeUrlForLanguage(state.language));
+      document.getElementById('home-nav-link')?.setAttribute('href', homeUrlForLanguage(state.language));
       authSubmit.textContent = state.authMode === 'signIn' ? t('signIn') : t('createAccount');
       authToggle.textContent = state.authMode === 'signIn' ? t('createAccount') : t('useExistingAccount');
     }

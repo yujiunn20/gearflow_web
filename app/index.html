@@ -7,6 +7,18 @@
   <meta name="description" content="GearFlow Web 版，登入後才能使用，所有資料只走雲端，並為行動版提供接近 App 的排版。">
   <link rel="icon" href="../assets/images/gearflow_icon_friendly.png">
   <link rel="stylesheet" href="../assets/css/web-app.css?v=20260612f">
+  <script>
+    (function() {
+      var language = 'zh';
+      try {
+        var saved = localStorage.getItem('gearflow-language');
+        if (saved === 'en' || saved === 'ja' || saved === 'zh') language = saved;
+      } catch (error) {
+        // ignore
+      }
+      window.location.replace('../events.html?lang=' + language);
+    })();
+  </script>
 </head>
 <body>
   <div class="web-app">

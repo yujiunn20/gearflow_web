@@ -109,6 +109,12 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
       return messages[state.language]?.[key] || messages.en[key] || key;
     }
 
+    function homeUrlForLanguage(language) {
+      if (language === 'en') return 'en/index.html';
+      if (language === 'ja') return 'ja/index.html';
+      return 'index.html';
+    }
+
     function applyTranslations() {
       document.documentElement.lang = state.language === 'zh' ? 'zh-Hant' : state.language;
       if (languageSelect) languageSelect.value = state.language;
@@ -118,6 +124,8 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
       document.querySelectorAll('[data-i18n-placeholder]').forEach((node) => {
         node.setAttribute('placeholder', t(node.getAttribute('data-i18n-placeholder')));
       });
+      document.getElementById('home-brand-link')?.setAttribute('href', homeUrlForLanguage(state.language));
+      document.getElementById('home-nav-link')?.setAttribute('href', homeUrlForLanguage(state.language));
       authSubmit.textContent = state.authMode === 'signIn' ? t('signIn') : t('createAccount');
       authToggle.textContent = state.authMode === 'signIn' ? t('createAccount') : t('useExistingAccount');
     }

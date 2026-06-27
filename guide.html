@@ -10,47 +10,118 @@
 <body class="policy-page">
   <div class="policy-shell">
     <div class="topbar">
-      <a class="brand-link" href="index.html">
+      <a class="brand-link" id="home-brand-link" href="index.html">
         <img src="assets/images/gearflow_icon_friendly.png" alt="GearFlow">
         <span>GearFlow</span>
       </a>
-      <div class="lang-links">
-        <a href="index.html">回首頁</a>
+      <div class="lang-links" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <a id="home-link" href="index.html" data-i18n="home">回首頁</a>
+        <select id="language-select" class="lang-select" aria-label="Language">
+          <option value="zh">繁體中文</option>
+          <option value="en">English</option>
+          <option value="ja">日本語</option>
+        </select>
       </div>
     </div>
 
     <article class="policy-card">
-      <p class="eyebrow">使用說明</p>
-      <h1>GearFlow 操作模板</h1>
-      <p class="updated">以下內容先保留為模板，之後可直接補上正式說明。</p>
+      <p class="eyebrow" data-i18n="eyebrow">使用說明</p>
+      <h1 data-i18n="title">GearFlow 操作模板</h1>
+      <p class="updated" data-i18n="intro">以下內容先保留為模板，之後可直接補上正式說明。</p>
 
       <section id="step-1">
-        <h2>01. 建立活動</h2>
-        <p>[待補內容] 說明如何新增活動、命名規則、日期與基本資料設定。</p>
+        <h2 data-i18n="stepOneTitle">01. 建立活動</h2>
+        <p data-i18n="stepOneBody">[待補內容] 說明如何新增活動、命名規則、日期與基本資料設定。</p>
         <ul>
-          <li>[待補內容] 範例 1</li>
-          <li>[待補內容] 範例 2</li>
+          <li data-i18n="placeholderOne">[待補內容] 範例 1</li>
+          <li data-i18n="placeholderTwo">[待補內容] 範例 2</li>
         </ul>
       </section>
 
       <section id="step-2">
-        <h2>02. 整理裝備與地點</h2>
-        <p>[待補內容] 說明如何把裝備、倉庫、車輛與目的地對應起來。</p>
+        <h2 data-i18n="stepTwoTitle">02. 整理裝備與地點</h2>
+        <p data-i18n="stepTwoBody">[待補內容] 說明如何把裝備、倉庫、車輛與目的地對應起來。</p>
         <ul>
-          <li>[待補內容] 範例 1</li>
-          <li>[待補內容] 範例 2</li>
+          <li data-i18n="placeholderOne">[待補內容] 範例 1</li>
+          <li data-i18n="placeholderTwo">[待補內容] 範例 2</li>
         </ul>
       </section>
 
       <section id="step-3">
-        <h2>03. 團隊同步查看</h2>
-        <p>[待補內容] 說明多人協作、檢查流程與現場確認方式。</p>
+        <h2 data-i18n="stepThreeTitle">03. 團隊同步查看</h2>
+        <p data-i18n="stepThreeBody">[待補內容] 說明多人協作、檢查流程與現場確認方式。</p>
         <ul>
-          <li>[待補內容] 範例 1</li>
-          <li>[待補內容] 範例 2</li>
+          <li data-i18n="placeholderOne">[待補內容] 範例 1</li>
+          <li data-i18n="placeholderTwo">[待補內容] 範例 2</li>
         </ul>
       </section>
     </article>
   </div>
+
+  <script>
+    const LANGUAGE_CACHE_KEY = 'gearflow-language';
+    const messages = {
+      zh: {
+        pageTitle: 'GearFlow | 使用說明', home: '回首頁', eyebrow: '使用說明', title: 'GearFlow 操作模板', intro: '以下內容先保留為模板，之後可直接補上正式說明。', stepOneTitle: '01. 建立活動', stepOneBody: '[待補內容] 說明如何新增活動、命名規則、日期與基本資料設定。', stepTwoTitle: '02. 整理裝備與地點', stepTwoBody: '[待補內容] 說明如何把裝備、倉庫、車輛與目的地對應起來。', stepThreeTitle: '03. 團隊同步查看', stepThreeBody: '[待補內容] 說明多人協作、檢查流程與現場確認方式。', placeholderOne: '[待補內容] 範例 1', placeholderTwo: '[待補內容] 範例 2'
+      },
+      en: {
+        pageTitle: 'GearFlow | Guide', home: 'Back to home', eyebrow: 'Guide', title: 'GearFlow guide template', intro: 'This page is a template for now. Formal instructions can be added here later.', stepOneTitle: '01. Create an event', stepOneBody: '[Placeholder] Explain how to add an event, naming rules, dates, and basic settings.', stepTwoTitle: '02. Organize gear and locations', stepTwoBody: '[Placeholder] Explain how to connect gear, warehouses, vehicles, and destinations.', stepThreeTitle: '03. Share with the team', stepThreeBody: '[Placeholder] Explain team collaboration, checks, and on-site confirmation.', placeholderOne: '[Placeholder] Example 1', placeholderTwo: '[Placeholder] Example 2'
+      },
+      ja: {
+        pageTitle: 'GearFlow | 使い方', home: 'ホームへ戻る', eyebrow: '使い方', title: 'GearFlow 操作テンプレート', intro: 'このページは一旦テンプレートです。正式な説明は後で追加できます。', stepOneTitle: '01. イベントを作成', stepOneBody: '[未入力] イベント追加、命名ルール、日付、基本設定を説明します。', stepTwoTitle: '02. 物品と場所を整理', stepTwoBody: '[未入力] 物品、倉庫、車両、目的地の紐付けを説明します。', stepThreeTitle: '03. チームで共有', stepThreeBody: '[未入力] 複数人での確認、チェック手順、現場確認を説明します。', placeholderOne: '[未入力] 例 1', placeholderTwo: '[未入力] 例 2'
+      }
+    };
+
+    const languageSelect = document.getElementById('language-select');
+
+    function homeUrlForLanguage(language) {
+      if (language === 'en') return 'en/index.html';
+      if (language === 'ja') return 'ja/index.html';
+      return 'index.html';
+    }
+
+    function loadLanguage() {
+      const params = new URLSearchParams(window.location.search);
+      const urlLanguage = params.get('lang');
+      if (urlLanguage && messages[urlLanguage]) return urlLanguage;
+      try {
+        const saved = localStorage.getItem(LANGUAGE_CACHE_KEY);
+        if (saved && messages[saved]) return saved;
+      } catch {
+        // ignore
+      }
+      const browserLanguage = (navigator.language || '').toLowerCase();
+      if (browserLanguage.startsWith('ja')) return 'ja';
+      if (browserLanguage.startsWith('zh')) return 'zh';
+      return 'en';
+    }
+
+    function persistLanguage(language) {
+      try {
+        localStorage.setItem(LANGUAGE_CACHE_KEY, language);
+      } catch {
+        // ignore
+      }
+    }
+
+    function applyLanguage(language) {
+      const copy = messages[language] || messages.zh;
+      document.documentElement.lang = language === 'zh' ? 'zh-Hant' : language;
+      document.title = copy.pageTitle;
+      languageSelect.value = language;
+      document.querySelectorAll('[data-i18n]').forEach((node) => {
+        node.textContent = copy[node.dataset.i18n] || node.textContent;
+      });
+      document.getElementById('home-link').href = homeUrlForLanguage(language);
+      document.getElementById('home-brand-link').href = homeUrlForLanguage(language);
+      persistLanguage(language);
+    }
+
+    languageSelect.addEventListener('change', () => {
+      applyLanguage(languageSelect.value);
+    });
+
+    applyLanguage(loadLanguage());
+  </script>
 </body>
 </html>
