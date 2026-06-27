@@ -27,6 +27,62 @@
       font-size: 1.05rem;
     }
 
+    .guide-pager {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 28px 0 34px;
+    }
+
+    .guide-pager button,
+    .guide-step-nav button {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.92rem;
+      font-weight: 700;
+      padding: 9px 14px;
+      transition: border-color 160ms ease, color 160ms ease, background 160ms ease, transform 160ms ease;
+    }
+
+    .guide-pager button:hover,
+    .guide-pager button:focus-visible,
+    .guide-step-nav button:hover,
+    .guide-step-nav button:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent-ink);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .guide-pager button[aria-current="page"] {
+      border-color: var(--accent);
+      background: rgba(19, 185, 154, 0.1);
+      color: var(--accent-ink);
+    }
+
+    .guide-page[hidden] {
+      display: none;
+    }
+
+    .guide-step-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 38px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+    }
+
+    .guide-step-nav button:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+      transform: none;
+    }
+
     .guide-shot {
       width: min(100%, 320px);
       margin: 18px auto 30px;
@@ -191,7 +247,7 @@
 
       .guide-shot img,
       .guide-grid .guide-shot img {
-        height: min(82vw, 360px);
+        height: auto;
       }
     }
   </style>
@@ -218,7 +274,15 @@
       <h1 data-i18n="title">GearFlow 操作模板</h1>
       <p class="updated guide-intro" data-i18n="intro">以下內容先保留為模板，之後可直接補上正式說明。</p>
 
-      <section class="guide-section" id="step-0">
+      <nav class="guide-pager" aria-label="Guide sections">
+        <button type="button" data-guide-target="step-0" data-i18n="navBasic" aria-current="page">00. 基本設定</button>
+        <button type="button" data-guide-target="step-1" data-i18n="navEvent">01. 建立活動</button>
+        <button type="button" data-guide-target="step-2" data-i18n="navGear">02. 整理裝備與地點</button>
+        <button type="button" data-guide-target="step-3" data-i18n="navCloud">03. 團隊同步查看</button>
+        <button type="button" data-guide-target="step-collab" data-i18n="navCollaboration">Collaboration design</button>
+      </nav>
+
+      <section class="guide-section guide-page" id="step-0" data-guide-page="step-0">
         <h2 data-i18n="basicTitle">00. 基本設定</h2>
         <p data-i18n="basicIntro">開始建立活動前，建議先整理倉庫、物品、聯絡人與帳戶設定。這些資料之後會在活動規劃、裝車、點名與雲端協作中重複使用。</p>
 
@@ -291,7 +355,7 @@
         <p class="guide-note" data-i18n="basicNote">建議順序：先建立倉庫，再建立物品庫與聯絡人，最後確認設定與帳戶。完成這些基本資料後，建立活動時會更快，也比較不容易漏掉人員或物品。</p>
       </section>
 
-      <section id="step-1">
+      <section class="guide-section guide-page" id="step-1" data-guide-page="step-1" hidden>
         <h2 data-i18n="stepOneTitle">01. 建立活動</h2>
         <p data-i18n="stepOneBody">活動是 GearFlow 的主要工作單位。建立活動後，可以集中管理日期、狀態、地點、車輛、物品與人員，讓事前準備與現場確認都在同一個檢視頁完成。</p>
 
@@ -322,7 +386,7 @@
         </ul>
       </section>
 
-      <section id="step-2">
+      <section class="guide-section guide-page" id="step-2" data-guide-page="step-2" hidden>
         <h2 data-i18n="stepTwoTitle">02. 整理裝備與地點</h2>
         <p data-i18n="stepTwoBody">活動開始前，先把物品、地點與運輸車輛對應清楚。GearFlow 會用 Site、Vehicle 與 Event Items 三個角度來追蹤物品與人員的位置，讓你知道哪些已到位、哪些還在車上、哪些是多出來的。</p>
 
@@ -364,7 +428,7 @@
         </figure>
       </section>
 
-      <section id="step-3">
+      <section class="guide-section guide-page" id="step-3" data-guide-page="step-3" hidden>
         <h2 data-i18n="stepThreeTitle">03. 團隊同步查看</h2>
         <p data-i18n="stepThreeBody">需要多人一起查看或更新活動時，可以把資料放到雲端空間。雲端空間可建立新的空白工作區，也可以把目前本地資料複製成新的雲端工作區，讓團隊用同一份活動資料協作。</p>
 
@@ -390,7 +454,10 @@
           <li data-i18n="stepThreeMemberBulletRole">加入後可以管理成員權限，控制對方能編輯、操作或只查看內容。</li>
         </ul>
 
-        <h3 data-i18n="stepThreeWorkflowTitle">協作設計：同一份活動資料、不同現場角色</h3>
+      </section>
+
+      <section class="guide-section guide-page" id="step-collab" data-guide-page="step-collab" hidden>
+        <h2 data-i18n="stepThreeWorkflowTitle">協作設計：同一份活動資料、不同現場角色</h2>
         <p data-i18n="stepThreeWorkflowBody">GearFlow 的設計重點不是讓每個人各自記一份清單，而是讓團隊共用同一個活動狀態。規劃者先設定活動、地點、車輛、人員與物品；現場人員只要依照自己的角色更新物品位置與人員報到狀態；只需要查看的人則可以用較低權限確認進度。</p>
         <ul>
           <li data-i18n="stepThreeWorkflowBulletRoles">權限分成 owner、plan editor、operator、viewer：管理者可調整工作區與成員，規劃者可編輯計畫，現場操作人員可更新搬運與報到狀態，viewer 則只負責查看。</li>
@@ -399,6 +466,11 @@
           <li data-i18n="stepThreeWorkflowBulletContacts">聯絡資訊只給需要操作活動的人查看；單純 viewer 可以確認誰應該在哪裡，但不會直接看到電話、Email 或 LINE。</li>
         </ul>
       </section>
+
+      <nav class="guide-step-nav" aria-label="Guide previous and next">
+        <button type="button" id="guide-prev" data-i18n="previousPage">上一頁</button>
+        <button type="button" id="guide-next" data-i18n="nextPage">下一頁</button>
+      </nav>
     </article>
   </div>
 
@@ -418,7 +490,14 @@
         home: '回首頁',
         eyebrow: '使用說明',
         title: 'GearFlow 操作模板',
-        intro: '以下內容先保留為模板，之後可直接補上正式說明。',
+        intro: '以下內容依照使用流程分成 5 頁，可以直接切換段落閱讀。',
+        navBasic: '00. 基本設定',
+        navEvent: '01. 建立活動',
+        navGear: '02. 整理裝備與地點',
+        navCloud: '03. 團隊同步查看',
+        navCollaboration: 'Collaboration design',
+        previousPage: '上一頁',
+        nextPage: '下一頁',
         basicTitle: '00. 基本設定',
         basicIntro: '開始建立活動前，建議先整理倉庫、物品、聯絡人與帳戶設定。這些資料之後會在活動規劃、裝車、點名與雲端協作中重複使用。',
         basicHomeTitle: '首頁入口',
@@ -514,7 +593,14 @@
         home: 'Back to home',
         eyebrow: 'Guide',
         title: 'GearFlow guide template',
-        intro: 'This page is a working template. Formal instructions can be added and refined here later.',
+        intro: 'The guide is split into 5 pages based on the setup and operation flow.',
+        navBasic: '00. Basic setup',
+        navEvent: '01. Create an event',
+        navGear: '02. Gear and locations',
+        navCloud: '03. Cloud sync',
+        navCollaboration: 'Collaboration design',
+        previousPage: 'Previous',
+        nextPage: 'Next',
         basicTitle: '00. Basic setup',
         basicIntro: 'Before creating events, set up your warehouses, gear, people, and account preferences first. These records are reused when planning events, loading items, checking people in, and working with cloud workspaces.',
         basicHomeTitle: 'Home shortcuts',
@@ -610,7 +696,14 @@
         home: 'ホームへ戻る',
         eyebrow: '使い方',
         title: 'GearFlow 操作テンプレート',
-        intro: 'このページは作業用テンプレートです。正式な説明は後で追加・調整できます。',
+        intro: 'このガイドは設定と操作の流れに合わせて 5 ページに分かれています。',
+        navBasic: '00. 基本設定',
+        navEvent: '01. イベント作成',
+        navGear: '02. 物品と場所',
+        navCloud: '03. クラウド同期',
+        navCollaboration: 'Collaboration design',
+        previousPage: '前へ',
+        nextPage: '次へ',
         basicTitle: '00. 基本設定',
         basicIntro: 'イベントを作成する前に、倉庫、物品、連絡先、アカウント設定を先に整理しておくと便利です。これらの情報はイベント計画、積み込み、点呼、クラウド共同作業で繰り返し使います。',
         basicHomeTitle: 'ホームの入口',
@@ -704,6 +797,11 @@
     };
 
     const languageSelect = document.getElementById('language-select');
+    const guidePageIds = ['step-0', 'step-1', 'step-2', 'step-3', 'step-collab'];
+    const guidePages = document.querySelectorAll('[data-guide-page]');
+    const guidePagerButtons = document.querySelectorAll('[data-guide-target]');
+    const guidePrevButton = document.getElementById('guide-prev');
+    const guideNextButton = document.getElementById('guide-next');
     const lightbox = document.getElementById('image-lightbox');
     const lightboxImage = document.getElementById('image-lightbox-image');
     const lightboxCaption = document.getElementById('image-lightbox-caption');
@@ -744,6 +842,52 @@
     lightboxClose.addEventListener('click', closeLightbox);
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
+    });
+
+    function activeGuidePageFromHash() {
+      const hash = window.location.hash.replace('#', '');
+      return guidePageIds.includes(hash) ? hash : guidePageIds[0];
+    }
+
+    function setGuidePage(pageId, options = {}) {
+      const targetId = guidePageIds.includes(pageId) ? pageId : guidePageIds[0];
+      const currentIndex = guidePageIds.indexOf(targetId);
+      guidePages.forEach((page) => {
+        page.hidden = page.dataset.guidePage !== targetId;
+      });
+      guidePagerButtons.forEach((button) => {
+        if (button.dataset.guideTarget === targetId) {
+          button.setAttribute('aria-current', 'page');
+        } else {
+          button.removeAttribute('aria-current');
+        }
+      });
+      guidePrevButton.disabled = currentIndex === 0;
+      guideNextButton.disabled = currentIndex === guidePageIds.length - 1;
+      if (options.updateHash !== false) {
+        history.replaceState(null, '', `#${targetId}`);
+      }
+      if (options.scroll !== false) {
+        document.querySelector('.policy-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    guidePagerButtons.forEach((button) => {
+      button.addEventListener('click', () => setGuidePage(button.dataset.guideTarget));
+    });
+
+    guidePrevButton.addEventListener('click', () => {
+      const currentIndex = guidePageIds.indexOf(activeGuidePageFromHash());
+      if (currentIndex > 0) setGuidePage(guidePageIds[currentIndex - 1]);
+    });
+
+    guideNextButton.addEventListener('click', () => {
+      const currentIndex = guidePageIds.indexOf(activeGuidePageFromHash());
+      if (currentIndex < guidePageIds.length - 1) setGuidePage(guidePageIds[currentIndex + 1]);
+    });
+
+    window.addEventListener('hashchange', () => {
+      setGuidePage(activeGuidePageFromHash(), { updateHash: false, scroll: false });
     });
 
     function homeUrlForLanguage(language) {
@@ -797,6 +941,7 @@
     });
 
     applyLanguage(loadLanguage());
+    setGuidePage(activeGuidePageFromHash(), { updateHash: false, scroll: false });
   </script>
 </body>
 </html>
