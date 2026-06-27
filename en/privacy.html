@@ -13,9 +13,11 @@
     <header class="topbar">
       <a class="brand-link" href="../index.html"><img src="../assets/images/gearflow_icon_friendly.png" alt="">GearFlow</a>
       <nav class="lang-links" aria-label="Language">
-        <a href="../zh-Hant/privacy.html">繁中</a>
-        <a href="../en/privacy.html" aria-current="page">English</a>
-        <a href="../ja/privacy.html">日本語</a>
+        <select class="lang-select" data-current-language="en" data-policy-page="privacy" aria-label="Language">
+          <option value="zh" data-target="../zh-Hant/privacy.html?lang=zh">繁體中文</option>
+          <option value="en" data-target="../en/privacy.html?lang=en" selected>English</option>
+          <option value="ja" data-target="../ja/privacy.html?lang=ja">日本語</option>
+        </select>
       </nav>
     </header>
     <article class="policy-card">
@@ -58,5 +60,51 @@
     </article>
     <footer>© 2026 GearFlow</footer>
   </main>
+  <script>
+    (function() {
+      const LANGUAGE_CACHE_KEY = 'gearflow-language';
+      const languageSelect = document.querySelector('.lang-select');
+      const homeByLanguage = {
+        zh: '../index.html',
+        en: '../en/index.html',
+        ja: '../ja/index.html',
+      };
+
+      function validLanguage(value) {
+        return value === 'zh' || value === 'en' || value === 'ja';
+      }
+
+      function persistLanguage(language) {
+        try {
+          localStorage.setItem(LANGUAGE_CACHE_KEY, language);
+        } catch {
+          // ignore
+        }
+      }
+
+      function applyLanguage(language) {
+        if (!validLanguage(language)) return;
+        persistLanguage(language);
+        document.querySelector('.brand-link')?.setAttribute('href', homeByLanguage[language] || '../index.html');
+        if (languageSelect) languageSelect.value = language;
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const urlLanguage = params.get('lang');
+      const pageLanguage = languageSelect?.dataset.currentLanguage || 'zh';
+      if (validLanguage(urlLanguage) && urlLanguage !== pageLanguage) {
+        const target = Array.from(languageSelect.options).find((option) => option.value === urlLanguage)?.dataset.target;
+        if (target) window.location.replace(target);
+      }
+      applyLanguage(validLanguage(urlLanguage) ? urlLanguage : pageLanguage);
+
+      languageSelect?.addEventListener('change', function() {
+        const selected = languageSelect.options[languageSelect.selectedIndex];
+        const language = languageSelect.value;
+        persistLanguage(language);
+        window.location.href = selected.dataset.target || '../index.html';
+      });
+    })();
+  </script>
 </body>
 </html>
