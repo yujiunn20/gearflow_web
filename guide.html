@@ -6,6 +6,99 @@
   <title>GearFlow | 使用說明</title>
   <link rel="icon" href="assets/images/gearflow_icon_friendly.png">
   <link rel="stylesheet" href="assets/css/site.css?v=1.3">
+  <style>
+    .guide-intro {
+      max-width: 760px;
+    }
+
+    .guide-section {
+      padding: 0;
+      max-width: none;
+      margin: 48px 0 0;
+    }
+
+    .guide-section h2 {
+      margin-top: 0;
+    }
+
+    .guide-section h3 {
+      margin: 30px 0 10px;
+      color: var(--ink);
+      font-size: 1.05rem;
+    }
+
+    .guide-shot {
+      margin: 18px 0 28px;
+    }
+
+    .guide-shot img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: 0 18px 36px rgba(24, 48, 71, 0.08);
+    }
+
+    .guide-shot figcaption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+      margin: 18px 0 28px;
+    }
+
+    .guide-card-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0 30px;
+    }
+
+    .guide-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(180deg, #ffffff 0%, #f7fbf9 100%);
+    }
+
+    .guide-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--ink);
+    }
+
+    .guide-card p {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .guide-note {
+      padding: 16px 18px;
+      border: 1px solid rgba(19, 185, 154, 0.25);
+      border-radius: 18px;
+      background: rgba(19, 185, 154, 0.08);
+    }
+
+    @media (max-width: 760px) {
+      .guide-grid,
+      .guide-card-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .guide-shot img {
+        border-radius: 16px;
+      }
+    }
+  </style>
 </head>
 <body class="policy-page">
   <div class="policy-shell">
@@ -27,7 +120,80 @@
     <article class="policy-card">
       <p class="eyebrow" data-i18n="eyebrow">使用說明</p>
       <h1 data-i18n="title">GearFlow 操作模板</h1>
-      <p class="updated" data-i18n="intro">以下內容先保留為模板，之後可直接補上正式說明。</p>
+      <p class="updated guide-intro" data-i18n="intro">以下內容先保留為模板，之後可直接補上正式說明。</p>
+
+      <section class="guide-section" id="step-0">
+        <h2 data-i18n="basicTitle">00. 基本設定</h2>
+        <p data-i18n="basicIntro">開始建立活動前，建議先整理倉庫、物品、聯絡人與帳戶設定。這些資料之後會在活動規劃、裝車、點名與雲端協作中重複使用。</p>
+
+        <h3 data-i18n="basicHomeTitle">首頁入口</h3>
+        <figure class="guide-shot">
+          <img src="assets/images/home.jpg" loading="lazy" data-i18n-alt="homeAlt" alt="GearFlow 首頁與下方四個主要入口">
+          <figcaption data-i18n="basicHomeCaption">首頁下方有四個主要入口：Warehouse、People、Settings、Account。</figcaption>
+        </figure>
+
+        <div class="guide-card-grid">
+          <div class="guide-card">
+            <strong data-i18n="warehouseCardTitle">Warehouse（倉庫）</strong>
+            <p data-i18n="warehouseCardBody">管理平常存放物品的地點，以及所有可被活動使用的物品。</p>
+          </div>
+          <div class="guide-card">
+            <strong data-i18n="peopleCardTitle">People（聯絡人）</strong>
+            <p data-i18n="peopleCardBody">建立常用人員與聯絡方式，活動中可快速加入與點名。</p>
+          </div>
+          <div class="guide-card">
+            <strong data-i18n="settingsCardTitle">Settings（設定）</strong>
+            <p data-i18n="settingsCardBody">調整主題、日期時間格式與活動物品排序方式。</p>
+          </div>
+          <div class="guide-card">
+            <strong data-i18n="accountCardTitle">Account（帳戶）</strong>
+            <p data-i18n="accountCardBody">管理個人資料、登入登出、雲端空間與訂閱。</p>
+          </div>
+        </div>
+
+        <h3 data-i18n="warehouseTitle">Warehouse：建立倉庫與物品庫</h3>
+        <p data-i18n="warehouseBody">Warehouse 分成 Warehouses 與 Gear Library。Warehouses 用來建立平常儲存物品的地點，例如公司、家中、車上、外部倉庫或臨時收納點；Gear Library 則集中管理所有物品，並可設定每個物品的所屬倉庫。</p>
+        <div class="guide-grid">
+          <figure class="guide-shot">
+            <img src="assets/images/Warehouse.jpg" loading="lazy" data-i18n-alt="warehouseAlt" alt="倉庫列表畫面">
+            <figcaption data-i18n="warehouseCaption">在 Warehouses 建立常用存放地點，之後建立活動時就能清楚知道物品原本應該在哪裡。</figcaption>
+          </figure>
+          <figure class="guide-shot">
+            <img src="assets/images/GearLibrary.jpg" loading="lazy" data-i18n-alt="gearLibraryAlt" alt="物品庫畫面">
+            <figcaption data-i18n="gearLibraryCaption">在 Gear Library 建立所有物品資料，並設定名稱、分類、數量與所屬倉庫。</figcaption>
+          </figure>
+        </div>
+
+        <h3 data-i18n="peopleTitle">People：建立聯絡人</h3>
+        <figure class="guide-shot">
+          <img src="assets/images/people.jpg" loading="lazy" data-i18n-alt="peopleAlt" alt="聯絡人列表畫面">
+          <figcaption data-i18n="peopleCaption">People 用來儲存常用聯絡人，可以只填電話、Email 或 LINE ID。若對方 Email 也註冊 GearFlow，之後可從聯絡人加入雲端空間成員；活動點名或找人時，電話與 LINE 圖示也能直接開啟撥號或 LINE。</figcaption>
+        </figure>
+
+        <h3 data-i18n="settingsTitle">Settings：調整顯示與排序</h3>
+        <p data-i18n="settingsBody">Settings 可以設定主題顏色、日期與時間顯示方式，以及活動物品與物品庫的排序邏輯。先設定好偏好的格式，後續活動列表與檢視頁會更符合你的工作習慣。</p>
+        <div class="guide-grid">
+          <figure class="guide-shot">
+            <img src="assets/images/settings1.jpg" loading="lazy" data-i18n-alt="settingsOneAlt" alt="設定頁上半部">
+          </figure>
+          <figure class="guide-shot">
+            <img src="assets/images/settings2.jpg" loading="lazy" data-i18n-alt="settingsTwoAlt" alt="設定頁下半部">
+          </figure>
+        </div>
+
+        <h3 data-i18n="accountTitle">Account：帳戶、雲端空間與訂閱</h3>
+        <p data-i18n="accountBody">Account 可編輯顯示名稱、管理密碼、登入或登出。雲端空間與訂閱也在這裡管理：你可以建立雲端工作區、加入成員，或依方案調整可使用的空間、人員、倉庫、物品與活動上限。</p>
+        <div class="guide-grid">
+          <figure class="guide-shot">
+            <img src="assets/images/account.jpg" loading="lazy" data-i18n-alt="accountAlt" alt="帳戶頁面">
+          </figure>
+          <figure class="guide-shot">
+            <img src="assets/images/cloud.jpg" loading="lazy" data-i18n-alt="cloudAlt" alt="雲端空間管理畫面">
+          </figure>
+        </div>
+
+        <p class="guide-note" data-i18n="basicNote">建議順序：先建立倉庫，再建立物品庫與聯絡人，最後確認設定與帳戶。完成這些基本資料後，建立活動時會更快，也比較不容易漏掉人員或物品。</p>
+      </section>
 
       <section id="step-1">
         <h2 data-i18n="stepOneTitle">01. 建立活動</h2>
@@ -62,13 +228,142 @@
     const LANGUAGE_CACHE_KEY = 'gearflow-language';
     const messages = {
       zh: {
-        pageTitle: 'GearFlow | 使用說明', home: '回首頁', eyebrow: '使用說明', title: 'GearFlow 操作模板', intro: '以下內容先保留為模板，之後可直接補上正式說明。', stepOneTitle: '01. 建立活動', stepOneBody: '[待補內容] 說明如何新增活動、命名規則、日期與基本資料設定。', stepTwoTitle: '02. 整理裝備與地點', stepTwoBody: '[待補內容] 說明如何把裝備、倉庫、車輛與目的地對應起來。', stepThreeTitle: '03. 團隊同步查看', stepThreeBody: '[待補內容] 說明多人協作、檢查流程與現場確認方式。', placeholderOne: '[待補內容] 範例 1', placeholderTwo: '[待補內容] 範例 2'
+        pageTitle: 'GearFlow | 使用說明',
+        home: '回首頁',
+        eyebrow: '使用說明',
+        title: 'GearFlow 操作模板',
+        intro: '以下內容先保留為模板，之後可直接補上正式說明。',
+        basicTitle: '00. 基本設定',
+        basicIntro: '開始建立活動前，建議先整理倉庫、物品、聯絡人與帳戶設定。這些資料之後會在活動規劃、裝車、點名與雲端協作中重複使用。',
+        basicHomeTitle: '首頁入口',
+        basicHomeCaption: '首頁下方有四個主要入口：Warehouse、People、Settings、Account。',
+        warehouseCardTitle: 'Warehouse（倉庫）',
+        warehouseCardBody: '管理平常存放物品的地點，以及所有可被活動使用的物品。',
+        peopleCardTitle: 'People（聯絡人）',
+        peopleCardBody: '建立常用人員與聯絡方式，活動中可快速加入與點名。',
+        settingsCardTitle: 'Settings（設定）',
+        settingsCardBody: '調整主題、日期時間格式與活動物品排序方式。',
+        accountCardTitle: 'Account（帳戶）',
+        accountCardBody: '管理個人資料、登入登出、雲端空間與訂閱。',
+        warehouseTitle: 'Warehouse：建立倉庫與物品庫',
+        warehouseBody: 'Warehouse 分成 Warehouses 與 Gear Library。Warehouses 用來建立平常儲存物品的地點，例如公司、家中、車上、外部倉庫或臨時收納點；Gear Library 則集中管理所有物品，並可設定每個物品的所屬倉庫。',
+        warehouseCaption: '在 Warehouses 建立常用存放地點，之後建立活動時就能清楚知道物品原本應該在哪裡。',
+        gearLibraryCaption: '在 Gear Library 建立所有物品資料，並設定名稱、分類、數量與所屬倉庫。',
+        peopleTitle: 'People：建立聯絡人',
+        peopleCaption: 'People 用來儲存常用聯絡人，可以只填電話、Email 或 LINE ID。若對方 Email 也註冊 GearFlow，之後可從聯絡人加入雲端空間成員；活動點名或找人時，電話與 LINE 圖示也能直接開啟撥號或 LINE。',
+        settingsTitle: 'Settings：調整顯示與排序',
+        settingsBody: 'Settings 可以設定主題顏色、日期與時間顯示方式，以及活動物品與物品庫的排序邏輯。先設定好偏好的格式，後續活動列表與檢視頁會更符合你的工作習慣。',
+        accountTitle: 'Account：帳戶、雲端空間與訂閱',
+        accountBody: 'Account 可編輯顯示名稱、管理密碼、登入或登出。雲端空間與訂閱也在這裡管理：你可以建立雲端工作區、加入成員，或依方案調整可使用的空間、人員、倉庫、物品與活動上限。',
+        basicNote: '建議順序：先建立倉庫，再建立物品庫與聯絡人，最後確認設定與帳戶。完成這些基本資料後，建立活動時會更快，也比較不容易漏掉人員或物品。',
+        homeAlt: 'GearFlow 首頁與下方四個主要入口',
+        warehouseAlt: '倉庫列表畫面',
+        gearLibraryAlt: '物品庫畫面',
+        peopleAlt: '聯絡人列表畫面',
+        settingsOneAlt: '設定頁上半部',
+        settingsTwoAlt: '設定頁下半部',
+        accountAlt: '帳戶頁面',
+        cloudAlt: '雲端空間管理畫面',
+        stepOneTitle: '01. 建立活動',
+        stepOneBody: '[待補內容] 說明如何新增活動、命名規則、日期與基本資料設定。',
+        stepTwoTitle: '02. 整理裝備與地點',
+        stepTwoBody: '[待補內容] 說明如何把裝備、倉庫、車輛與目的地對應起來。',
+        stepThreeTitle: '03. 團隊同步查看',
+        stepThreeBody: '[待補內容] 說明多人協作、檢查流程與現場確認方式。',
+        placeholderOne: '[待補內容] 範例 1',
+        placeholderTwo: '[待補內容] 範例 2'
       },
       en: {
-        pageTitle: 'GearFlow | Guide', home: 'Back to home', eyebrow: 'Guide', title: 'GearFlow guide template', intro: 'This page is a template for now. Formal instructions can be added here later.', stepOneTitle: '01. Create an event', stepOneBody: '[Placeholder] Explain how to add an event, naming rules, dates, and basic settings.', stepTwoTitle: '02. Organize gear and locations', stepTwoBody: '[Placeholder] Explain how to connect gear, warehouses, vehicles, and destinations.', stepThreeTitle: '03. Share with the team', stepThreeBody: '[Placeholder] Explain team collaboration, checks, and on-site confirmation.', placeholderOne: '[Placeholder] Example 1', placeholderTwo: '[Placeholder] Example 2'
+        pageTitle: 'GearFlow | Guide',
+        home: 'Back to home',
+        eyebrow: 'Guide',
+        title: 'GearFlow guide template',
+        intro: 'This page is a working template. Formal instructions can be added and refined here later.',
+        basicTitle: '00. Basic setup',
+        basicIntro: 'Before creating events, set up your warehouses, gear, people, and account preferences first. These records are reused when planning events, loading items, checking people in, and working with cloud workspaces.',
+        basicHomeTitle: 'Home shortcuts',
+        basicHomeCaption: 'The bottom of the home screen has four main shortcuts: Warehouse, People, Settings, and Account.',
+        warehouseCardTitle: 'Warehouse',
+        warehouseCardBody: 'Manage storage locations and the gear that can be used in events.',
+        peopleCardTitle: 'People',
+        peopleCardBody: 'Save frequent contacts so they can be added to events and checked in quickly.',
+        settingsCardTitle: 'Settings',
+        settingsCardBody: 'Adjust the theme, date/time display, and event item sorting.',
+        accountCardTitle: 'Account',
+        accountCardBody: 'Manage your profile, sign-in state, cloud workspaces, and subscription.',
+        warehouseTitle: 'Warehouse: set up storage and the gear library',
+        warehouseBody: 'Warehouse contains two tabs: Warehouses and Gear Library. Warehouses are the places where gear is normally stored, such as an office, home, vehicle, external storage, or temporary staging area. Gear Library is where you manage all gear and assign each item to its planned warehouse.',
+        warehouseCaption: 'Create regular storage locations in Warehouses so events can show where each item should start from.',
+        gearLibraryCaption: 'Create gear records in Gear Library and set the name, category, quantity, and planned warehouse.',
+        peopleTitle: 'People: save contacts',
+        peopleCaption: 'People stores frequent contacts. A contact can have only a phone number, email, or LINE ID. If the email also belongs to a GearFlow account, you can later add that person to a cloud workspace from the contact list. During check-in or on-site coordination, phone and LINE icons can open the dialer or LINE directly.',
+        settingsTitle: 'Settings: display and sorting',
+        settingsBody: 'Settings controls the theme color, date and time format, and sorting behavior for event items and the gear library. Setting these preferences first makes event lists and detail pages match the way you work.',
+        accountTitle: 'Account: profile, cloud workspaces, and subscription',
+        accountBody: 'Account lets you edit your display name, manage your password, and sign in or out. Cloud workspaces and subscriptions are managed here as well: create a workspace, add members, or manage the plan limits for spaces, members, warehouses, gear, and events.',
+        basicNote: 'Recommended order: create warehouses first, then add gear and people, then confirm Settings and Account. After these basics are ready, creating events is faster and it is easier to avoid missing people or items.',
+        homeAlt: 'GearFlow home screen with four main shortcuts',
+        warehouseAlt: 'Warehouses list screen',
+        gearLibraryAlt: 'Gear Library screen',
+        peopleAlt: 'People list screen',
+        settingsOneAlt: 'Upper part of Settings screen',
+        settingsTwoAlt: 'Lower part of Settings screen',
+        accountAlt: 'Account screen',
+        cloudAlt: 'Cloud workspace management screen',
+        stepOneTitle: '01. Create an event',
+        stepOneBody: '[Placeholder] Explain how to add an event, naming rules, dates, and basic settings.',
+        stepTwoTitle: '02. Organize gear and locations',
+        stepTwoBody: '[Placeholder] Explain how to connect gear, warehouses, vehicles, and destinations.',
+        stepThreeTitle: '03. Share with the team',
+        stepThreeBody: '[Placeholder] Explain team collaboration, checks, and on-site confirmation.',
+        placeholderOne: '[Placeholder] Example 1',
+        placeholderTwo: '[Placeholder] Example 2'
       },
       ja: {
-        pageTitle: 'GearFlow | 使い方', home: 'ホームへ戻る', eyebrow: '使い方', title: 'GearFlow 操作テンプレート', intro: 'このページは一旦テンプレートです。正式な説明は後で追加できます。', stepOneTitle: '01. イベントを作成', stepOneBody: '[未入力] イベント追加、命名ルール、日付、基本設定を説明します。', stepTwoTitle: '02. 物品と場所を整理', stepTwoBody: '[未入力] 物品、倉庫、車両、目的地の紐付けを説明します。', stepThreeTitle: '03. チームで共有', stepThreeBody: '[未入力] 複数人での確認、チェック手順、現場確認を説明します。', placeholderOne: '[未入力] 例 1', placeholderTwo: '[未入力] 例 2'
+        pageTitle: 'GearFlow | 使い方',
+        home: 'ホームへ戻る',
+        eyebrow: '使い方',
+        title: 'GearFlow 操作テンプレート',
+        intro: 'このページは作業用テンプレートです。正式な説明は後で追加・調整できます。',
+        basicTitle: '00. 基本設定',
+        basicIntro: 'イベントを作成する前に、倉庫、物品、連絡先、アカウント設定を先に整理しておくと便利です。これらの情報はイベント計画、積み込み、点呼、クラウド共同作業で繰り返し使います。',
+        basicHomeTitle: 'ホームの入口',
+        basicHomeCaption: 'ホーム画面の下には Warehouse、People、Settings、Account の4つの主な入口があります。',
+        warehouseCardTitle: 'Warehouse（倉庫）',
+        warehouseCardBody: '普段の保管場所と、イベントで使う物品を管理します。',
+        peopleCardTitle: 'People（連絡先）',
+        peopleCardBody: 'よく使う連絡先を保存し、イベントへの追加や点呼をすばやく行えます。',
+        settingsCardTitle: 'Settings（設定）',
+        settingsCardBody: 'テーマ、日付・時刻表示、イベント物品の並び順を調整します。',
+        accountCardTitle: 'Account（アカウント）',
+        accountCardBody: 'プロフィール、ログイン状態、クラウドワークスペース、サブスクリプションを管理します。',
+        warehouseTitle: 'Warehouse：倉庫と物品ライブラリを準備',
+        warehouseBody: 'Warehouse には Warehouses と Gear Library の2つのタブがあります。Warehouses は会社、自宅、車内、外部倉庫、一時置き場など、普段物品を保管する場所を登録する画面です。Gear Library ではすべての物品を管理し、それぞれの物品に所属倉庫を設定できます。',
+        warehouseCaption: 'Warehouses で普段の保管場所を登録しておくと、イベント作成時に物品の出発地点が分かりやすくなります。',
+        gearLibraryCaption: 'Gear Library で物品の名前、カテゴリ、数量、所属倉庫を登録します。',
+        peopleTitle: 'People：連絡先を登録',
+        peopleCaption: 'People ではよく使う連絡先を保存できます。電話番号、Email、LINE ID のどれかだけでも登録できます。相手の Email が GearFlow アカウントに紐づいている場合、後で連絡先からクラウドワークスペースのメンバーに追加できます。点呼や現場連絡では、電話や LINE のアイコンから直接発信・起動できます。',
+        settingsTitle: 'Settings：表示と並び順',
+        settingsBody: 'Settings ではテーマカラー、日付・時刻の表示形式、イベント物品と物品ライブラリの並び順を設定できます。先に好みの形式にしておくと、イベント一覧や詳細画面が作業しやすくなります。',
+        accountTitle: 'Account：アカウント、クラウド、サブスクリプション',
+        accountBody: 'Account では表示名の編集、パスワード管理、ログイン・ログアウトができます。クラウドワークスペースとサブスクリプションもここで管理します。ワークスペースの作成、メンバー追加、プランごとのワークスペース・メンバー・倉庫・物品・イベント上限を確認できます。',
+        basicNote: 'おすすめの順番：先に倉庫を作成し、次に物品ライブラリと連絡先を登録し、最後に Settings と Account を確認します。基本情報が整うと、イベント作成が速くなり、人員や物品の漏れも減らせます。',
+        homeAlt: 'GearFlow ホーム画面と4つの主な入口',
+        warehouseAlt: '倉庫一覧画面',
+        gearLibraryAlt: '物品ライブラリ画面',
+        peopleAlt: '連絡先一覧画面',
+        settingsOneAlt: '設定画面の上部',
+        settingsTwoAlt: '設定画面の下部',
+        accountAlt: 'アカウント画面',
+        cloudAlt: 'クラウドワークスペース管理画面',
+        stepOneTitle: '01. イベントを作成',
+        stepOneBody: '[未入力] イベント追加、命名ルール、日付、基本設定を説明します。',
+        stepTwoTitle: '02. 物品と場所を整理',
+        stepTwoBody: '[未入力] 物品、倉庫、車両、目的地の紐付けを説明します。',
+        stepThreeTitle: '03. チームで共有',
+        stepThreeBody: '[未入力] 複数人での確認、チェック手順、現場確認を説明します。',
+        placeholderOne: '[未入力] 例 1',
+        placeholderTwo: '[未入力] 例 2'
       }
     };
 
@@ -111,6 +406,9 @@
       languageSelect.value = language;
       document.querySelectorAll('[data-i18n]').forEach((node) => {
         node.textContent = copy[node.dataset.i18n] || node.textContent;
+      });
+      document.querySelectorAll('[data-i18n-alt]').forEach((node) => {
+        node.setAttribute('alt', copy[node.dataset.i18nAlt] || node.getAttribute('alt') || '');
       });
       document.getElementById('home-link').href = homeUrlForLanguage(language);
       document.getElementById('home-brand-link').href = homeUrlForLanguage(language);
