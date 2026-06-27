@@ -28,7 +28,7 @@
     }
 
     .guide-shot {
-      width: min(100%, 360px);
+      width: min(100%, 320px);
       margin: 18px auto 30px;
       overflow: hidden;
       border: 1px solid var(--line);
@@ -39,15 +39,15 @@
 
     .guide-grid .guide-shot {
       width: 100%;
-      max-width: 320px;
+      max-width: 300px;
     }
 
     .guide-shot img {
       display: block;
       width: 100%;
-      height: clamp(260px, 33vw, 360px);
-      object-fit: cover;
-      object-position: top center;
+      height: auto;
+      object-fit: contain;
+      object-position: center;
       cursor: zoom-in;
       transition: transform 160ms ease, filter 160ms ease;
     }
@@ -60,7 +60,7 @@
     }
 
     .guide-grid .guide-shot img {
-      height: clamp(240px, 28vw, 330px);
+      height: auto;
     }
 
     .guide-shot figcaption {
@@ -185,7 +185,7 @@
       }
 
       .guide-shot {
-        width: min(100%, 340px);
+        width: min(100%, 320px);
         border-radius: 18px;
       }
 
@@ -293,10 +293,32 @@
 
       <section id="step-1">
         <h2 data-i18n="stepOneTitle">01. 建立活動</h2>
-        <p data-i18n="stepOneBody">[待補內容] 說明如何新增活動、命名規則、日期與基本資料設定。</p>
+        <p data-i18n="stepOneBody">活動是 GearFlow 的主要工作單位。建立活動後，可以集中管理日期、狀態、地點、車輛、物品與人員，讓事前準備與現場確認都在同一個檢視頁完成。</p>
+
+        <h3 data-i18n="stepOneHomeTitle">從首頁新增活動</h3>
+        <figure class="guide-shot">
+          <img src="assets/images/home.jpg" loading="lazy" data-i18n-alt="stepOneHomeAlt" alt="首頁右上方加號可新增活動">
+          <figcaption data-i18n="stepOneHomeCaption">在首頁右上方點「+」即可建立新活動。新增時先設定活動名稱、日期與基本資訊，建立後會回到活動列表。</figcaption>
+        </figure>
+
+        <h3 data-i18n="stepOneEventTitle">活動檢視頁</h3>
+        <p data-i18n="stepOneEventBody">點進活動後會進入正式檢視頁。頁面上方會顯示日期與活動狀態，並提供編輯、刪除與開始活動的操作。開始活動後，已規劃的物品會從原本倉庫移到活動中，倉庫內的物品狀態也會同步改變。</p>
+        <div class="guide-grid">
+          <figure class="guide-shot">
+            <img src="assets/images/event.jpg" loading="lazy" data-i18n-alt="eventAlt" alt="活動檢視頁總覽">
+            <figcaption data-i18n="eventCaption">活動檢視頁集中顯示日期、狀態、活動地點、運輸車輛、物品與人員管理。</figcaption>
+          </figure>
+          <figure class="guide-shot">
+            <img src="assets/images/event_items.jpg" loading="lazy" data-i18n-alt="eventItemsAlt" alt="活動物品管理畫面">
+            <figcaption data-i18n="eventItemsCaption">物品區可以管理活動需要的裝備，開始活動後也能追蹤物品目前所在位置與狀態。</figcaption>
+          </figure>
+        </div>
+
         <ul>
-          <li data-i18n="placeholderOne">[待補內容] 範例 1</li>
-          <li data-i18n="placeholderTwo">[待補內容] 範例 2</li>
+          <li data-i18n="stepOneBulletEdit">上方圖示可編輯或刪除活動；開始圖示會把活動切換到進行中。</li>
+          <li data-i18n="stepOneBulletStart">開始活動後，規劃物品會從所屬倉庫移入活動，方便後續裝車與現場確認。</li>
+          <li data-i18n="stepOneBulletStatus">日期與活動狀態會顯示在活動頁上方，方便快速確認目前進度。</li>
+          <li data-i18n="stepOneBulletManage">活動內可管理地點、運輸車輛、物品與人員，所有準備項目集中在同一頁。</li>
         </ul>
       </section>
 
@@ -369,7 +391,20 @@
         accountAlt: '帳戶頁面',
         cloudAlt: '雲端空間管理畫面',
         stepOneTitle: '01. 建立活動',
-        stepOneBody: '[待補內容] 說明如何新增活動、命名規則、日期與基本資料設定。',
+        stepOneBody: '活動是 GearFlow 的主要工作單位。建立活動後，可以集中管理日期、狀態、地點、車輛、物品與人員，讓事前準備與現場確認都在同一個檢視頁完成。',
+        stepOneHomeTitle: '從首頁新增活動',
+        stepOneHomeCaption: '在首頁右上方點「+」即可建立新活動。新增時先設定活動名稱、日期與基本資訊，建立後會回到活動列表。',
+        stepOneHomeAlt: '首頁右上方加號可新增活動',
+        stepOneEventTitle: '活動檢視頁',
+        stepOneEventBody: '點進活動後會進入正式檢視頁。頁面上方會顯示日期與活動狀態，並提供編輯、刪除與開始活動的操作。開始活動後，已規劃的物品會從原本倉庫移到活動中，倉庫內的物品狀態也會同步改變。',
+        eventAlt: '活動檢視頁總覽',
+        eventCaption: '活動檢視頁集中顯示日期、狀態、活動地點、運輸車輛、物品與人員管理。',
+        eventItemsAlt: '活動物品管理畫面',
+        eventItemsCaption: '物品區可以管理活動需要的裝備，開始活動後也能追蹤物品目前所在位置與狀態。',
+        stepOneBulletEdit: '上方圖示可編輯或刪除活動；開始圖示會把活動切換到進行中。',
+        stepOneBulletStart: '開始活動後，規劃物品會從所屬倉庫移入活動，方便後續裝車與現場確認。',
+        stepOneBulletStatus: '日期與活動狀態會顯示在活動頁上方，方便快速確認目前進度。',
+        stepOneBulletManage: '活動內可管理地點、運輸車輛、物品與人員，所有準備項目集中在同一頁。',
         stepTwoTitle: '02. 整理裝備與地點',
         stepTwoBody: '[待補內容] 說明如何把裝備、倉庫、車輛與目的地對應起來。',
         stepThreeTitle: '03. 團隊同步查看',
@@ -415,7 +450,20 @@
         accountAlt: 'Account screen',
         cloudAlt: 'Cloud workspace management screen',
         stepOneTitle: '01. Create an event',
-        stepOneBody: '[Placeholder] Explain how to add an event, naming rules, dates, and basic settings.',
+        stepOneBody: 'Events are the main workspace in GearFlow. After creating an event, you can manage the date, status, sites, vehicles, gear, and people in one view for both preparation and on-site checks.',
+        stepOneHomeTitle: 'Create an event from Home',
+        stepOneHomeCaption: 'Tap the “+” in the top-right corner of Home to create a new event. Set the event name, date, and basic information first; after saving, it appears in the event list.',
+        stepOneHomeAlt: 'The plus button on Home creates a new event',
+        stepOneEventTitle: 'Event detail view',
+        stepOneEventBody: 'Opening an event shows the formal detail view. The top area shows the date and event status, plus edit, delete, and start actions. After starting the event, planned gear moves from its warehouse into the event, and the gear status in the warehouse changes as well.',
+        eventAlt: 'Event detail overview',
+        eventCaption: 'The event detail view brings together the date, status, sites, transport vehicles, gear, and people management.',
+        eventItemsAlt: 'Event item management screen',
+        eventItemsCaption: 'The item area manages the gear needed for the event and helps track each item’s current location and status after the event starts.',
+        stepOneBulletEdit: 'The top icons let you edit or delete the event; the start icon switches the event into active operation.',
+        stepOneBulletStart: 'After starting an event, planned gear moves from its assigned warehouse into the event for loading and on-site confirmation.',
+        stepOneBulletStatus: 'The date and event status are shown near the top of the event page so progress is easy to check.',
+        stepOneBulletManage: 'Sites, transport vehicles, gear, and people are all managed inside the event page.',
         stepTwoTitle: '02. Organize gear and locations',
         stepTwoBody: '[Placeholder] Explain how to connect gear, warehouses, vehicles, and destinations.',
         stepThreeTitle: '03. Share with the team',
@@ -461,7 +509,20 @@
         accountAlt: 'アカウント画面',
         cloudAlt: 'クラウドワークスペース管理画面',
         stepOneTitle: '01. イベントを作成',
-        stepOneBody: '[未入力] イベント追加、命名ルール、日付、基本設定を説明します。',
+        stepOneBody: 'イベントは GearFlow の中心となる作業単位です。イベントを作成すると、日付、状態、拠点、車両、物品、人員を1つの画面で管理でき、事前準備と現場確認をまとめて進められます。',
+        stepOneHomeTitle: 'ホームからイベントを追加',
+        stepOneHomeCaption: 'ホーム右上の「+」をタップすると新しいイベントを作成できます。最初にイベント名、日付、基本情報を設定し、保存後にイベント一覧へ表示されます。',
+        stepOneHomeAlt: 'ホーム右上のプラスボタンでイベントを追加',
+        stepOneEventTitle: 'イベント詳細画面',
+        stepOneEventBody: 'イベントを開くと詳細画面に入ります。上部には日付とイベント状態が表示され、編集、削除、開始の操作があります。イベントを開始すると、計画済みの物品は所属倉庫からイベントへ移動し、倉庫側の物品状態も変わります。',
+        eventAlt: 'イベント詳細画面の概要',
+        eventCaption: 'イベント詳細画面では、日付、状態、拠点、運搬車両、物品、人員管理をまとめて確認できます。',
+        eventItemsAlt: 'イベント物品管理画面',
+        eventItemsCaption: '物品エリアではイベントに必要な装備を管理し、開始後は各物品の現在地と状態を追跡できます。',
+        stepOneBulletEdit: '上部アイコンからイベントの編集・削除ができ、開始アイコンでイベントを進行中に切り替えます。',
+        stepOneBulletStart: 'イベント開始後、計画済み物品は所属倉庫からイベントへ移動し、積み込みや現場確認に使えます。',
+        stepOneBulletStatus: '日付とイベント状態は画面上部に表示され、現在の進行状況をすぐ確認できます。',
+        stepOneBulletManage: '拠点、運搬車両、物品、人員はすべてイベント画面内で管理します。',
         stepTwoTitle: '02. 物品と場所を整理',
         stepTwoBody: '[未入力] 物品、倉庫、車両、目的地の紐付けを説明します。',
         stepThreeTitle: '03. チームで共有',
