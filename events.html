@@ -811,6 +811,7 @@
       filter: 'all',
       query: '',
       scrollRequested: false,
+      isSigningOut: false,
     };
 
     function escapeHtml(value) {
@@ -839,6 +840,28 @@
 
     function setVisible(node, visible) {
       node.classList.toggle('app-hidden', !visible);
+    }
+
+    function withTimeout(promise, label, ms = 12000) {
+      let timerId;
+      const timeout = new Promise((_, reject) => {
+        timerId = window.setTimeout(() => reject(new Error(`${label} 逾時，請重新整理或稍後再試。`)), ms);
+      });
+      return Promise.race([promise, timeout]).finally(() => window.clearTimeout(timerId));
+    }
+
+    function resetViewerState() {
+      state.workspaces = [];
+      state.selectedWorkspaceId = '';
+      state.events = [];
+      state.selectedEventId = '';
+      workspaceList.innerHTML = '';
+      workspaceTitle.textContent = '事件頁';
+      workspaceSummary.textContent = '尚未選擇工作區。';
+      workspaceBadges.innerHTML = '';
+      eventList.innerHTML = '';
+      eventDetail.innerHTML = '';
+      renderMetrics([]);
     }
 
     function scrollToDetailIfNeeded() {
@@ -902,9 +925,10 @@
     async function restoreSession() {
       try {
         setSystemMessage('正在確認登入狀態...');
-        const { data, error } = await client.auth.getSession();
+        const { data, error } = await withTimeout(client.auth.getSession(), '取得登入狀態');
         if (error) {
           setAuthMessage(error.message, true);
+          renderAuthState();
           return;
         }
         state.session = data.session;
@@ -915,6 +939,7 @@
         }
       } catch (error) {
         setAuthMessage(error.message || '無法取得登入狀態', true);
+        renderAuthState();
       }
     }
 
@@ -954,20 +979,24 @@
       }
     }
 
-    async function signOut() {
+    async function signOut(event) {
+      event?.preventDefault();
+      if (state.isSigningOut) return;
+      state.isSigningOut = true;
+      signOutBtn.disabled = true;
       setSystemMessage('正在登出...');
+      state.session = null;
+      resetViewerState();
+      renderAuthState();
+
       try {
-        await client.auth.signOut();
+        await withTimeout(client.auth.signOut({ scope: 'local' }), '登出', 5000);
       } catch (error) {
-        setAuthMessage(error.message || '登出時發生錯誤，已先切回登入畫面。', true);
+        console.warn('Supabase signOut failed after local logout:', error);
       } finally {
-        state.session = null;
-        state.workspaces = [];
-        state.selectedWorkspaceId = '';
-        state.events = [];
-        state.selectedEventId = '';
-        renderAuthState();
-        setTimeout(() => window.location.replace('/'), 150);
+        state.isSigningOut = false;
+        signOutBtn.disabled = false;
+        window.location.href = 'index.html';
       }
     }
 
@@ -981,6 +1010,7 @@
     }
 
     function renderAuthState() {
+      resetViewerState();
       setVisible(authShell, true);
       setVisible(workspaceShell, false);
       setVisible(eventsShell, false);
@@ -992,57 +1022,76 @@
       if (!state.session) return;
 
       setSystemMessage('正在載入你的雲端空間...');
+      workspaceList.innerHTML = '<div class="event-empty">正在載入工作區...</div>';
 
-      const userId = state.session.user.id;
-      const { data: membershipRows, error: memberError } = await client
-        .from('workspace_members')
-        .select('workspace_id, role')
-        .eq('user_id', userId);
+      try {
+        const user = state.session.user;
+        const memberResult = await withTimeout(
+          client.from('workspace_members').select('workspace_id, role').eq('user_id', user.id),
+          '載入工作區權限'
+        );
 
-      if (memberError) {
-        setAuthMessage(`載入工作區失敗：${memberError.message}`, true);
-        return;
-      }
+        if (memberResult.error) {
+          throw memberResult.error;
+        }
 
-      const workspaceIds = (membershipRows || []).map((row) => row.workspace_id);
-      if (!workspaceIds.length) {
-        state.workspaces = [];
-        state.selectedWorkspaceId = '';
-        workspaceList.innerHTML = '<div class="event-empty">目前這個帳號沒有被加入任何雲端空間。請確認 Supabase 的 `workspace_members` 是否有你的 user_id。<br><br>如果你只是想退出，右上角可直接登出。</div>';
-        setSystemMessage('目前這個帳號沒有可查看的雲端空間。請確認 workspace_members 與權限設定。', true);
-        workspaceTitle.textContent = '事件頁';
-        workspaceSummary.textContent = '尚未加入任何雲端空間。';
-        workspaceBadges.innerHTML = '';
-        renderEvents([]);
+        const membershipRows = memberResult.data || [];
+        const workspaceIds = membershipRows.map((row) => row.workspace_id).filter(Boolean);
+        const roleMap = new Map(membershipRows.map((row) => [row.workspace_id, row.role || 'viewer']));
+        let workspaces = [];
+
+        if (workspaceIds.length) {
+          const workspaceResult = await withTimeout(
+            client.from('workspaces').select('id, name, owner_email').in('id', workspaceIds).order('name', { ascending: true }),
+            '載入雲端空間'
+          );
+          if (workspaceResult.error) throw workspaceResult.error;
+          workspaces = workspaceResult.data || [];
+        }
+
+        if (!workspaces.length && user.email) {
+          const ownedResult = await withTimeout(
+            client.from('workspaces').select('id, name, owner_email').eq('owner_email', user.email).order('name', { ascending: true }),
+            '載入擁有的雲端空間'
+          );
+          if (!ownedResult.error && ownedResult.data?.length) {
+            workspaces = ownedResult.data;
+            ownedResult.data.forEach((workspace) => roleMap.set(workspace.id, 'owner'));
+          }
+        }
+
+        state.workspaces = workspaces.map((workspace) => ({
+          id: workspace.id,
+          name: workspace.name || '未命名工作區',
+          ownerEmail: workspace.owner_email || '',
+          role: roleMap.get(workspace.id) || 'viewer',
+        }));
+
+        if (!state.workspaces.length) {
+          state.selectedWorkspaceId = '';
+          workspaceList.innerHTML = '<div class="event-empty">這個帳號目前沒有可查看的雲端空間。請確認 App 是否已同步雲端空間，或 Supabase 的 workspace_members 是否有這個登入帳號。</div>';
+          workspaceTitle.textContent = '事件頁';
+          workspaceSummary.textContent = `已登入 ${escapeHtml(user.email || '目前帳號')}，但沒有找到可查看的工作區。`;
+          workspaceBadges.innerHTML = '';
+          renderEvents([]);
+          renderMetrics([]);
+          setSystemMessage('沒有找到可查看的雲端空間。', true);
+          return;
+        }
+
+        const savedWorkspaceId = loadSelectedWorkspaceId();
+        const savedExists = state.workspaces.some((workspace) => workspace.id === savedWorkspaceId);
+        state.selectedWorkspaceId = savedExists ? savedWorkspaceId : state.workspaces[0].id;
+        persistSelectedWorkspaceId(state.selectedWorkspaceId);
+        renderWorkspaceList();
+        await loadEventsForWorkspace(state.selectedWorkspaceId);
+      } catch (error) {
+        workspaceList.innerHTML = `<div class="event-empty">載入工作區失敗：${escapeHtml(error.message || error)}</div>`;
+        eventList.innerHTML = '<div class="event-empty">工作區載入失敗，無法載入事件。</div>';
+        eventDetail.innerHTML = '<div class="event-empty">請重新整理頁面，或先登出後再登入。</div>';
         renderMetrics([]);
-        return;
+        setAuthMessage(`載入工作區失敗：${error.message || error}`, true);
       }
-
-      const { data: workspaces, error: workspaceError } = await client
-        .from('workspaces')
-        .select('id, name, owner_email')
-        .in('id', workspaceIds)
-        .order('name', { ascending: true });
-
-      if (workspaceError) {
-        setAuthMessage(`載入雲端空間失敗：${workspaceError.message}`, true);
-        return;
-      }
-
-      const roleMap = new Map((membershipRows || []).map((row) => [row.workspace_id, row.role]));
-      state.workspaces = (workspaces || []).map((workspace) => ({
-        id: workspace.id,
-        name: workspace.name,
-        ownerEmail: workspace.owner_email || '',
-        role: roleMap.get(workspace.id) || 'viewer',
-      }));
-
-      const savedWorkspaceId = loadSelectedWorkspaceId();
-      const savedExists = state.workspaces.some((workspace) => workspace.id === savedWorkspaceId);
-      state.selectedWorkspaceId = savedExists ? savedWorkspaceId : state.workspaces[0]?.id || '';
-      persistSelectedWorkspaceId(state.selectedWorkspaceId);
-      renderWorkspaceList();
-      await loadEventsForWorkspace(state.selectedWorkspaceId);
     }
 
     function renderWorkspaceList() {
@@ -1094,11 +1143,17 @@
         <span class="pill">只讀查看</span>
       `;
 
-      const { data, error } = await client
-        .from('events')
-        .select('*, event_transports(*), event_sites(*), event_items(*), event_people(*)')
-        .eq('workspace_id', workspaceId)
-        .order('name', { ascending: true });
+      eventList.innerHTML = '<div class="event-empty">正在載入事件...</div>';
+      eventDetail.innerHTML = '<div class="event-empty">正在載入內容...</div>';
+
+      const { data, error } = await withTimeout(
+        client
+          .from('events')
+          .select('*, event_transports(*), event_sites(*), event_items(*), event_people(*)')
+          .eq('workspace_id', workspaceId)
+          .order('name', { ascending: true }),
+        '載入事件'
+      );
 
       if (error) {
         eventList.innerHTML = `<div class="event-empty">載入事件失敗：${escapeHtml(error.message)}</div>`;
@@ -1297,10 +1352,15 @@
 
     signOutBtn.addEventListener('click', signOut);
 
-    client.auth.onAuthStateChange(async (_, session) => {
-      state.session = session;
-      if (session) {
-        await afterSignIn();
+    client.auth.onAuthStateChange((event, session) => {
+      if (state.isSigningOut) return;
+      if (event === 'SIGNED_OUT') {
+        state.session = null;
+        renderAuthState();
+        return;
+      }
+      if (event === 'TOKEN_REFRESHED') {
+        state.session = session;
       }
     });
 
