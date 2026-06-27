@@ -95,6 +95,16 @@
       renderMetrics([]);
     }
 
+    function clearLocalAuthState() {
+      try {
+        Object.keys(localStorage)
+          .filter((key) => key.startsWith('sb-') || key.startsWith('gearflow-web-'))
+          .forEach((key) => localStorage.removeItem(key));
+      } catch {
+        // Storage can be unavailable in strict privacy modes.
+      }
+    }
+
     function scrollToDetailIfNeeded() {
       if (window.matchMedia('(max-width: 920px)').matches) {
         window.requestAnimationFrame(() => {
@@ -210,7 +220,7 @@
       }
     }
 
-    async function signOut(event) {
+    function signOut(event) {
       event?.preventDefault();
       if (state.isSigningOut) return;
       state.isSigningOut = true;
@@ -218,17 +228,12 @@
       setSystemMessage('正在登出...');
       state.session = null;
       resetViewerState();
+      clearLocalAuthState();
       renderAuthState();
-
-      try {
-        await withTimeout(client.auth.signOut({ scope: 'local' }), '登出', 5000);
-      } catch (error) {
+      client.auth.signOut({ scope: 'local' }).catch((error) => {
         console.warn('Supabase signOut failed after local logout:', error);
-      } finally {
-        state.isSigningOut = false;
-        signOutBtn.disabled = false;
-        window.location.href = 'index.html';
-      }
+      });
+      window.location.replace('index.html');
     }
 
     async function afterSignIn() {
