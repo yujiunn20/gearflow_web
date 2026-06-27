@@ -253,6 +253,55 @@
       margin-top: 20px;
     }
 
+    .app-page {
+      width: min(980px, 100%);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .events-layout.events-view-list,
+    .events-layout.events-view-detail {
+      grid-template-columns: 1fr;
+      width: min(760px, 100%);
+      margin: 20px auto 0;
+    }
+
+    .events-layout.events-view-list .events-detail-panel,
+    .events-layout.events-view-detail .events-list-panel {
+      display: none;
+    }
+
+    .events-list-head,
+    .page-section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .page-back-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      padding: 9px 13px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .page-back-button:hover,
+    .page-back-button:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent-ink);
+      outline: none;
+    }
+
+
     .workspace-panel {
       display: grid;
       gap: 16px;
@@ -783,7 +832,7 @@
       </div>
     </section>
 
-    <section class="workspace-shell app-hidden" id="workspace-shell">
+    <section class="workspace-shell app-hidden app-page" id="workspace-shell">
       <aside class="workspace-panel">
         <div>
           <p class="eyebrow" style="margin-top: 0;">雲端空間</p>
@@ -793,7 +842,7 @@
         <div class="workspace-selector" id="workspace-list"></div>
       </aside>
 
-      <div class="events-hero">
+      <div class="events-hero app-page">
         <div>
           <p class="eyebrow" style="margin-top: 0;">Web View</p>
           <h1 id="workspace-title">事件頁</h1>
@@ -821,13 +870,14 @@
       </div>
     </section>
 
-    <section class="events-layout app-hidden" id="events-shell">
+    <section class="events-layout app-hidden events-view-list" id="events-shell">
       <aside class="events-list-panel">
         <div class="events-list-head">
           <div>
             <h2>事件列表</h2>
-            <p>點選事件即可查看詳情。</p>
+            <p id="event-list-context">點選事件即可查看詳情。</p>
           </div>
+          <button class="page-back-button" id="back-to-workspaces" type="button">返回工作區</button>
         </div>
         <div class="event-toolbar">
           <input id="event-search" class="event-search" type="search" placeholder="搜尋事件、描述、日期">
@@ -867,6 +917,8 @@
     const systemStatusText = document.getElementById('system-status-text');
     const signOutBtn = document.getElementById('sign-out-btn');
     const workspaceList = document.getElementById('workspace-list');
+
+    const backToWorkspacesBtn = document.getElementById('back-to-workspaces');
     const workspaceTitle = document.getElementById('workspace-title');
     const workspaceSummary = document.getElementById('workspace-summary');
     const workspaceBadges = document.getElementById('workspace-badges');
@@ -893,6 +945,7 @@
       isSigningOut: false,
       diagnostics: [],
       selectedDetail: null,
+      view: 'workspace',
     };
 
     function escapeHtml(value) {
@@ -934,6 +987,22 @@
       node.classList.toggle('app-hidden', !visible);
     }
 
+    function setAppView(view) {
+      state.view = view;
+      setVisible(workspaceShell, view === 'workspace');
+      setVisible(eventsShell, view === 'events' || view === 'detail');
+      eventsShell.classList.toggle('events-view-list', view === 'events');
+      eventsShell.classList.toggle('events-view-detail', view === 'detail');
+      if (view === 'workspace') {
+        setSystemMessage('請選擇工作區。');
+      } else if (view === 'events') {
+        setSystemMessage(`正在查看事件列表：${currentWorkspace()?.name || '未選擇工作區'}`);
+      } else if (view === 'detail') {
+        setSystemMessage(`正在查看事件內容：${currentEvent()?.name || '未選擇事件'}`);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     function withTimeout(promise, label, ms = 12000) {
       let timerId;
       const timeout = new Promise((_, reject) => {
@@ -948,6 +1017,7 @@
       state.events = [];
       state.selectedEventId = '';
       state.selectedDetail = null;
+      state.view = 'workspace';
       workspaceList.innerHTML = '';
       workspaceTitle.textContent = '事件頁';
       workspaceSummary.textContent = '尚未選擇工作區。';
@@ -968,11 +1038,7 @@
     }
 
     function scrollToDetailIfNeeded() {
-      if (window.matchMedia('(max-width: 920px)').matches) {
-        window.requestAnimationFrame(() => {
-          eventDetail?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-      }
+      setAppView('detail');
     }
 
     window.addEventListener('error', (event) => {
@@ -1105,10 +1171,9 @@
       addDiagnostic(`user ${state.session.user.id}`);
       setAuthMessage(`已登入 ${state.session.user.email}`);
       setVisible(authShell, false);
-      setVisible(workspaceShell, true);
-      setVisible(eventsShell, true);
       signOutBtn.classList.remove('login-hidden');
       await loadWorkspaces();
+      setAppView('workspace');
     }
 
     function renderAuthState() {
@@ -1186,7 +1251,7 @@
         state.selectedWorkspaceId = savedExists ? savedWorkspaceId : state.workspaces[0].id;
         persistSelectedWorkspaceId(state.selectedWorkspaceId);
         renderWorkspaceList();
-        await loadEventsForWorkspace(state.selectedWorkspaceId);
+        await loadEventsForWorkspace(state.selectedWorkspaceId, { keepView: true });
       } catch (error) {
         addDiagnostic(error.message || String(error));
         workspaceList.innerHTML = `<div class="event-empty">載入工作區失敗：${escapeHtml(error.message || error)}</div>`;
@@ -1219,7 +1284,10 @@
       workspaceList.querySelectorAll('[data-workspace-id]').forEach((button) => {
         button.addEventListener('click', async () => {
           const workspaceId = button.getAttribute('data-workspace-id') || '';
-          if (workspaceId === state.selectedWorkspaceId) return;
+          if (workspaceId === state.selectedWorkspaceId && state.events.length) {
+            setAppView('events');
+            return;
+          }
           const previousWorkspaceId = state.selectedWorkspaceId;
           const previousEventId = state.selectedEventId;
           if (previousWorkspaceId && previousEventId) {
@@ -1229,15 +1297,17 @@
           persistSelectedWorkspaceId(workspaceId);
           renderWorkspaceList();
           await loadEventsForWorkspace(workspaceId);
+          setAppView('events');
         });
       });
     }
 
-    async function loadEventsForWorkspace(workspaceId) {
+    async function loadEventsForWorkspace(workspaceId, options = {}) {
       const workspace = state.workspaces.find((item) => item.id === workspaceId);
       if (!workspace) return;
 
       setSystemMessage(`正在載入事件：${workspace.name}`);
+      const keepView = options.keepView === true;
       workspaceTitle.textContent = workspace.name;
       workspaceSummary.textContent = `owner: ${workspace.ownerEmail || 'N/A'} · role: ${workspace.role}`;
       workspaceBadges.innerHTML = `
@@ -1245,6 +1315,10 @@
         <span class="pill">${escapeHtml(workspace.role)}</span>
         <span class="pill">只讀查看</span>
       `;
+      const eventListContext = document.getElementById('event-list-context');
+      if (eventListContext) {
+        eventListContext.textContent = `${workspace.name} · 點選事件即可查看詳情。`;
+      }
 
       eventList.innerHTML = '<div class="event-empty">正在載入事件...</div>';
       eventDetail.innerHTML = '<div class="event-empty">正在載入內容...</div>';
@@ -1277,7 +1351,9 @@
       renderEvents();
       renderMetrics(state.events);
       setSystemMessage(`已載入 ${state.events.length} 個事件。`);
-      scrollToDetailIfNeeded();
+      if (!keepView) {
+        setAppView('events');
+      }
     }
 
     function normalizeEvent(row) {
@@ -1354,7 +1430,8 @@
             persistSelectedEventId(state.selectedWorkspaceId, state.selectedEventId);
           }
           renderEvents();
-          scrollToDetailIfNeeded();
+          renderEventDetail();
+          setAppView('detail');
         });
       });
 
@@ -1377,6 +1454,13 @@
       const selected = getSelectedDetail(event);
 
       eventDetail.innerHTML = `
+        <div class="page-section-head" style="margin-bottom:14px;">
+          <div>
+            <p class="eyebrow" style="margin:0 0 4px;">Event Detail</p>
+            <h2 style="margin:0;">事件內容</h2>
+          </div>
+          <button class="page-back-button" type="button" data-back-to-events>返回事件列表</button>
+        </div>
         <div class="event-detail-hero">
           <div class="event-detail-kicker">
             <div>
@@ -1429,6 +1513,10 @@
 
         ${renderDetailInspector(selected)}
       `;
+
+      eventDetail.querySelector('[data-back-to-events]')?.addEventListener('click', () => {
+        setAppView('events');
+      });
 
       eventDetail.querySelectorAll('[data-detail-kind][data-detail-id]').forEach((button) => {
         button.addEventListener('click', () => {
@@ -1608,6 +1696,10 @@
     eventSearch.addEventListener('input', () => {
       state.query = eventSearch.value;
       renderEvents();
+    });
+
+    backToWorkspacesBtn?.addEventListener('click', () => {
+      setAppView('workspace');
     });
 
     eventFilters.addEventListener('click', (event) => {

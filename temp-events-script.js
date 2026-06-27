@@ -18,6 +18,8 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
     const systemStatusText = document.getElementById('system-status-text');
     const signOutBtn = document.getElementById('sign-out-btn');
     const workspaceList = document.getElementById('workspace-list');
+
+    const backToWorkspacesBtn = document.getElementById('back-to-workspaces');
     const workspaceTitle = document.getElementById('workspace-title');
     const workspaceSummary = document.getElementById('workspace-summary');
     const workspaceBadges = document.getElementById('workspace-badges');
@@ -44,6 +46,7 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
       isSigningOut: false,
       diagnostics: [],
       selectedDetail: null,
+      view: 'workspace',
     };
 
     function escapeHtml(value) {
@@ -85,6 +88,22 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
       node.classList.toggle('app-hidden', !visible);
     }
 
+    function setAppView(view) {
+      state.view = view;
+      setVisible(workspaceShell, view === 'workspace');
+      setVisible(eventsShell, view === 'events' || view === 'detail');
+      eventsShell.classList.toggle('events-view-list', view === 'events');
+      eventsShell.classList.toggle('events-view-detail', view === 'detail');
+      if (view === 'workspace') {
+        setSystemMessage('請選擇工作區。');
+      } else if (view === 'events') {
+        setSystemMessage(`正在查看事件列表：${currentWorkspace()?.name || '未選擇工作區'}`);
+      } else if (view === 'detail') {
+        setSystemMessage(`正在查看事件內容：${currentEvent()?.name || '未選擇事件'}`);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     function withTimeout(promise, label, ms = 12000) {
       let timerId;
       const timeout = new Promise((_, reject) => {
@@ -99,6 +118,7 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
       state.events = [];
       state.selectedEventId = '';
       state.selectedDetail = null;
+      state.view = 'workspace';
       workspaceList.innerHTML = '';
       workspaceTitle.textContent = '事件頁';
       workspaceSummary.textContent = '尚未選擇工作區。';
@@ -119,11 +139,7 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
     }
 
     function scrollToDetailIfNeeded() {
-      if (window.matchMedia('(max-width: 920px)').matches) {
-        window.requestAnimationFrame(() => {
-          eventDetail?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-      }
+      setAppView('detail');
     }
 
     window.addEventListener('error', (event) => {
@@ -256,10 +272,9 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
       addDiagnostic(`user ${state.session.user.id}`);
       setAuthMessage(`已登入 ${state.session.user.email}`);
       setVisible(authShell, false);
-      setVisible(workspaceShell, true);
-      setVisible(eventsShell, true);
       signOutBtn.classList.remove('login-hidden');
       await loadWorkspaces();
+      setAppView('workspace');
     }
 
     function renderAuthState() {
@@ -337,7 +352,7 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
         state.selectedWorkspaceId = savedExists ? savedWorkspaceId : state.workspaces[0].id;
         persistSelectedWorkspaceId(state.selectedWorkspaceId);
         renderWorkspaceList();
-        await loadEventsForWorkspace(state.selectedWorkspaceId);
+        await loadEventsForWorkspace(state.selectedWorkspaceId, { keepView: true });
       } catch (error) {
         addDiagnostic(error.message || String(error));
         workspaceList.innerHTML = `<div class="event-empty">載入工作區失敗：${escapeHtml(error.message || error)}</div>`;
@@ -370,7 +385,10 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
       workspaceList.querySelectorAll('[data-workspace-id]').forEach((button) => {
         button.addEventListener('click', async () => {
           const workspaceId = button.getAttribute('data-workspace-id') || '';
-          if (workspaceId === state.selectedWorkspaceId) return;
+          if (workspaceId === state.selectedWorkspaceId && state.events.length) {
+            setAppView('events');
+            return;
+          }
           const previousWorkspaceId = state.selectedWorkspaceId;
           const previousEventId = state.selectedEventId;
           if (previousWorkspaceId && previousEventId) {
@@ -380,15 +398,17 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
           persistSelectedWorkspaceId(workspaceId);
           renderWorkspaceList();
           await loadEventsForWorkspace(workspaceId);
+          setAppView('events');
         });
       });
     }
 
-    async function loadEventsForWorkspace(workspaceId) {
+    async function loadEventsForWorkspace(workspaceId, options = {}) {
       const workspace = state.workspaces.find((item) => item.id === workspaceId);
       if (!workspace) return;
 
       setSystemMessage(`正在載入事件：${workspace.name}`);
+      const keepView = options.keepView === true;
       workspaceTitle.textContent = workspace.name;
       workspaceSummary.textContent = `owner: ${workspace.ownerEmail || 'N/A'} · role: ${workspace.role}`;
       workspaceBadges.innerHTML = `
@@ -396,6 +416,10 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
         <span class="pill">${escapeHtml(workspace.role)}</span>
         <span class="pill">只讀查看</span>
       `;
+      const eventListContext = document.getElementById('event-list-context');
+      if (eventListContext) {
+        eventListContext.textContent = `${workspace.name} · 點選事件即可查看詳情。`;
+      }
 
       eventList.innerHTML = '<div class="event-empty">正在載入事件...</div>';
       eventDetail.innerHTML = '<div class="event-empty">正在載入內容...</div>';
@@ -428,7 +452,9 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
       renderEvents();
       renderMetrics(state.events);
       setSystemMessage(`已載入 ${state.events.length} 個事件。`);
-      scrollToDetailIfNeeded();
+      if (!keepView) {
+        setAppView('events');
+      }
     }
 
     function normalizeEvent(row) {
@@ -505,7 +531,8 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
             persistSelectedEventId(state.selectedWorkspaceId, state.selectedEventId);
           }
           renderEvents();
-          scrollToDetailIfNeeded();
+          renderEventDetail();
+          setAppView('detail');
         });
       });
 
@@ -528,6 +555,13 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
       const selected = getSelectedDetail(event);
 
       eventDetail.innerHTML = `
+        <div class="page-section-head" style="margin-bottom:14px;">
+          <div>
+            <p class="eyebrow" style="margin:0 0 4px;">Event Detail</p>
+            <h2 style="margin:0;">事件內容</h2>
+          </div>
+          <button class="page-back-button" type="button" data-back-to-events>返回事件列表</button>
+        </div>
         <div class="event-detail-hero">
           <div class="event-detail-kicker">
             <div>
@@ -580,6 +614,10 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
 
         ${renderDetailInspector(selected)}
       `;
+
+      eventDetail.querySelector('[data-back-to-events]')?.addEventListener('click', () => {
+        setAppView('events');
+      });
 
       eventDetail.querySelectorAll('[data-detail-kind][data-detail-id]').forEach((button) => {
         button.addEventListener('click', () => {
@@ -759,6 +797,10 @@ const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
     eventSearch.addEventListener('input', () => {
       state.query = eventSearch.value;
       renderEvents();
+    });
+
+    backToWorkspacesBtn?.addEventListener('click', () => {
+      setAppView('workspace');
     });
 
     eventFilters.addEventListener('click', (event) => {
