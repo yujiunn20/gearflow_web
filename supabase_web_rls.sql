@@ -1,0 +1,30 @@
+-- GearFlow web Supabase note
+-- DO NOT RUN the older guessed web-only RLS policies.
+--
+-- I checked the real App project at:
+--   C:\Users\yuhjiunn20\Desktop\GearFlow
+--
+-- The App already defines RLS in:
+--   supabase/migrations/20260623000002_rls.sql
+--
+-- Relevant existing policies:
+--   workspaces_select       -> is_workspace_member(id)
+--   workspace_members_select -> is_workspace_member(workspace_id)
+--   events_select           -> is_workspace_member(workspace_id)
+--   event_transports_select -> is_workspace_member(workspace_id)
+--   event_sites_select      -> is_workspace_member(workspace_id)
+--   event_items_select      -> is_workspace_member(workspace_id)
+--   event_people_select     -> is_workspace_member(workspace_id)
+--
+-- So the web viewer should NOT need extra RLS if:
+--   1. The browser logs into the same Supabase project.
+--   2. auth.users.id matches workspace_members.user_id.
+--   3. The existing App migrations were applied to the live database.
+--
+-- If web still shows zero workspaces, check this in Supabase SQL Editor:
+--
+-- select workspace_id, user_id, role, email
+-- from public.workspace_members
+-- where email = 'YOUR_LOGIN_EMAIL';
+--
+-- Then compare that user_id with the web page diagnostic user id shown in the system bar.

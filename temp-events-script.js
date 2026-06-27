@@ -1,5 +1,4 @@
-
-    const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
+const SUPABASE_URL = 'https://ijsuhfeznfnpqpxkwmni.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlqc3VoZmV6bmZucHFweGt3bW5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxODc2NTgsImV4cCI6MjA5Nzc2MzY1OH0.Ca-TuNTvBD8RaPYP_mULtDuLpLuJS-ew4QMIL4A4JA4';
     const WORKSPACE_CACHE_KEY = 'gearflow-web-selected-workspace';
     const WORKSPACE_EVENT_CACHE_PREFIX = 'gearflow-web-selected-event:';
@@ -43,6 +42,7 @@
       query: '',
       scrollRequested: false,
       isSigningOut: false,
+      diagnostics: [],
     };
 
     function escapeHtml(value) {
@@ -56,11 +56,22 @@
 
     function setSystemMessage(message, isError = false) {
       if (systemStatusText) {
-        systemStatusText.textContent = message;
+        const diagnosticText = state.diagnostics.length
+          ? ` · ${state.diagnostics.slice(-3).join(' · ')}`
+          : '';
+        systemStatusText.textContent = `${message}${diagnosticText}`;
       }
       if (systemStatus) {
         systemStatus.classList.toggle('error', isError);
       }
+    }
+
+    function addDiagnostic(message) {
+      state.diagnostics = [...state.diagnostics, message].slice(-6);
+    }
+
+    function clearDiagnostics() {
+      state.diagnostics = [];
     }
 
     function setAuthMessage(message, isError = false) {
@@ -230,13 +241,17 @@
       resetViewerState();
       clearLocalAuthState();
       renderAuthState();
+      setTimeout(() => {
+        window.location.assign('/');
+      }, 50);
       client.auth.signOut({ scope: 'local' }).catch((error) => {
         console.warn('Supabase signOut failed after local logout:', error);
       });
-      window.location.replace('index.html');
     }
 
     async function afterSignIn() {
+      clearDiagnostics();
+      addDiagnostic(`user ${state.session.user.id}`);
       setAuthMessage(`已登入 ${state.session.user.email}`);
       setVisible(authShell, false);
       setVisible(workspaceShell, true);
@@ -251,6 +266,7 @@
       setVisible(workspaceShell, false);
       setVisible(eventsShell, false);
       signOutBtn.classList.add('login-hidden');
+      signOutBtn.disabled = false;
       setAuthMessage('請先登入 Supabase 帳號。');
     }
 
@@ -263,7 +279,10 @@
       try {
         const user = state.session.user;
         const memberResult = await withTimeout(
-          client.from('workspace_members').select('workspace_id, role').eq('user_id', user.id),
+          client
+            .from('workspace_members')
+            .select('workspace_id, role, email')
+            .eq('user_id', user.id),
           '載入工作區權限'
         );
 
@@ -272,29 +291,25 @@
         }
 
         const membershipRows = memberResult.data || [];
+        addDiagnostic(`members ${membershipRows.length}`);
         const workspaceIds = membershipRows.map((row) => row.workspace_id).filter(Boolean);
         const roleMap = new Map(membershipRows.map((row) => [row.workspace_id, row.role || 'viewer']));
         let workspaces = [];
 
         if (workspaceIds.length) {
           const workspaceResult = await withTimeout(
-            client.from('workspaces').select('id, name, owner_email').in('id', workspaceIds).order('name', { ascending: true }),
+            client
+              .from('workspaces')
+              .select('id, name, owner_email')
+              .in('id', workspaceIds)
+              .order('name', { ascending: true }),
             '載入雲端空間'
           );
           if (workspaceResult.error) throw workspaceResult.error;
           workspaces = workspaceResult.data || [];
         }
 
-        if (!workspaces.length && user.email) {
-          const ownedResult = await withTimeout(
-            client.from('workspaces').select('id, name, owner_email').eq('owner_email', user.email).order('name', { ascending: true }),
-            '載入擁有的雲端空間'
-          );
-          if (!ownedResult.error && ownedResult.data?.length) {
-            workspaces = ownedResult.data;
-            ownedResult.data.forEach((workspace) => roleMap.set(workspace.id, 'owner'));
-          }
-        }
+        addDiagnostic(`workspaces ${workspaces.length}`);
 
         state.workspaces = workspaces.map((workspace) => ({
           id: workspace.id,
@@ -305,7 +320,7 @@
 
         if (!state.workspaces.length) {
           state.selectedWorkspaceId = '';
-          workspaceList.innerHTML = '<div class="event-empty">這個帳號目前沒有可查看的雲端空間。請確認 App 是否已同步雲端空間，或 Supabase 的 workspace_members 是否有這個登入帳號。</div>';
+          workspaceList.innerHTML = `<div class="event-empty">這個帳號目前沒有可查看的雲端空間。<br>目前登入 user_id：${escapeHtml(user.id)}<br>Email：${escapeHtml(user.email || '')}<br>請用 App 專案既有 RLS 檢查 workspace_members 是否能以這個 user_id 讀到資料。</div>`;
           workspaceTitle.textContent = '事件頁';
           workspaceSummary.textContent = `已登入 ${escapeHtml(user.email || '目前帳號')}，但沒有找到可查看的工作區。`;
           workspaceBadges.innerHTML = '';
@@ -322,6 +337,7 @@
         renderWorkspaceList();
         await loadEventsForWorkspace(state.selectedWorkspaceId);
       } catch (error) {
+        addDiagnostic(error.message || String(error));
         workspaceList.innerHTML = `<div class="event-empty">載入工作區失敗：${escapeHtml(error.message || error)}</div>`;
         eventList.innerHTML = '<div class="event-empty">工作區載入失敗，無法載入事件。</div>';
         eventDetail.innerHTML = '<div class="event-empty">請重新整理頁面，或先登出後再登入。</div>';
@@ -392,6 +408,7 @@
       );
 
       if (error) {
+        addDiagnostic(error.message || String(error));
         eventList.innerHTML = `<div class="event-empty">載入事件失敗：${escapeHtml(error.message)}</div>`;
         eventDetail.innerHTML = `<div class="event-empty">${escapeHtml(error.message)}</div>`;
         setAuthMessage(`載入事件失敗：${error.message}`, true);
@@ -400,6 +417,7 @@
       }
 
       state.events = (data || []).map(normalizeEvent);
+      addDiagnostic(`events ${state.events.length}`);
       const savedEventId = loadSelectedEventId(workspaceId);
       state.selectedEventId = state.events.find((event) => event.id === savedEventId)?.id || state.events[0]?.id || '';
       persistSelectedEventId(workspaceId, state.selectedEventId);
@@ -601,4 +619,3 @@
     });
 
     restoreSession();
-  
