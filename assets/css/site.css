@@ -105,6 +105,74 @@ h1 {
   line-height: 1.7;
 }
 
+.store-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.app-store-badge {
+  display: block;
+  height: 54px;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.app-store-badge:hover,
+.app-store-badge:focus-visible {
+  opacity: 0.82;
+  transform: translateY(-1px);
+  outline: 3px solid rgba(24, 157, 230, 0.28);
+  outline-offset: 2px;
+}
+
+.app-store-badge img {
+  display: block;
+  width: auto;
+  height: 54px;
+}
+
+.store-coming-soon {
+  position: relative;
+  display: inline-flex;
+  height: 54px;
+  overflow: hidden;
+  align-items: center;
+  border-radius: 8px;
+  background: #000;
+  cursor: default;
+}
+
+.store-coming-soon img {
+  display: block;
+  width: auto;
+  height: 54px;
+  filter: grayscale(1);
+  opacity: 0.38;
+}
+
+.store-coming-soon span {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.42);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 3px #000;
+}
+
+.trademark-note {
+  margin: 8px auto 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
 .language-grid {
   display: grid;
   max-width: 620px;
