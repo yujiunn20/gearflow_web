@@ -3,6 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    if (new URLSearchParams(window.location.search).get('lang') !== 'zh') {
+      window.location.replace('en/index.html');
+    }
+  </script>
   <title>GearFlow 裝備清單 App｜活動器材、倉庫與運輸管理</title>
   <meta name="description" content="GearFlow 是活動裝備清單與器材物流管理 App，協助團隊管理倉庫、裝備、場地、車輛運輸與雲端協作，減少漏帶與裝錯車。">
   <link rel="canonical" href="https://gearflow.yuchunlab.com/">
