@@ -133,37 +133,21 @@ h1 {
   height: 54px;
 }
 
-.store-coming-soon {
-  position: relative;
-  display: inline-flex;
-  height: 54px;
+/* The official Google Play badge PNG has a ~41px transparent margin baked
+   into its 646x250 canvas (visible pill is only 564x168), so scaling it by
+   height alone renders the pill noticeably smaller than Apple's near-full-
+   bleed SVG. Overscale the image and clip the container to crop that
+   margin so both badges read as the same visual size. */
+.app-store-badge[href*="play.google.com"] {
+  width: 181px;
   overflow: hidden;
-  align-items: center;
   border-radius: 8px;
-  background: #000;
-  cursor: default;
 }
 
-.store-coming-soon img {
-  display: block;
+.app-store-badge[href*="play.google.com"] img {
+  height: 80px;
   width: auto;
-  height: 54px;
-  filter: grayscale(1);
-  opacity: 0.38;
-}
-
-.store-coming-soon span {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.42);
-  color: #fff;
-  font-size: 0.82rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-shadow: 0 1px 3px #000;
+  margin: -13px 0 0 -13px;
 }
 
 .trademark-note {
